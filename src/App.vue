@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <h1>simple flowchart</h1>
-    <button @click="adicionar">la vai</button>
     <simple-flowchart
       :scene.sync="scene"
       :nodesAction.sync="nodeActions"
@@ -80,15 +79,6 @@ export default {
     };
   },
   methods: {
-    adicionar() {
-      this.nodeActions = {
-        id: 250,
-        x: -600,
-        y: -139,
-        type: "Join",
-        label: "Start"
-      };
-    },
     canvasClick(e) {
       // console.log("canvas Click, event:", e);
     },
