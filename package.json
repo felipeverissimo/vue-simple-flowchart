@@ -1,6 +1,6 @@
 {
   "name": "vue-simple-flowchart",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": false,
   "main": "./dist/vue-flowchart.common.js",
   "files": [

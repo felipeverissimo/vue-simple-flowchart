@@ -1,116 +1,116 @@
 <template>
   <div id="app">
-    <h1> simple flowchart</h1>
-    <div class="tool-wrapper">
-      <select v-model="newNodeType">
-        <option v-for="(item, index) in nodeCategory" :key="index" :value="index">{{item}}</option>
-      </select>
-      <input type="text" v-model="newNodeLabel" placeholder="Input node label">
-      <button @click="addNode">ADD</button>
-    </div>
-    
-    <simple-flowchart :scene.sync="scene" 
+    <h1>simple flowchart</h1>
+    <button @click="adicionar">la vai</button>
+    <simple-flowchart
+      :scene.sync="scene"
+      :nodesAction.sync="nodeActions"
       @nodeClick="nodeClick"
       @nodeDelete="nodeDelete"
       @linkBreak="linkBreak"
       @linkAdded="linkAdded"
       @canvasClick="canvasClick"
-      :height="800"/>
+      :height="800"
+    />
   </div>
 </template>
 
 <script>
-import SimpleFlowchart from './components/SimpleFlowchart.vue'
+import SimpleFlowchart from "./components/SimpleFlowchart.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     SimpleFlowchart
   },
   data() {
     return {
+      nodeActions: {},
       scene: {
         centerX: 1024,
         centerY: 140,
         scale: 1,
         nodes: [
           {
+            id: 1,
+            x: -700,
+            y: -139,
+            type: "Start",
+            label: "Start"
+          },
+          {
             id: 2,
             x: -700,
-            y: -69,
-            type: 'Action',
-            label: 'test1',
+            y: 0,
+            type: "Action",
+            label: "test1"
           },
           {
             id: 4,
             x: -357,
             y: 80,
-            type: 'Script',
-            label: 'test2',
+            type: "Decision",
+            label: "test2",
+            rotate: 45
           },
           {
             id: 6,
             x: -557,
             y: 80,
-            type: 'Rule',
-            label: 'test3',
+            type: "Join",
+            label: "test3",
+            rotate: 45
           }
         ],
         links: [
           {
+            id: 5,
+            from: 1, // node id the link start
+            to: 2, // node id the link end
+            label: ""
+          },
+          {
             id: 3,
             from: 2, // node id the link start
-            to: 4,  // node id the link end
+            to: 4, // node id the link end
+            label: ""
           }
         ]
-      },
-      newNodeType: 0,
-      newNodeLabel: '',
-      nodeCategory:[
-        'rule',
-        'action',
-        'script',
-        'decision',
-        'fork',
-        'join',
-      ],
-    }
+      }
+    };
   },
   methods: {
-    canvasClick(e) {
-      console.log('canvas Click, event:', e)
+    adicionar() {
+      this.nodeActions = {
+        id: 250,
+        x: -600,
+        y: -139,
+        type: "Join",
+        label: "Start"
+      };
     },
-    addNode() {
-      let maxID = Math.max(0, ...this.scene.nodes.map((link) => {
-        return link.id
-      }))
-      this.scene.nodes.push({
-        id: maxID + 1,
-        x: -400,
-        y: 50,
-        type: this.nodeCategory[this.newNodeType],
-        label: this.newNodeLabel ? this.newNodeLabel: `test${maxID + 1}`,
-      })
+    canvasClick(e) {
+      // console.log("canvas Click, event:", e);
     },
     nodeClick(id) {
-      console.log('node click', id);
+      // console.log("node click", id);
     },
     nodeDelete(id) {
-      console.log('node delete', id);
+      // console.log("node delete", id);
     },
     linkBreak(id) {
-      console.log('link break', id);
+      // console.log("link break", id);
     },
     linkAdded(link) {
-      console.log('new link added:', link);
+      // console.log("new link added:", link);
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -118,8 +118,5 @@ export default {
   margin: 0;
   overflow: hidden;
   height: 800px;
-  .tool-wrapper {
-    position: relative;
-  }
 }
 </style>

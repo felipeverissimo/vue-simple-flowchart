@@ -1,34 +1,71 @@
 <template>
-  <div class="flowchart-container" 
-    @mousemove="handleMove" 
+  <div
+    class="flowchart-container"
+    @mousemove="handleMove"
     @mouseup="handleUp"
-    @mousedown="handleDown">
+    @mousedown="handleDown"
+  >
+    <div class="tool-wrapper">
+      <div
+        class="config-tool"
+        v-for="(item, index) in nodeCategory"
+        :key="index"
+        :value="index"
+        @click="chosedNodes(item, index)"
+      >
+        <div class="button-decision" v-if="index == 0">
+          <div>✖</div>
+        </div>
+
+        <div class="button-decision" v-if="index == 1">
+          <div>🞅</div>
+        </div>
+
+        <div class="button-end" v-if="index == 2"></div>
+
+        <div class="button-end-workflow" v-if="index == 3">
+          <div>⏺</div>
+        </div>
+      </div>
+    </div>
+
     <svg width="100%" :height="`${height}px`">
-      <flowchart-link v-bind.sync="link" 
-        v-for="(link, index) in lines" 
+      <flowchart-link
+        v-bind.sync="link"
+        :label="link.label"
+        v-for="(link, index) in lines"
         :key="`link${index}`"
-        @deleteLink="linkDelete(link.id)">
-      </flowchart-link>
+        @deleteLink="linkDelete(link.id)"
+        @changeLineLabel="linkLabel(link, $event)"
+      ></flowchart-link>
     </svg>
-    <flowchart-node v-bind.sync="node" 
-      v-for="(node, index) in scene.nodes" 
+    <flowchart-node
+      v-bind.sync="node"
+      v-for="(node, index) in scene.nodes"
       :key="`node${index}`"
       :options="nodeOptions"
-      @linkingStart="linkingStart(node.id)"
-      @linkingStop="linkingStop(node.id)"
-      @nodeSelected="nodeSelected(node.id, $event)">
+      @linkingStart="linkingStart(node.id, node.type)"
+      @linkingStop="linkingStop(node.id, node.type)"
+      @nodeSelected="nodeSelected(node.id, $event)"
+    >
     </flowchart-node>
   </div>
 </template>
 
 <script>
-import FlowchartLink from './FlowchartLink.vue';
-import FlowchartNode from './FlowchartNode.vue';
-import { getMousePosition } from '../assets/utilty/position';
+import FlowchartLink from "./FlowchartLink.vue";
+import FlowchartNode from "./FlowchartNode.vue";
+import { getMousePosition } from "../assets/utilty/position";
 
 export default {
-  name: 'VueFlowchart',
+  name: "VueFlowchart",
   props: {
+    nodesAction: {
+      type: Object,
+      default() {
+        return {};
+      }
+    },
     scene: {
       type: Object,
       default() {
@@ -37,41 +74,55 @@ export default {
           scale: 1,
           centerY: 140,
           nodes: [],
-          links: [],
-        }
+          links: []
+        };
       }
     },
     height: {
       type: Number,
-      default: 400,
-    },
+      default: 400
+    }
   },
   data() {
     return {
+      newNodeType: 0,
+      newNodeLabel: "",
+      nodeCategory: ["Decision", "Join", "End", "EndWorkflow"],
       action: {
         linking: false,
         dragging: false,
         scrolling: false,
-        selected: 0,
+        selected: 0
+      },
+      item: {
+        text: ""
       },
       mouse: {
         x: 0,
         y: 0,
         lastX: 0,
-        lastY: 0,
+        lastY: 0
       },
       draggingLink: null,
       rootDivOffset: {
         top: 0,
         left: 0
-      },
+      }
     };
+  },
+  watch: {
+    nodesAction: function() {
+      this.addNodeActions;
+    }
   },
   components: {
     FlowchartLink,
-    FlowchartNode,
+    FlowchartNode
   },
   computed: {
+    addNodeActions() {
+      return this.scene.nodes.push(this.nodesAction);
+    },
     nodeOptions() {
       return {
         centerY: this.scene.centerY,
@@ -79,37 +130,43 @@ export default {
         scale: this.scene.scale,
         offsetTop: this.rootDivOffset.top,
         offsetLeft: this.rootDivOffset.left,
-        selected: this.action.selected,
-      }
+        selected: this.action.selected
+      };
     },
     lines() {
-      const lines = this.scene.links.map((link) => {
-        const fromNode = this.findNodeWithID(link.from)
-        const toNode = this.findNodeWithID(link.to)
+      this.scene.links.map(element => {});
+      const lines = this.scene.links.map(link => {
+        const fromNode = this.findNodeWithID(link.from);
+        const toNode = this.findNodeWithID(link.to);
+        // let labelLine = this
         let x, y, cy, cx, ex, ey;
         x = this.scene.centerX + fromNode.x;
         y = this.scene.centerY + fromNode.y;
-        [cx, cy] = this.getPortPosition('bottom', x, y);
+        [cx, cy] = this.getPortPosition("bottom", x, y);
         x = this.scene.centerX + toNode.x;
         y = this.scene.centerY + toNode.y;
-        [ex, ey] = this.getPortPosition('top', x, y);
-        return { 
-          start: [cx, cy], 
+        [ex, ey] = this.getPortPosition("top", x, y);
+        return {
+          start: [cx, cy],
           end: [ex, ey],
           id: link.id,
+          label: link.label,
+          from: fromNode
         };
-      })
+      });
       if (this.draggingLink) {
         let x, y, cy, cx;
-        const fromNode = this.findNodeWithID(this.draggingLink.from)
+        const fromNode = this.findNodeWithID(this.draggingLink.from);
         x = this.scene.centerX + fromNode.x;
         y = this.scene.centerY + fromNode.y;
-        [cx, cy] = this.getPortPosition('bottom', x, y);
-        // push temp dragging link, mouse cursor postion = link end postion 
-        lines.push({ 
-          start: [cx, cy], 
+        [cx, cy] = this.getPortPosition("bottom", x, y);
+        // push temp dragging link, mouse cursor postion = link end postion
+
+        lines.push({
+          start: [cx, cy],
           end: [this.draggingLink.mx, this.draggingLink.my],
-        })
+          label: ""
+        });
       }
       return lines;
     }
@@ -120,75 +177,155 @@ export default {
     // console.log(22222, this.rootDivOffset);
   },
   methods: {
+    linkLabel(link, payload) {
+      const deletedLink = this.scene.links.find(item => {
+        return item.id === link.id;
+      });
+      if (deletedLink) {
+        deletedLink.label = payload;
+      }
+    },
+    chosedNodes(item, index) {
+      this.newNodeType = index;
+      this.addNode();
+    },
+    addNode() {
+      let maxID = Math.max(
+        0,
+        ...this.scene.nodes.map(link => {
+          return link.id;
+        })
+      );
+      this.scene.nodes.push({
+        id: maxID + 1,
+        x: -400,
+        y: 50,
+        type: this.nodeCategory[this.newNodeType],
+        label: this.newNodeLabel ? this.newNodeLabel : `test${maxID + 1}`
+      });
+    },
     findNodeWithID(id) {
-      return this.scene.nodes.find((item) => {
-          return id === item.id
-      })
+      return this.scene.nodes.find(item => {
+        return id === item.id;
+      });
     },
     getPortPosition(type, x, y) {
-      if (type === 'top') {
+      if (type === "top") {
         return [x + 40, y];
-      }
-      else if (type === 'bottom') {
+      } else if (type === "bottom") {
         return [x + 40, y + 80];
       }
     },
-    linkingStart(index) {
+    linkingStart(index, type) {
       this.action.linking = true;
       this.draggingLink = {
         from: index,
         mx: 0,
         my: 0,
+        type: type
       };
     },
-    linkingStop(index) {
+    linkingStop(index, type) {
       // add new Link
       if (this.draggingLink && this.draggingLink.from !== index) {
         // check link existence
-        const existed = this.scene.links.find((link) => {
+        let existed = this.scene.links.find(link => {
           return link.from === this.draggingLink.from && link.to === index;
-        })
+        });
+
+        if (type === "Decision") {
+          existed = this.scene.links.find(link => {
+            return link.to === index;
+          });
+        }
         if (!existed) {
-          let maxID = Math.max(0, ...this.scene.links.map((link) => {
-            return link.id
-          }))
+          let maxID = Math.max(
+            0,
+            ...this.scene.links.map(link => {
+              return link.id;
+            })
+          );
           const newLink = {
             id: maxID + 1,
             from: this.draggingLink.from,
             to: index,
+            type: type
           };
-          this.scene.links.push(newLink)
-          this.$emit('linkAdded', newLink)
+          if (
+            (this.draggingLink.type === "Decision" &&
+              newLink.type === "Join") ||
+            (newLink.type === "Decision" && this.draggingLink.type === "Join")
+          ) {
+            alert("Operação Não permintida1");
+          } else if (
+            this.draggingLink.type === "Action" ||
+            this.draggingLink.type !== newLink.type
+          ) {
+            if (this.draggingLink.from === newLink.from) {
+              // alert("nesse caso é 2");
+              let lista = this.scene.links.map(element => {
+                return element.type;
+              });
+              // Quando o o link vier da mesma origem "ACTION" e tiver um tipo diferente dele mesmo não gera conecxão
+              if (
+                lista.find(type => {
+                  return type != newLink.type;
+                })
+              ) {
+                //... nada acontece aqui
+              } else {
+                if (
+                  lista.find(type => {
+                    return type === newLink.type;
+                  })
+                ) {
+                  //... nada acontece aqui
+                } else {
+                  this.scene.links.push(newLink);
+                  this.$emit("linkAdded", newLink);
+                }
+              }
+            }
+          } else {
+            alert("Operação Não permintida2");
+          }
         }
       }
-      this.draggingLink = null
+      this.draggingLink = null;
     },
     linkDelete(id) {
-      const deletedLink = this.scene.links.find((item) => {
-          return item.id === id;
+      const deletedLink = this.scene.links.find(item => {
+        return item.id === id;
       });
       if (deletedLink) {
-        this.scene.links = this.scene.links.filter((item) => {
-            return item.id !== id;
+        this.scene.links = this.scene.links.filter(item => {
+          return item.id !== id;
         });
-        this.$emit('linkBreak', deletedLink);
+        this.$emit("linkBreak", deletedLink);
       }
     },
     nodeSelected(id, e) {
       this.action.dragging = id;
       this.action.selected = id;
-      this.$emit('nodeClick', id);
-      this.mouse.lastX = e.pageX || e.clientX + document.documentElement.scrollLeft
-      this.mouse.lastY = e.pageY || e.clientY + document.documentElement.scrollTop
+      this.$emit("nodeClick", id);
+      this.mouse.lastX =
+        e.pageX || e.clientX + document.documentElement.scrollLeft;
+      this.mouse.lastY =
+        e.pageY || e.clientY + document.documentElement.scrollTop;
     },
     handleMove(e) {
       if (this.action.linking) {
         [this.mouse.x, this.mouse.y] = getMousePosition(this.$el, e);
-        [this.draggingLink.mx, this.draggingLink.my] = [this.mouse.x, this.mouse.y];
+        [this.draggingLink.mx, this.draggingLink.my] = [
+          this.mouse.x,
+          this.mouse.y
+        ];
       }
       if (this.action.dragging) {
-        this.mouse.x = e.pageX || e.clientX + document.documentElement.scrollLeft
-        this.mouse.y = e.pageY || e.clientY + document.documentElement.scrollTop
+        this.mouse.x =
+          e.pageX || e.clientX + document.documentElement.scrollLeft;
+        this.mouse.y =
+          e.pageY || e.clientY + document.documentElement.scrollTop;
         let diffX = this.mouse.x - this.mouse.lastX;
         let diffY = this.mouse.y - this.mouse.lastY;
 
@@ -213,10 +350,16 @@ export default {
     handleUp(e) {
       const target = e.target || e.srcElement;
       if (this.$el.contains(target)) {
-        if (typeof target.className !== 'string' || target.className.indexOf('node-input') < 0) {
+        if (
+          typeof target.className !== "string" ||
+          target.className.indexOf("node-input") < 0
+        ) {
           this.draggingLink = null;
         }
-        if (typeof target.className === 'string' && target.className.indexOf('node-delete') > -1) {
+        if (
+          typeof target.className === "string" &&
+          target.className.indexOf("node-delete") > -1
+        ) {
           // console.log('delete2', this.action.dragging);
           this.nodeDelete(this.action.dragging);
         }
@@ -228,35 +371,42 @@ export default {
     handleDown(e) {
       const target = e.target || e.srcElement;
       // console.log('for scroll', target, e.keyCode, e.which)
-      if ((target === this.$el || target.matches('svg, svg *')) && e.which === 1) {
+      if (
+        (target === this.$el || target.matches("svg, svg *")) &&
+        e.which === 1
+      ) {
         this.action.scrolling = true;
         [this.mouse.lastX, this.mouse.lastY] = getMousePosition(this.$el, e);
         this.action.selected = null; // deselectAll
       }
-      this.$emit('canvasClick', e);
+      this.$emit("canvasClick", e);
     },
     moveSelectedNode(dx, dy) {
-      let index = this.scene.nodes.findIndex((item) => {
-        return item.id === this.action.dragging
-      })
+      let index = this.scene.nodes.findIndex(item => {
+        return item.id === this.action.dragging;
+      });
       let left = this.scene.nodes[index].x + dx / this.scene.scale;
       let top = this.scene.nodes[index].y + dy / this.scene.scale;
-      this.$set(this.scene.nodes, index, Object.assign(this.scene.nodes[index], {
-        x: left,
-        y: top,
-      }));
+      this.$set(
+        this.scene.nodes,
+        index,
+        Object.assign(this.scene.nodes[index], {
+          x: left,
+          y: top
+        })
+      );
     },
     nodeDelete(id) {
-      this.scene.nodes = this.scene.nodes.filter((node) => {
+      this.scene.nodes = this.scene.nodes.filter(node => {
         return node.id !== id;
-      })
-      this.scene.links = this.scene.links.filter((link) => {
-        return link.from !== id && link.to !== id
-      })
-      this.$emit('nodeDelete', id)
+      });
+      this.scene.links = this.scene.links.filter(link => {
+        return link.from !== id && link.to !== id;
+      });
+      this.$emit("nodeDelete", id);
     }
-  },
-}
+  }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -268,6 +418,105 @@ export default {
   overflow: hidden;
   svg {
     cursor: grab;
+  }
+}
+.tool-wrapper {
+  position: fixed;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  left: 15px;
+  width: 115px;
+  height: 110px;
+  margin-top: 10px;
+  padding-top: 20px;
+  background-color: white;
+  z-index: 800;
+  &:before {
+    height: 20px;
+    width: 100%;
+    min-width: 100%;
+    background-color: rgb(17, 148, 200);
+    content: " ";
+    top: 0px;
+    left: 0;
+    position: absolute;
+    border-radius: 15px, 15px 0px 0px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 5px !important;
+    margin-right: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #e5e5e5;
+    border-radius: 50px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #dddddd;
+  }
+}
+
+.config-tool {
+  width: 43px;
+  height: 43px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ddd;
+  margin: 5px 7px 5px;
+  border-radius: 5px;
+  color: black;
+}
+
+.button-decision {
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 3px solid black;
+  transform: rotate(45deg);
+
+  & > div {
+    position: relative;
+    top: -1px;
+    left: 0px;
+    color: black;
+  }
+}
+
+.button-end {
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 50%;
+}
+
+.button-end-workflow {
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 3px solid black;
+  border-radius: 50%;
+
+  & > div {
+    position: relative;
+    top: -5px;
+    left: 0px;
+    font-size: 20px;
+    color: black;
   }
 }
 </style>

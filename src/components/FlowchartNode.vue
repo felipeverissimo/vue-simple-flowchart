@@ -1,56 +1,159 @@
 <template>
-  <div class="flowchart-node" :style="nodeStyle" 
-    @mousedown="handleMousedown"
-    @mouseover="handleMouseOver"
-    @mouseleave="handleMouseLeave"
-    v-bind:class="{selected: options.selected === id}">
-    <div class="node-port node-input"
-       @mousedown="inputMouseDown"
-       @mouseup="inputMouseUp">
+  <div>
+    <div
+      class="flowchart-node flowchart-actions"
+      :style="nodeStyle"
+      @mousedown="handleMousedown"
+      @mouseover="handleMouseOver"
+      @mouseleave="handleMouseLeave"
+      v-bind:class="{ selected: options.selected === id }"
+      v-if="type === 'Action'"
+    >
+      <div
+        class="node-port node-input"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div class="node-main">
+        <div v-text="label" class="node-label"></div>
+      </div>
+      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
+      <div v-show="show.delete" class="node-delete">&times;</div>
     </div>
-    <div class="node-main">
-      <div v-text="type" class="node-type"></div>
-      <div v-text="label" class="node-label"></div>
+
+    <div
+      class="flowchart-node flowchart-decision"
+      :style="decisionStyle"
+      @mousedown="handleMousedown"
+      @mouseover="handleMouseOver"
+      @mouseleave="handleMouseLeave"
+      v-bind:class="{ selected: options.selected === id }"
+      v-if="type === 'Decision'"
+    >
+      <div
+        class="node-port node-input"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div class="node-main">
+        <div class="node-label">✖</div>
+      </div>
+      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
+      <div v-show="show.delete" class="node-delete">&times;</div>
     </div>
-    <div class="node-port node-output" 
-      @mousedown="outputMouseDown">
+
+    <div
+      class="flowchart-node flowchart-join"
+      :style="decisionStyle"
+      @mousedown="handleMousedown"
+      @mouseover="handleMouseOver"
+      @mouseleave="handleMouseLeave"
+      v-bind:class="{ selected: options.selected === id }"
+      v-if="type === 'Join'"
+    >
+      <div
+        class="node-port node-input"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div class="node-main">
+        <div class="node-label">🞅</div>
+      </div>
+      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
+      <div v-show="show.delete" class="node-delete">&times;</div>
     </div>
-    <div v-show="show.delete" class="node-delete">&times;</div>
+
+    <div
+      class="flowchart-node flowchart-start"
+      :style="startStyle"
+      @mousedown="handleMousedown"
+      @mouseover="handleMouseOver"
+      @mouseleave="handleMouseLeave"
+      v-bind:class="{ selected: options.selected === id }"
+      v-if="type === 'Start'"
+    >
+      <div class="node-main">
+        <div class="node-label"></div>
+      </div>
+      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
+    </div>
+
+    <div
+      class="flowchart-node flowchart-end"
+      :style="endStyle"
+      @mousedown="handleMousedown"
+      @mouseover="handleMouseOver"
+      @mouseleave="handleMouseLeave"
+      v-bind:class="{ selected: options.selected === id }"
+      v-if="type === 'End'"
+    >
+      <div
+        class="node-port node-input"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div class="node-main"></div>
+      <div v-show="show.delete" class="node-delete">&times;</div>
+    </div>
+
+    <div
+      class="flowchart-node flowchart-end-workflow"
+      :style="endStyle"
+      @mousedown="handleMousedown"
+      @mouseover="handleMouseOver"
+      @mouseleave="handleMouseLeave"
+      v-bind:class="{ selected: options.selected === id }"
+      v-if="type === 'EndWorkflow'"
+    >
+      <div
+        class="node-port node-input"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div class="node-main">
+        <div class="node-label">⏺</div>
+      </div>
+      <div v-show="show.delete" class="node-delete">&times;</div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'FlowchartNode',
+  name: "FlowchartNode",
   props: {
     id: {
       type: Number,
       default: 1000,
       validator(val) {
-        return typeof val === 'number'
+        return typeof val === "number";
       }
     },
     x: {
       type: Number,
       default: 0,
       validator(val) {
-        return typeof val === 'number'
+        return typeof val === "number";
       }
-    },    
+    },
     y: {
       type: Number,
       default: 0,
       validator(val) {
-        return typeof val === 'number'
+        return typeof val === "number";
       }
     },
     type: {
       type: String,
-      default: 'Default'
+      default: "Default"
     },
     label: {
       type: String,
-      default: 'input name'
+      default: "input name"
+    },
+    rotate: {
+      type: Number,
+      default: 0
     },
     options: {
       type: Object,
@@ -59,34 +162,58 @@ export default {
           centerX: 1024,
           scale: 1,
           centerY: 140,
-        }
+          rotate: 90
+        };
       }
     }
   },
   data() {
     return {
       show: {
-        delete: false,
+        delete: false
       }
-    }
+    };
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     nodeStyle() {
       return {
-        top: this.options.centerY + this.y * this.options.scale + 'px', // remove: this.options.offsetTop + 
-        left: this.options.centerX + this.x * this.options.scale + 'px', // remove: this.options.offsetLeft + 
-        transform: `scale(${this.options.scale})`,
-      }
+        top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
+        left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
+        transform: `scale(${this.options.scale})`
+      };
+    },
+    decisionStyle() {
+      return {
+        top: this.options.centerY + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
+        left: this.options.centerX + 40 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
+        transform: `rotate(45deg)`
+      };
+    },
+    startStyle() {
+      return {
+        top: this.options.centerY + 40 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
+        left: this.options.centerX + 15 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
+        transform: `scale(${this.options.scale})`
+      };
+    },
+    endStyle() {
+      return {
+        top: this.options.centerY + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
+        left: this.options.centerX + 15 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
+        transform: `scale(${this.options.scale})`
+      };
     }
   },
   methods: {
     handleMousedown(e) {
       const target = e.target || e.srcElement;
       // console.log(target);
-      if (target.className.indexOf('node-input') < 0 && target.className.indexOf('node-output') < 0) {
-        this.$emit('nodeSelected', e);
+      if (
+        target.className.indexOf("node-input") < 0 &&
+        target.className.indexOf("node-output") < 0
+      ) {
+        this.$emit("nodeSelected", e);
       }
       e.preventDefault();
     },
@@ -97,18 +224,18 @@ export default {
       this.show.delete = false;
     },
     outputMouseDown(e) {
-      this.$emit('linkingStart')
+      this.$emit("linkingStart");
       e.preventDefault();
     },
     inputMouseDown(e) {
       e.preventDefault();
     },
     inputMouseUp(e) {
-      this.$emit('linkingStop')
+      this.$emit("linkingStop");
       e.preventDefault();
-    },
+    }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -125,7 +252,7 @@ $portSize: 12;
   border: none;
   background: white;
   z-index: 1;
-  opacity: .9;
+  opacity: 0.9;
   cursor: move;
   transform-origin: top left;
   .node-main {
@@ -155,10 +282,10 @@ $portSize: 12;
     }
   }
   .node-input {
-    top: #{-2+$portSize/-2}px;
+    top: #{-2 + $portSize/-2}px;
   }
   .node-output {
-    bottom: #{-2+$portSize/-2}px;
+    bottom: #{-2 + $portSize/-2}px;
   }
   .node-delete {
     position: absolute;
@@ -173,10 +300,95 @@ $portSize: 12;
     border: 1px solid $themeColor;
     border-radius: 100px;
     text-align: center;
-    &:hover{
+    &:hover {
       background: $themeColor;
       color: white;
     }
+  }
+}
+.flowchart-decision {
+  width: 60px;
+  height: 60px;
+  border: 5px solid black;
+  .node-port {
+    left: 0;
+
+    &.node-output {
+      left: 100%;
+    }
+  }
+  .node-main {
+    .node-label {
+      font-size: 35px;
+      color: black;
+    }
+  }
+}
+
+.flowchart-join {
+  width: 60px;
+  height: 60px;
+  border: 5px solid black;
+  .node-port {
+    left: 0;
+
+    &.node-output {
+      left: 100%;
+    }
+  }
+  .node-main {
+    .node-label {
+      font-size: 35px;
+      color: black;
+    }
+  }
+}
+
+.flowchart-start {
+  width: 50px;
+  height: 50px;
+  border: 3px solid black;
+  border-radius: 50%;
+}
+
+.flowchart-end-workflow {
+  width: 50px;
+  height: 50px;
+  border: 5px solid black;
+  border-radius: 50%;
+
+  .node-input {
+    z-index: 22;
+  }
+
+  .node-main {
+    .node-label {
+      position: relative;
+      top: -10px;
+      font-size: 42px;
+      color: black;
+      z-index: 20;
+    }
+  }
+}
+.flowchart-end {
+  width: 50px;
+  height: 50px;
+  border: 5px solid black;
+  border-radius: 50%;
+}
+
+.flowchart-actions {
+  width: 120px;
+  height: 70px;
+  border: 3px solid black;
+  border-radius: 5px;
+
+  .node-main {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 .selected {
