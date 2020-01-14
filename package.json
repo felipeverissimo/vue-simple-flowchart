@@ -1,5 +1,5 @@
 {
-  "name": "vue-simple-flowchart",
+  "name": "simple-bpm",
   "version": "0.1.9",
   "private": false,
   "main": "./dist/vue-flowchart.common.js",
@@ -50,6 +50,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jeffreyrn/vue-simple-flowchart"
-  }
+    "url": "git+https://github.com/Jeffreyrn/vue-simple-flowchart.git"
+  },
+  "description": "a lightweight flowchart editor for Vue.js, code with vanillaJS,",
+  "bugs": {
+    "url": "https://github.com/Jeffreyrn/vue-simple-flowchart/issues"
+  },
+  "homepage": "https://github.com/Jeffreyrn/vue-simple-flowchart#readme",
+  "author": ""
 }
