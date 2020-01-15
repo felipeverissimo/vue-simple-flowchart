@@ -443,7 +443,7 @@ export default {
   overflow: auto;
   left: 15px;
   width: 122px;
-  height: 110px;
+  height: 140px;
   margin-top: 10px;
   padding-top: 20px;
   background-color: white;
@@ -497,13 +497,12 @@ export default {
   justify-content: center;
   align-items: center;
   background-color: white;
-  border: 3px solid black;
+  outline: 3px solid black;
   transform: rotate(45deg);
+  display: flex;
 
   & > div {
-    position: relative;
-    top: -1px;
-    left: 0px;
+    font-size: 24px;
     color: black;
   }
 }
@@ -528,11 +527,10 @@ export default {
   border-radius: 50%;
 
   & > div {
-    position: relative;
-    top: -5px;
-    left: 0px;
     font-size: 20px;
     color: black;
+    position: relative;
+    top: -5px;
   }
 }
 </style>

@@ -7,7 +7,7 @@
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
       @dblclick="handleContent"
-      v-bind:class="{ 'selected': options.selected === id ,  'full-content': show.fullContent}"
+      v-bind:class="{ 'selected': options.selected === id }"
       v-if="type === 'Action'"
     >
       <div
@@ -190,6 +190,10 @@ export default {
       type: Boolean,
       default: false
     },
+    width: {
+      type: Number,
+      default: 400
+    },
     options: {
       type: Object,
       default () {
@@ -219,7 +223,7 @@ export default {
           top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
           left: this.options.centerX - 160 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
           transform: `scale(${this.options.scale})`,
-          // width: this.options.width
+          width: this.options.width + "px"
         }
       }
       else {
@@ -227,6 +231,8 @@ export default {
           top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
           left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
           transform: `scale(${this.options.scale})`
+
+
         }
 
 
