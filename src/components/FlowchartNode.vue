@@ -6,7 +6,8 @@
       @mousedown="handleMousedown"
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      v-bind:class="{ selected: options.selected === id }"
+      @dblclick="handleContent"
+      v-bind:class="{ 'selected': options.selected === id ,  'full-content': show.fullContent}"
       v-if="type === 'Action'"
     >
       <div
@@ -196,7 +197,8 @@ export default {
           centerX: 1024,
           scale: 1,
           centerY: 140,
-          rotate: 90
+          rotate: 90,
+          width: 400,
         };
       }
     }
@@ -204,17 +206,30 @@ export default {
   data () {
     return {
       show: {
-        delete: false
+        delete: false,
+        fullContent: false
       }
     };
   },
   mounted () { },
   computed: {
-    nodeStyle () {
-      return {
-        top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
-        left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
-        transform: `scale(${this.options.scale})`
+    nodeStyle: function () {
+      if (this.show.fullContent) {
+        return {
+          top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
+          left: this.options.centerX - 160 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
+          transform: `scale(${this.options.scale})`,
+          // width: this.options.width
+        }
+      }
+      else {
+        return {
+          top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
+          left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
+          transform: `scale(${this.options.scale})`
+        }
+
+
       };
     },
     decisionStyle () {
@@ -240,6 +255,14 @@ export default {
     }
   },
   methods: {
+    handleContent () {
+      if (!this.show.fullContent) {
+        this.show.fullContent = true;
+      }
+      else {
+        this.show.fullContent = false;
+      }
+    },
     handleMousedown (e) {
       const target = e.target || e.srcElement;
       // console.log(target);
@@ -253,6 +276,7 @@ export default {
     },
     handleMouseOver () {
       this.show.delete = true;
+
     },
     handleMouseLeave () {
       this.show.delete = false;
@@ -417,12 +441,24 @@ $portSize: 12;
   height: 70px;
   border: 3px solid black;
   border-radius: 5px;
+  will-change: width;
+
+  &.full-content {
+    width: 400px;
+  }
 
   .node-label {
-    white-space: nowrap;
+    padding: 0px 10px;
+    display: block; /* Fallback for non-webkit */
+    display: -webkit-box;
+    max-width: 400px;
+    margin: 0 auto;
+    font-size: 13px;
+    line-height: 1.2;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    padding: 10px;
   }
 
   .node-main {

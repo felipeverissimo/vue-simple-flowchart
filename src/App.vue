@@ -3,7 +3,7 @@
     <h1>simple flowchart</h1>
     <simple-flowchart
       :scene.sync="scene"
-      @nodeClick="nodeClick"
+      @not-allowed="teste"
       @nodeDelete="nodeDelete"
       @linkBreak="linkBreak"
       @linkAdded="linkAdded"
@@ -48,7 +48,7 @@ export default {
             x: -700,
             y: 0,
             type: "Action",
-            label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas ",
+            label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas gigante para 5",
             disabled: false
           },
           {
@@ -102,6 +102,10 @@ export default {
     };
   },
   methods: {
+    teste () {
+      alert("Operação não permitida app");
+
+    },
     canvasClick (e) {
       // console.log("canvas Click, event:", e);
     },

@@ -260,7 +260,6 @@ export default {
           };
 
           if ((this.draggingType === "Decision" && type === "Join") || (type === "Decision" && this.draggingType === "Join")) {
-            alert("Operação não permitida");
             this.$emit('not-allowed')
           }
           else if (this.draggingType === "Action" || this.draggingType !== type) {
@@ -290,7 +289,7 @@ export default {
               }
             }
           } else {
-            alert("Operação não permitida");
+            this.$emit('not-allowed')
           }
         }
       }
