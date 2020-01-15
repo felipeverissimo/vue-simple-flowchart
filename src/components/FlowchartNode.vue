@@ -15,10 +15,19 @@
         @mouseup="inputMouseUp"
       ></div>
       <div class="node-main">
-        <div v-text="label" class="node-label"></div>
+        <div
+          v-text="label"
+          class="node-label"
+        ></div>
       </div>
-      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
-      <div v-show="show.delete" class="node-delete">&times;</div>
+      <div
+        class="node-port node-output"
+        @mousedown="outputMouseDown"
+      ></div>
+      <div
+        v-show="show.delete"
+        class="node-delete"
+      >&times;</div>
     </div>
 
     <div
@@ -38,8 +47,14 @@
       <div class="node-main">
         <div class="node-label">✖</div>
       </div>
-      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
-      <div v-show="show.delete" class="node-delete">&times;</div>
+      <div
+        class="node-port node-output"
+        @mousedown="outputMouseDown"
+      ></div>
+      <div
+        v-show="show.delete"
+        class="node-delete"
+      >&times;</div>
     </div>
 
     <div
@@ -59,8 +74,14 @@
       <div class="node-main">
         <div class="node-label">🞅</div>
       </div>
-      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
-      <div v-show="show.delete" class="node-delete">&times;</div>
+      <div
+        class="node-port node-output"
+        @mousedown="outputMouseDown"
+      ></div>
+      <div
+        v-show="show.delete"
+        class="node-delete"
+      >&times;</div>
     </div>
 
     <div
@@ -75,7 +96,10 @@
       <div class="node-main">
         <div class="node-label"></div>
       </div>
-      <div class="node-port node-output" @mousedown="outputMouseDown"></div>
+      <div
+        class="node-port node-output"
+        @mousedown="outputMouseDown"
+      ></div>
     </div>
 
     <div
@@ -93,7 +117,10 @@
         @mouseup="inputMouseUp"
       ></div>
       <div class="node-main"></div>
-      <div v-show="show.delete" class="node-delete">&times;</div>
+      <div
+        v-show="show.delete"
+        class="node-delete"
+      >&times;</div>
     </div>
 
     <div
@@ -113,7 +140,10 @@
       <div class="node-main">
         <div class="node-label">⏺</div>
       </div>
-      <div v-show="show.delete" class="node-delete">&times;</div>
+      <div
+        v-show="show.delete"
+        class="node-delete"
+      >&times;</div>
     </div>
   </div>
 </template>
@@ -125,21 +155,21 @@ export default {
     id: {
       type: Number,
       default: 1000,
-      validator(val) {
+      validator (val) {
         return typeof val === "number";
       }
     },
     x: {
       type: Number,
       default: 0,
-      validator(val) {
+      validator (val) {
         return typeof val === "number";
       }
     },
     y: {
       type: Number,
       default: 0,
-      validator(val) {
+      validator (val) {
         return typeof val === "number";
       }
     },
@@ -155,9 +185,13 @@ export default {
       type: Number,
       default: 0
     },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Object,
-      default() {
+      default () {
         return {
           centerX: 1024,
           scale: 1,
@@ -167,37 +201,37 @@ export default {
       }
     }
   },
-  data() {
+  data () {
     return {
       show: {
         delete: false
       }
     };
   },
-  mounted() {},
+  mounted () { },
   computed: {
-    nodeStyle() {
+    nodeStyle () {
       return {
         top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
         left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
         transform: `scale(${this.options.scale})`
       };
     },
-    decisionStyle() {
+    decisionStyle () {
       return {
         top: this.options.centerY + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
         left: this.options.centerX + 40 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
         transform: `rotate(45deg)`
       };
     },
-    startStyle() {
+    startStyle () {
       return {
         top: this.options.centerY + 40 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
         left: this.options.centerX + 15 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
         transform: `scale(${this.options.scale})`
       };
     },
-    endStyle() {
+    endStyle () {
       return {
         top: this.options.centerY + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
         left: this.options.centerX + 15 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
@@ -206,7 +240,7 @@ export default {
     }
   },
   methods: {
-    handleMousedown(e) {
+    handleMousedown (e) {
       const target = e.target || e.srcElement;
       // console.log(target);
       if (
@@ -217,20 +251,20 @@ export default {
       }
       e.preventDefault();
     },
-    handleMouseOver() {
+    handleMouseOver () {
       this.show.delete = true;
     },
-    handleMouseLeave() {
+    handleMouseLeave () {
       this.show.delete = false;
     },
-    outputMouseDown(e) {
+    outputMouseDown (e) {
       this.$emit("linkingStart");
       e.preventDefault();
     },
-    inputMouseDown(e) {
+    inputMouseDown (e) {
       e.preventDefault();
     },
-    inputMouseUp(e) {
+    inputMouseUp (e) {
       this.$emit("linkingStop");
       e.preventDefault();
     }
@@ -383,6 +417,13 @@ $portSize: 12;
   height: 70px;
   border: 3px solid black;
   border-radius: 5px;
+
+  .node-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 10px;
+  }
 
   .node-main {
     height: 100%;

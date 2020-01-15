@@ -3,7 +3,6 @@
     <h1>simple flowchart</h1>
     <simple-flowchart
       :scene.sync="scene"
-      :nodesAction.sync="nodeActions"
       @nodeClick="nodeClick"
       @nodeDelete="nodeDelete"
       @linkBreak="linkBreak"
@@ -22,9 +21,8 @@ export default {
   components: {
     SimpleFlowchart
   },
-  data() {
+  data () {
     return {
-      nodeActions: {},
       scene: {
         centerX: 1024,
         centerY: 140,
@@ -42,23 +40,48 @@ export default {
             x: -700,
             y: 0,
             type: "Action",
-            label: "test1"
+            label: "test1",
+            disabled: true
+          },
+          {
+            id: 9,
+            x: -700,
+            y: 0,
+            type: "Action",
+            label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas ",
+            disabled: false
+          },
+          {
+            id: 60,
+            x: -700,
+            y: 0,
+            type: "Action",
+            label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas ",
+            disabled: false
+          },
+          {
+            id: 52,
+            x: -700,
+            y: 0,
+            type: "Action",
+            label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas ",
+            disabled: false
           },
           {
             id: 4,
             x: -357,
             y: 80,
             type: "Decision",
-            label: "test2",
-            rotate: 45
+            label: "decisáo",
+            disabled: false
           },
           {
             id: 6,
             x: -557,
             y: 80,
             type: "Join",
-            label: "test3",
-            rotate: 45
+            label: "test1",
+            disabled: false
           }
         ],
         links: [
@@ -79,19 +102,19 @@ export default {
     };
   },
   methods: {
-    canvasClick(e) {
+    canvasClick (e) {
       // console.log("canvas Click, event:", e);
     },
-    nodeClick(id) {
+    nodeClick (id) {
       // console.log("node click", id);
     },
-    nodeDelete(id) {
+    nodeDelete (id) {
       // console.log("node delete", id);
     },
-    linkBreak(id) {
+    linkBreak (id) {
       // console.log("link break", id);
     },
-    linkAdded(link) {
+    linkAdded (link) {
       // console.log("new link added:", link);
     }
   }

@@ -13,23 +13,38 @@
         :value="index"
         @click="chosedNodes(item, index)"
       >
-        <div class="button-decision" v-if="index == 0">
+        <div
+          class="button-decision"
+          v-if="index == 0"
+        >
           <div>✖</div>
         </div>
 
-        <div class="button-decision" v-if="index == 1">
+        <div
+          class="button-decision"
+          v-if="index == 1"
+        >
           <div>🞅</div>
         </div>
 
-        <div class="button-end" v-if="index == 2"></div>
+        <div
+          class="button-end"
+          v-if="index == 2"
+        ></div>
 
-        <div class="button-end-workflow" v-if="index == 3">
+        <div
+          class="button-end-workflow"
+          v-if="index == 3"
+        >
           <div>⏺</div>
         </div>
       </div>
     </div>
 
-    <svg width="100%" :height="`${height}px`">
+    <svg
+      width="100%"
+      :height="`${height}px`"
+    >
       <flowchart-link
         v-bind.sync="link"
         :label="link.label"
@@ -62,13 +77,13 @@ export default {
   props: {
     nodesAction: {
       type: Object,
-      default() {
+      default () {
         return {};
       }
     },
     scene: {
       type: Object,
-      default() {
+      default () {
         return {
           centerX: 1024,
           scale: 1,
@@ -83,7 +98,7 @@ export default {
       default: 400
     }
   },
-  data() {
+  data () {
     return {
       newNodeType: 0,
       newNodeLabel: "",
@@ -110,20 +125,12 @@ export default {
       }
     };
   },
-  watch: {
-    nodesAction: function() {
-      this.addNodeActions;
-    }
-  },
   components: {
     FlowchartLink,
     FlowchartNode
   },
   computed: {
-    addNodeActions() {
-      return this.scene.nodes.push(this.nodesAction);
-    },
-    nodeOptions() {
+    nodeOptions () {
       return {
         centerY: this.scene.centerY,
         centerX: this.scene.centerX,
@@ -133,8 +140,8 @@ export default {
         selected: this.action.selected
       };
     },
-    lines() {
-      this.scene.links.map(element => {});
+    lines () {
+      // this.scene.links.map(element => { });
       const lines = this.scene.links.map(link => {
         const fromNode = this.findNodeWithID(link.from);
         const toNode = this.findNodeWithID(link.to);
@@ -171,13 +178,13 @@ export default {
       return lines;
     }
   },
-  mounted() {
+  mounted () {
     this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
     this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
     // console.log(22222, this.rootDivOffset);
   },
   methods: {
-    linkLabel(link, payload) {
+    linkLabel (link, payload) {
       const deletedLink = this.scene.links.find(item => {
         return item.id === link.id;
       });
@@ -185,11 +192,11 @@ export default {
         deletedLink.label = payload;
       }
     },
-    chosedNodes(item, index) {
+    chosedNodes (item, index) {
       this.newNodeType = index;
       this.addNode();
     },
-    addNode() {
+    addNode () {
       let maxID = Math.max(
         0,
         ...this.scene.nodes.map(link => {
@@ -204,28 +211,29 @@ export default {
         label: this.newNodeLabel ? this.newNodeLabel : `test${maxID + 1}`
       });
     },
-    findNodeWithID(id) {
+    findNodeWithID (id) {
       return this.scene.nodes.find(item => {
         return id === item.id;
       });
     },
-    getPortPosition(type, x, y) {
+    getPortPosition (type, x, y) {
       if (type === "top") {
         return [x + 40, y];
       } else if (type === "bottom") {
         return [x + 40, y + 80];
       }
     },
-    linkingStart(index, type) {
+    linkingStart (index, type, ) {
       this.action.linking = true;
+
+      this.draggingType = type
       this.draggingLink = {
         from: index,
         mx: 0,
         my: 0,
-        type: type
       };
     },
-    linkingStop(index, type) {
+    linkingStop (index, type) {
       // add new Link
       if (this.draggingLink && this.draggingLink.from !== index) {
         // check link existence
@@ -249,62 +257,70 @@ export default {
             id: maxID + 1,
             from: this.draggingLink.from,
             to: index,
-            type: type
           };
-          if (
-            (this.draggingLink.type === "Decision" &&
-              newLink.type === "Join") ||
-            (newLink.type === "Decision" && this.draggingLink.type === "Join")
-          ) {
-            alert("Operação Não permintida1");
-          } else if (
-            this.draggingLink.type === "Action" ||
-            this.draggingLink.type !== newLink.type
-          ) {
+
+          if ((this.draggingType === "Decision" && type === "Join") || (type === "Decision" && this.draggingType === "Join")) {
+            alert("Operação não permitida");
+            this.$emit('not-allowed')
+          }
+          else if (this.draggingType === "Action" || this.draggingType !== type) {
             if (this.draggingLink.from === newLink.from) {
-              // alert("nesse caso é 2");
-              let lista = this.scene.links.map(element => {
-                return element.type;
-              });
-              // Quando o o link vier da mesma origem "ACTION" e tiver um tipo diferente dele mesmo não gera conecxão
-              if (
-                lista.find(type => {
-                  return type != newLink.type;
-                })
-              ) {
-                //... nada acontece aqui
-              } else {
-                if (
-                  lista.find(type => {
-                    return type === newLink.type;
-                  })
-                ) {
-                  //... nada acontece aqui
-                } else {
+              let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
+              let parentNodes = this.scene.links.map(element => { return element.from });
+              let equalsNodes = parentNodes.find(node => { return node === this.draggingLink.from; })
+
+              if (!findNodeFrom.disabled && parentNodes.length >= 1) {
+                //check if the parent node has multiple conections  
+                if (!findNodeFrom.disabled && type === 'Action') {
                   this.scene.links.push(newLink);
                   this.$emit("linkAdded", newLink);
                 }
+
+                else if (!findNodeFrom.disabled && (type === 'Join' || type === 'Decision') && !equalsNodes) {
+                  //check if the parent node has no conections and linking  nodes of type Join or decision
+                  findNodeFrom['disabled'] = true
+                  this.scene.links.push(newLink);
+                  this.$emit("linkAdded", newLink);
+                }
+              } else if (!findNodeFrom.disabled && (type === 'Join' || type === 'Decision')) {
+                //check if the parent node has no conections and linking  nodes of type Join or decision
+                findNodeFrom['disabled'] = true
+                this.scene.links.push(newLink);
+                this.$emit("linkAdded", newLink);
               }
             }
           } else {
-            alert("Operação Não permintida2");
+            alert("Operação não permitida");
           }
         }
       }
       this.draggingLink = null;
     },
-    linkDelete(id) {
+    linkDelete (id) {
       const deletedLink = this.scene.links.find(item => {
         return item.id === id;
       });
+      let findNodeFromDelete = this.scene.nodes.find(node => {
+        return node.id === deletedLink.from
+      });
+
+      let deletedLinkChild = this.scene.nodes.find(item => {
+        return item.id === deletedLink.to;
+      });
+
       if (deletedLink) {
         this.scene.links = this.scene.links.filter(item => {
           return item.id !== id;
         });
-        this.$emit("linkBreak", deletedLink);
+        if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision') {
+          findNodeFromDelete['disabled'] = false
+          this.$emit("linkBreak", deletedLink);
+        } else {
+          this.$emit("linkBreak", deletedLink);
+        }
       }
     },
-    nodeSelected(id, e) {
+    nodeSelected (id, e) {
       this.action.dragging = id;
       this.action.selected = id;
       this.$emit("nodeClick", id);
@@ -313,7 +329,7 @@ export default {
       this.mouse.lastY =
         e.pageY || e.clientY + document.documentElement.scrollTop;
     },
-    handleMove(e) {
+    handleMove (e) {
       if (this.action.linking) {
         [this.mouse.x, this.mouse.y] = getMousePosition(this.$el, e);
         [this.draggingLink.mx, this.draggingLink.my] = [
@@ -347,7 +363,7 @@ export default {
         // this.hasDragged = true
       }
     },
-    handleUp(e) {
+    handleUp (e) {
       const target = e.target || e.srcElement;
       if (this.$el.contains(target)) {
         if (
@@ -368,7 +384,7 @@ export default {
       this.action.dragging = null;
       this.action.scrolling = false;
     },
-    handleDown(e) {
+    handleDown (e) {
       const target = e.target || e.srcElement;
       // console.log('for scroll', target, e.keyCode, e.which)
       if (
@@ -381,7 +397,7 @@ export default {
       }
       this.$emit("canvasClick", e);
     },
-    moveSelectedNode(dx, dy) {
+    moveSelectedNode (dx, dy) {
       let index = this.scene.nodes.findIndex(item => {
         return item.id === this.action.dragging;
       });
@@ -396,7 +412,7 @@ export default {
         })
       );
     },
-    nodeDelete(id) {
+    nodeDelete (id) {
       this.scene.nodes = this.scene.nodes.filter(node => {
         return node.id !== id;
       });
@@ -423,10 +439,11 @@ export default {
 .tool-wrapper {
   position: fixed;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   overflow: auto;
   left: 15px;
-  width: 115px;
+  width: 122px;
   height: 110px;
   margin-top: 10px;
   padding-top: 20px;
