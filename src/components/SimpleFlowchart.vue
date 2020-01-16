@@ -584,8 +584,8 @@ export default {
 
   & > div {
     background-color: black;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     position: relative;
     border-radius: 50%;
     content: " ";

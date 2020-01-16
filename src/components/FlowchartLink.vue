@@ -1,19 +1,40 @@
 <template>
-  <g @mouseover="handleMouseOver" @mouseleave="handleMouseLeave">
-    <path :d="dAttr" :style="pathStyle"></path>
-    <a v-if="show.delete" @click="deleteLink">
-      <text text-anchor="middle" :transform="arrowTransform" font-size="22"
-        >&times;</text
-      >
+  <g
+    @mouseover="handleMouseOver"
+    @mouseleave="handleMouseLeave"
+  >
+    <path
+      :d="dAttr"
+      :style="pathStyle"
+    ></path>
+    <a
+      v-if="show.delete"
+      @click="deleteLink"
+    >
+      <text
+        text-anchor="middle"
+        :transform="arrowTransform"
+        font-size="22"
+      >&times;</text>
     </a>
     <a v-else>
-      <text text-anchor="middle" :transform="textTransform" font-size="22">{{
+      <text
+        text-anchor="middle"
+        :transform="textTransform"
+        font-size="22"
+      >{{
         text
       }}</text>
     </a>
-    <a v-if="show.delete" @dblclick="changeLink">
-      <text text-anchor="middle" :transform="changeTransform" font-size="22"
-        >Editar
+    <a
+      v-if="show.delete"
+      @dblclick="changeLink"
+    >
+      <text
+        text-anchor="middle"
+        :transform="changeTransform"
+        font-size="22"
+      >Editar
       </text>
     </a>
   </g>
@@ -25,50 +46,50 @@ export default {
   props: {
     label: {
       type: String,
-      default() {
+      default () {
         return this.text;
       }
     },
     // start point position [x, y]
     start: {
       type: Array,
-      default() {
+      default () {
         return [0, 0];
       }
     },
     // end point position [x, y]
     end: {
       type: Array,
-      default() {
+      default () {
         return [0, 0];
       }
     },
     id: Number
   },
-  data() {
+  data () {
     return {
-      text: this.compText,
+      text: this.label,
       show: {
         delete: false
       }
     };
   },
   methods: {
-    handleMouseOver() {
+    handleMouseOver () {
       if (this.id) {
         this.show.delete = true;
       }
     },
-    handleMouseLeave() {
+    handleMouseLeave () {
       this.show.delete = false;
     },
-    caculateCenterPoint() {
+    caculateCenterPoint () {
       // caculate arrow position: the center point between start and end
       const dx = (this.end[0] - this.start[0]) / 2;
       const dy = (this.end[1] - this.start[1]) / 2;
       return [this.start[0] + dx, this.start[1] + dy];
     },
-    caculateRotation() {
+    caculateRotation () {
       // caculate arrow rotation
       const angle = -Math.atan2(
         this.end[0] - this.start[0],
@@ -77,55 +98,55 @@ export default {
       const degree = (angle * 180) / Math.PI;
       return degree < 0 ? degree + 360 : degree;
     },
-    changeLink() {
+    changeLink () {
       this.text = prompt();
     },
-    deleteLink() {
+    deleteLink () {
       this.$emit("deleteLink");
     }
   },
   watch: {
-    text: function() {
+    text: function () {
       this.$emit("changeLineLabel", this.text);
     }
   },
   computed: {
-    pathStyle() {
+    pathStyle () {
       return {
         stroke: "rgb(255, 136, 85)",
         strokeWidth: 2.73205,
         fill: "none"
       };
     },
-    arrowStyle() {
+    arrowStyle () {
       return {
         stroke: "rgb(255, 136, 85)",
         strokeWidth: 5.73205,
         fill: "none"
       };
     },
-    arrowTransform() {
+    arrowTransform () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
       const degree = this.caculateRotation();
       return `translate(${arrowX}, ${arrowY}) rotate(${degree})`;
     },
-    textTransform() {
+    textTransform () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
       let sideText = arrowX + 50;
       const degree = this.caculateRotation();
       return `translate(${sideText}, ${arrowY}) rotate(${degree} )`;
     },
-    changeTransform() {
+    changeTransform () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
       let change = arrowY + 35;
       const degree = this.caculateRotation();
       return `translate(${arrowX}, ${change}) rotate(${degree})`;
     },
-    compText() {
+    compText () {
       let change = this.text;
       return (this.$props.label = `${change}`);
     },
-    dAttr() {
+    dAttr () {
       let cx = this.start[0],
         cy = this.start[1],
         ex = this.end[0],

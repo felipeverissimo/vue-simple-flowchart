@@ -93,13 +93,13 @@ export default {
             id: 5,
             from: 1, // node id the link start
             to: 2, // node id the link end
-            label: ""
+            label: "inicio"
           },
           {
             id: 3,
             from: 2, // node id the link start
             to: 4, // node id the link end
-            label: ""
+            label: "PROCEDE > NÃO PROCEDE"
           }
         ]
       }
