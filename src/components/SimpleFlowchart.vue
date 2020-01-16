@@ -266,7 +266,6 @@ export default {
           if (this.draggingType === "Start" && type === "Action") {
             let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
             let parentNodes = this.scene.links.map(element => { return element.from });
-            let equalsNodes = parentNodes.find(node => { return node === this.draggingLink.from; })
 
             if (!findNodeFrom.disabled && parentNodes.length >= 1) {
               //check if the parent node has multiple conections  

@@ -230,7 +230,7 @@ export default {
           width: 120 + "px",
 
         }
-      };
+      }
     },
     decisionStyle () {
       return {
