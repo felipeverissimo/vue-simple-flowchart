@@ -7,7 +7,7 @@
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
       @dblclick="handleContent"
-      v-bind:class="{ 'selected': options.selected === id }"
+      v-bind:class="{full: options.transition, selected: options.selected === id  }"
       v-if="type === 'Action'"
     >
       <div
@@ -190,10 +190,6 @@ export default {
       type: Boolean,
       default: false
     },
-    width: {
-      type: Number,
-      default: 400
-    },
     options: {
       type: Object,
       default () {
@@ -211,8 +207,8 @@ export default {
     return {
       show: {
         delete: false,
-        fullContent: false
-      }
+        fullContent: false,
+      },
     };
   },
   mounted () { },
@@ -223,19 +219,17 @@ export default {
           top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
           left: this.options.centerX - 160 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
           transform: `scale(${this.options.scale})`,
-          width: this.options.width + "px"
+          width: this.options.width + "px",
         }
       }
       else {
         return {
           top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
           left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
-          transform: `scale(${this.options.scale})`
-
+          transform: `scale(${this.options.scale})`,
+          width: 120 + "px",
 
         }
-
-
       };
     },
     decisionStyle () {
@@ -263,10 +257,23 @@ export default {
   methods: {
     handleContent () {
       if (!this.show.fullContent) {
+        this.$emit('nodeTransition')
+
         this.show.fullContent = true;
+
+
+
       }
       else {
+
+        this.$emit('nodeTransition')
+        // alert('to aqui ')
         this.show.fullContent = false;
+        this.$emit('canvasClick')
+
+
+
+
       }
     },
     handleMousedown (e) {
@@ -449,10 +456,6 @@ $portSize: 12;
   border-radius: 5px;
   will-change: width;
 
-  &.full-content {
-    width: 400px;
-  }
-
   .node-label {
     padding: 0px 10px;
     display: block; /* Fallback for non-webkit */
@@ -476,5 +479,8 @@ $portSize: 12;
 }
 .selected {
   box-shadow: 0 0 0 2px $themeColor;
+}
+.full {
+  transition: 0.5s ease-in-out;
 }
 </style>

@@ -33,7 +33,8 @@ export default {
             x: -700,
             y: -139,
             type: "Start",
-            label: "Start"
+            label: "Start",
+            disabled: true
           },
           {
             id: 2,
@@ -49,7 +50,8 @@ export default {
             y: 0,
             type: "Action",
             label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas gigante para 5",
-            disabled: false
+            disabled: false,
+            width: 400
           },
           {
             id: 60,
@@ -57,7 +59,8 @@ export default {
             y: 0,
             type: "Action",
             label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas ",
-            disabled: false
+            disabled: false,
+            width: 400
           },
           {
             id: 52,
@@ -65,7 +68,8 @@ export default {
             y: 0,
             type: "Action",
             label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas ",
-            disabled: false
+            disabled: false,
+            width: 400
           },
           {
             id: 4,
@@ -104,7 +108,6 @@ export default {
   methods: {
     teste () {
       alert("Operação não permitida app");
-
     },
     canvasClick (e) {
       // console.log("canvas Click, event:", e);

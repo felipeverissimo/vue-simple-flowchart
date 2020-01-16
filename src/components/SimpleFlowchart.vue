@@ -36,7 +36,7 @@
           class="button-end-workflow"
           v-if="index == 3"
         >
-          <div>⏺</div>
+          <div></div>
         </div>
       </div>
     </div>
@@ -62,6 +62,7 @@
       @linkingStart="linkingStart(node.id, node.type)"
       @linkingStop="linkingStop(node.id, node.type)"
       @nodeSelected="nodeSelected(node.id, $event)"
+      @nodeTransition='nodeTransition()'
     >
     </flowchart-node>
   </div>
@@ -107,7 +108,8 @@ export default {
         linking: false,
         dragging: false,
         scrolling: false,
-        selected: 0
+        selected: 0,
+        transition: false,
       },
       item: {
         text: ""
@@ -137,7 +139,9 @@ export default {
         scale: this.scene.scale,
         offsetTop: this.rootDivOffset.top,
         offsetLeft: this.rootDivOffset.left,
-        selected: this.action.selected
+        selected: this.action.selected,
+        width: 400,
+        transition: this.action.transition,
       };
     },
     lines () {
@@ -259,7 +263,27 @@ export default {
             to: index,
           };
 
-          if ((this.draggingType === "Decision" && type === "Join") || (type === "Decision" && this.draggingType === "Join")) {
+          if (this.draggingType === "Start" && type === "Action") {
+            let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
+            let parentNodes = this.scene.links.map(element => { return element.from });
+            let equalsNodes = parentNodes.find(node => { return node === this.draggingLink.from; })
+
+            if (!findNodeFrom.disabled && parentNodes.length >= 1) {
+              //check if the parent node has multiple conections  
+              if (!findNodeFrom.disabled && type === 'Action' && parentNodes.length < 2) {
+                this.scene.links.push(newLink);
+                this.$emit("linkAdded", newLink);
+              }
+              else {
+                this.$emit('not-allowed')
+              }
+            }
+            else {
+              this.$emit('not-allowed')
+            }
+
+          }
+          else if ((this.draggingType === "Decision" && type === "Join") || (type === "Decision" && this.draggingType === "Join")) {
             this.$emit('not-allowed')
           }
           else if (this.draggingType === "Action" || this.draggingType !== type) {
@@ -274,18 +298,27 @@ export default {
                   this.scene.links.push(newLink);
                   this.$emit("linkAdded", newLink);
                 }
-
                 else if (!findNodeFrom.disabled && (type === 'Join' || type === 'Decision') && !equalsNodes) {
                   //check if the parent node has no conections and linking  nodes of type Join or decision
-                  findNodeFrom['disabled'] = true
-                  this.scene.links.push(newLink);
-                  this.$emit("linkAdded", newLink);
+                  if (findNodeFrom.label === 'Start') {
+                    this.$emit('not-allowed')                  }
+                  else {
+                    findNodeFrom['disabled'] = true
+                    this.scene.links.push(newLink);
+                    this.$emit("linkAdded", newLink);
+                  }
+                }
+                else {
+                  this.$emit('not-allowed')
                 }
               } else if (!findNodeFrom.disabled && (type === 'Join' || type === 'Decision')) {
                 //check if the parent node has no conections and linking  nodes of type Join or decision
                 findNodeFrom['disabled'] = true
                 this.scene.links.push(newLink);
                 this.$emit("linkAdded", newLink);
+              }
+              else {
+                this.$emit('not-allowed')
               }
             }
           } else {
@@ -306,7 +339,6 @@ export default {
       let deletedLinkChild = this.scene.nodes.find(item => {
         return item.id === deletedLink.to;
       });
-
       if (deletedLink) {
         this.scene.links = this.scene.links.filter(item => {
           return item.id !== id;
@@ -314,10 +346,19 @@ export default {
         if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision') {
           findNodeFromDelete['disabled'] = false
           this.$emit("linkBreak", deletedLink);
+        } else if (findNodeFromDelete.type === "Start") {
+          findNodeFromDelete['disabled'] = false
         } else {
           this.$emit("linkBreak", deletedLink);
         }
       }
+    },
+    nodeTransition () {
+      let me = this;
+      this.action.transition = !this.action.transition
+      setTimeout(function () {
+        me.action.transition = false
+      }, 500);
     },
     nodeSelected (id, e) {
       this.action.dragging = id;
@@ -436,7 +477,7 @@ export default {
   }
 }
 .tool-wrapper {
-  position: fixed;
+  position: absolute;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -489,6 +530,10 @@ export default {
   margin: 5px 7px 5px;
   border-radius: 5px;
   color: black;
+  transition: 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.05);
+  }
 }
 
 .button-decision {
@@ -500,37 +545,54 @@ export default {
   outline: 3px solid black;
   transform: rotate(45deg);
   display: flex;
+  transition: 0.5s ease-in-out;
 
   & > div {
-    font-size: 24px;
+    font-size: 22px;
     color: black;
+  }
+
+  &:hover {
+    transform: scale(1.1) rotate(45deg);
   }
 }
 
 .button-end {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   justify-content: center;
   align-items: center;
   background-color: white;
   border: 3px solid black;
   border-radius: 50%;
+  transition: 0.5s ease-in-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .button-end-workflow {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   justify-content: center;
   align-items: center;
   background-color: white;
   border: 3px solid black;
   border-radius: 50%;
+  display: flex;
+  transition: 0.5s ease-in-out;
 
   & > div {
-    font-size: 20px;
-    color: black;
+    background-color: black;
+    width: 24px;
+    height: 24px;
     position: relative;
-    top: -5px;
+    border-radius: 50%;
+    content: " ";
+  }
+  &:hover {
+    transform: scale(1.1);
   }
 }
 </style>
