@@ -34,7 +34,7 @@ export default {
             y: -139,
             type: "Start",
             label: "Start",
-            disabled: true
+            disabled: false
           },
           {
             id: 2,
@@ -42,14 +42,14 @@ export default {
             y: 0,
             type: "Action",
             label: "test1",
-            disabled: true
+            disabled: false
           },
           {
-            id: 9,
+            id: 5987569,
             x: -700,
             y: 0,
             type: "Action",
-            label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas gigante para 5",
+            label: "Mano",
             disabled: false,
             width: 400
           },
@@ -67,12 +67,12 @@ export default {
             x: -700,
             y: 0,
             type: "Action",
-            label: "Este e um texto gigante para 5 linhas, gigante para 5 linhas, gigante para 5 linhas ",
+            label: "linhas ",
             disabled: false,
             width: 400
           },
           {
-            id: 4,
+            id: 3248,
             x: -357,
             y: 80,
             type: "Decision",
@@ -80,7 +80,7 @@ export default {
             disabled: false
           },
           {
-            id: 6,
+            id: 5796,
             x: -557,
             y: 80,
             type: "Join",
@@ -89,18 +89,7 @@ export default {
           }
         ],
         links: [
-          {
-            id: 5,
-            from: 1, // node id the link start
-            to: 2, // node id the link end
-            label: "inicio"
-          },
-          {
-            id: 3,
-            from: 2, // node id the link start
-            to: 4, // node id the link end
-            label: "PROCEDE > NÃO PROCEDE"
-          }
+
         ]
       }
     };

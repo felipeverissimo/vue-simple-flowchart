@@ -201,12 +201,7 @@ export default {
       this.addNode();
     },
     addNode () {
-      let maxID = Math.max(
-        0,
-        ...this.scene.nodes.map(link => {
-          return link.id;
-        })
-      );
+      let maxID = this.scene.nodes.length;
       this.scene.nodes.push({
         id: maxID + 1,
         x: -400,
@@ -262,14 +257,14 @@ export default {
             from: this.draggingLink.from,
             to: index,
           };
+          let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
+          let parentNodes = this.scene.links.map(element => { return element.from });
+          let disabled = findNodeFrom.disabled;
 
-          if (this.draggingType === "Start" && type === "Action") {
-            let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
-            let parentNodes = this.scene.links.map(element => { return element.from });
-
-            if (!findNodeFrom.disabled && parentNodes.length >= 1) {
-              //check if the parent node has multiple conections  
-              if (!findNodeFrom.disabled && type === 'Action' && parentNodes.length < 2) {
+          if (this.draggingType === "Start") {
+            if (type === 'Action') {
+              if (!disabled) {
+                findNodeFrom['disabled'] = true
                 this.scene.links.push(newLink);
                 this.$emit("linkAdded", newLink);
               }
@@ -280,49 +275,46 @@ export default {
             else {
               this.$emit('not-allowed')
             }
-
           }
-          else if ((this.draggingType === "Decision" && type === "Join") || (type === "Decision" && this.draggingType === "Join")) {
-            this.$emit('not-allowed')
-          }
-          else if (this.draggingType === "Action" || this.draggingType !== type) {
-            if (this.draggingLink.from === newLink.from) {
-              let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
-              let parentNodes = this.scene.links.map(element => { return element.from });
-              let equalsNodes = parentNodes.find(node => { return node === this.draggingLink.from; })
-
-              if (!findNodeFrom.disabled && parentNodes.length >= 1) {
-                //check if the parent node has multiple conections  
-                if (!findNodeFrom.disabled && type === 'Action') {
-                  this.scene.links.push(newLink);
-                  this.$emit("linkAdded", newLink);
-                }
-                else if (!findNodeFrom.disabled && (type === 'Join' || type === 'Decision') && !equalsNodes) {
-                  //check if the parent node has no conections and linking  nodes of type Join or decision
-                  if (findNodeFrom.label === 'Start') {
-                    this.$emit('not-allowed')                  }
-                  else {
-                    findNodeFrom['disabled'] = true
-                    this.scene.links.push(newLink);
-                    this.$emit("linkAdded", newLink);
-                  }
-                }
-                else {
-                  this.$emit('not-allowed')
-                }
-              } else if (!findNodeFrom.disabled && (type === 'Join' || type === 'Decision')) {
-                //check if the parent node has no conections and linking  nodes of type Join or decision
-                findNodeFrom['disabled'] = true
-                this.scene.links.push(newLink);
-                this.$emit("linkAdded", newLink);
-              }
-              else {
-                this.$emit('not-allowed')
-              }
+          if (this.draggingType === "Action") {
+            if (!disabled) {
+              findNodeFrom['disabled'] = true
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
             }
-          } else {
-            this.$emit('not-allowed')
+            else if (disabled && type === "Action") {
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            }
+            else {
+              this.$emit('not-allowed')
+            }
           }
+          if (this.draggingType === "Join") {
+            if (type !== "Action") {
+              this.$emit('not-allowed')
+            }
+            else if (disabled && type === "Action") {
+              this.$emit('not-allowed')
+            }
+            else {
+              findNodeFrom['disabled'] = true
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            }
+          }
+          if (this.draggingType === "Decision") {
+            if (type === "Join" || type === "Decision") {
+              this.$emit('not-allowed')
+            }
+            else {
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            }
+          }
+        }
+        else {
+          this.$emit('not-allowed')
         }
       }
       this.draggingLink = null;
@@ -345,9 +337,11 @@ export default {
         if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision') {
           findNodeFromDelete['disabled'] = false
           this.$emit("linkBreak", deletedLink);
-        } else if (findNodeFromDelete.type === "Start") {
+        }
+        else if (findNodeFromDelete.type === "Start" || findNodeFromDelete.type === "Action") {
           findNodeFromDelete['disabled'] = false
-        } else {
+        }
+        else {
           this.$emit("linkBreak", deletedLink);
         }
       }

@@ -242,17 +242,6 @@ if (typeof window !== 'undefined') {
 
 /***/ }),
 
-/***/ "1f2d":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_33d8fa9c_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("e88c");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_33d8fa9c_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_33d8fa9c_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_33d8fa9c_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "20d6":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -820,6 +809,13 @@ module.exports = {
 
 /***/ }),
 
+/***/ "8dc2":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "9093":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1192,10 +1188,14 @@ module.exports = function (original) {
 
 /***/ }),
 
-/***/ "e88c":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "f5e1":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-// extracted by mini-css-extract-plugin
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_530ab3c6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("8dc2");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_530ab3c6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_530ab3c6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_8_oneOf_1_0_node_modules_css_loader_index_js_ref_8_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_lib_index_js_ref_8_oneOf_1_2_node_modules_sass_loader_lib_loader_js_ref_8_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SimpleFlowchart_vue_vue_type_style_index_0_id_530ab3c6_scoped_true_lang_scss___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -1228,12 +1228,12 @@ __webpack_require__.r(__webpack_exports__);
 // EXTERNAL MODULE: ./node_modules/@vue/cli-service/lib/commands/build/setPublicPath.js
 var setPublicPath = __webpack_require__("1eb2");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"d50f023a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/SimpleFlowchart.vue?vue&type=template&id=33d8fa9c&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules//.cache//vue-loader","cacheIdentifier":"d50f023a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/SimpleFlowchart.vue?vue&type=template&id=530ab3c6&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"flowchart-container",on:{"mousemove":_vm.handleMove,"mouseup":_vm.handleUp,"mousedown":_vm.handleDown}},[_c('div',{staticClass:"tool-wrapper"},_vm._l((_vm.nodeCategory),function(item,index){return _c('div',{key:index,staticClass:"config-tool",attrs:{"value":index},on:{"click":function($event){_vm.chosedNodes(item, index)}}},[(index == 0)?_c('div',{staticClass:"button-decision"},[_c('div',[_vm._v("✖")])]):_vm._e(),(index == 1)?_c('div',{staticClass:"button-decision"},[_c('div',[_vm._v("🞅")])]):_vm._e(),(index == 2)?_c('div',{staticClass:"button-end"}):_vm._e(),(index == 3)?_c('div',{staticClass:"button-end-workflow"},[_c('div')]):_vm._e()])})),_c('svg',{attrs:{"width":"100%","height":(_vm.height + "px")}},_vm._l((_vm.lines),function(link,index){return _c('flowchart-link',_vm._b({key:("link" + index),attrs:{"label":link.label},on:{"deleteLink":function($event){_vm.linkDelete(link.id)},"changeLineLabel":function($event){_vm.linkLabel(link, $event)}}},'flowchart-link',link,false,true))})),_vm._l((_vm.scene.nodes),function(node,index){return _c('flowchart-node',_vm._b({key:("node" + index),attrs:{"options":_vm.nodeOptions},on:{"linkingStart":function($event){_vm.linkingStart(node.id, node.type)},"linkingStop":function($event){_vm.linkingStop(node.id, node.type)},"nodeSelected":function($event){_vm.nodeSelected(node.id, $event)},"nodeTransition":function($event){_vm.nodeTransition()}}},'flowchart-node',node,false,true))})],2)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/SimpleFlowchart.vue?vue&type=template&id=33d8fa9c&scoped=true&
+// CONCATENATED MODULE: ./src/components/SimpleFlowchart.vue?vue&type=template&id=530ab3c6&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.object.assign.js
 var es6_object_assign = __webpack_require__("f751");
@@ -2217,9 +2217,7 @@ function getMousePosition(element, event) {
       this.addNode();
     },
     addNode: function addNode() {
-      var maxID = Math.max.apply(Math, [0].concat(_toConsumableArray(this.scene.nodes.map(function (link) {
-        return link.id;
-      }))));
+      var maxID = this.scene.nodes.length;
       this.scene.nodes.push({
         id: maxID + 1,
         x: -400,
@@ -2274,18 +2272,18 @@ function getMousePosition(element, event) {
             from: this.draggingLink.from,
             to: index
           };
+          var findNodeFrom = this.scene.nodes.find(function (node) {
+            return node.id === _this2.draggingLink.from;
+          });
+          var parentNodes = this.scene.links.map(function (element) {
+            return element.from;
+          });
+          var disabled = findNodeFrom.disabled;
 
-          if (this.draggingType === "Start" && type === "Action") {
-            var findNodeFrom = this.scene.nodes.find(function (node) {
-              return node.id === _this2.draggingLink.from;
-            });
-            var parentNodes = this.scene.links.map(function (element) {
-              return element.from;
-            });
-
-            if (!findNodeFrom.disabled && parentNodes.length >= 1) {
-              //check if the parent node has multiple conections  
-              if (!findNodeFrom.disabled && type === 'Action' && parentNodes.length < 2) {
+          if (this.draggingType === "Start") {
+            if (type === 'Action') {
+              if (!disabled) {
+                findNodeFrom['disabled'] = true;
                 this.scene.links.push(newLink);
                 this.$emit("linkAdded", newLink);
               } else {
@@ -2294,51 +2292,43 @@ function getMousePosition(element, event) {
             } else {
               this.$emit('not-allowed');
             }
-          } else if (this.draggingType === "Decision" && type === "Join" || type === "Decision" && this.draggingType === "Join") {
-            this.$emit('not-allowed');
-          } else if (this.draggingType === "Action" || this.draggingType !== type) {
-            if (this.draggingLink.from === newLink.from) {
-              var _findNodeFrom = this.scene.nodes.find(function (node) {
-                return node.id === _this2.draggingLink.from;
-              });
-
-              var _parentNodes = this.scene.links.map(function (element) {
-                return element.from;
-              });
-
-              var equalsNodes = _parentNodes.find(function (node) {
-                return node === _this2.draggingLink.from;
-              });
-
-              if (!_findNodeFrom.disabled && _parentNodes.length >= 1) {
-                //check if the parent node has multiple conections  
-                if (!_findNodeFrom.disabled && type === 'Action') {
-                  this.scene.links.push(newLink);
-                  this.$emit("linkAdded", newLink);
-                } else if (!_findNodeFrom.disabled && (type === 'Join' || type === 'Decision') && !equalsNodes) {
-                  //check if the parent node has no conections and linking  nodes of type Join or decision
-                  if (_findNodeFrom.label === 'Start') {
-                    this.$emit('not-allowed');
-                  } else {
-                    _findNodeFrom['disabled'] = true;
-                    this.scene.links.push(newLink);
-                    this.$emit("linkAdded", newLink);
-                  }
-                } else {
-                  this.$emit('not-allowed');
-                }
-              } else if (!_findNodeFrom.disabled && (type === 'Join' || type === 'Decision')) {
-                //check if the parent node has no conections and linking  nodes of type Join or decision
-                _findNodeFrom['disabled'] = true;
-                this.scene.links.push(newLink);
-                this.$emit("linkAdded", newLink);
-              } else {
-                this.$emit('not-allowed');
-              }
-            }
-          } else {
-            this.$emit('not-allowed');
           }
+
+          if (this.draggingType === "Action") {
+            if (!disabled) {
+              findNodeFrom['disabled'] = true;
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            } else if (disabled && type === "Action") {
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            } else {
+              this.$emit('not-allowed');
+            }
+          }
+
+          if (this.draggingType === "Join") {
+            if (type !== "Action") {
+              this.$emit('not-allowed');
+            } else if (disabled && type === "Action") {
+              this.$emit('not-allowed');
+            } else {
+              findNodeFrom['disabled'] = true;
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            }
+          }
+
+          if (this.draggingType === "Decision") {
+            if (type === "Join" || type === "Decision") {
+              this.$emit('not-allowed');
+            } else {
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            }
+          }
+        } else {
+          this.$emit('not-allowed');
         }
       }
 
@@ -2363,7 +2353,7 @@ function getMousePosition(element, event) {
         if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision') {
           findNodeFromDelete['disabled'] = false;
           this.$emit("linkBreak", deletedLink);
-        } else if (findNodeFromDelete.type === "Start") {
+        } else if (findNodeFromDelete.type === "Start" || findNodeFromDelete.type === "Action") {
           findNodeFromDelete['disabled'] = false;
         } else {
           this.$emit("linkBreak", deletedLink);
@@ -2486,8 +2476,8 @@ function getMousePosition(element, event) {
 });
 // CONCATENATED MODULE: ./src/components/SimpleFlowchart.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_SimpleFlowchartvue_type_script_lang_js_ = (SimpleFlowchartvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/SimpleFlowchart.vue?vue&type=style&index=0&id=33d8fa9c&scoped=true&lang=scss&
-var SimpleFlowchartvue_type_style_index_0_id_33d8fa9c_scoped_true_lang_scss_ = __webpack_require__("1f2d");
+// EXTERNAL MODULE: ./src/components/SimpleFlowchart.vue?vue&type=style&index=0&id=530ab3c6&scoped=true&lang=scss&
+var SimpleFlowchartvue_type_style_index_0_id_530ab3c6_scoped_true_lang_scss_ = __webpack_require__("f5e1");
 
 // CONCATENATED MODULE: ./src/components/SimpleFlowchart.vue
 
@@ -2504,7 +2494,7 @@ var SimpleFlowchart_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "33d8fa9c",
+  "530ab3c6",
   null
   
 )
