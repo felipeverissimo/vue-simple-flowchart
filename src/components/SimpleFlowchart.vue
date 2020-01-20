@@ -50,6 +50,7 @@
         :label="link.label"
         v-for="(link, index) in lines"
         :key="`link${index}`"
+        :linking="action.linking"
         @deleteLink="linkDelete(link.id)"
         @changeLineLabel="linkLabel(link, $event)"
       ></flowchart-link>

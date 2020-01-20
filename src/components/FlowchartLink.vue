@@ -13,14 +13,14 @@
     >
       <text
         text-anchor="middle"
-        :transform="arrowTransform"
+        :transform="horizontal? arrowTransformHorizontal :arrowTransform "
         font-size="22"
       >&times;</text>
     </a>
     <a v-else>
       <text
         text-anchor="middle"
-        :transform="textTransform"
+        :transform="horizontal? textTransformHorizontal : textTransform"
         font-size="22"
       >{{
         text
@@ -32,7 +32,7 @@
     >
       <text
         text-anchor="middle"
-        :transform="changeTransform"
+        :transform="horizontal? changeTransformHorizontal : changeTransform"
         font-size="22"
       >Editar
       </text>
@@ -66,6 +66,7 @@ export default {
     },
     id: Number,
     horizontal: Boolean,
+    linking: Boolean,
   },
   data () {
     return {
@@ -131,17 +132,34 @@ export default {
       const degree = this.caculateRotation();
       return `translate(${arrowX}, ${arrowY}) rotate(${degree})`;
     },
+    arrowTransformHorizontal () {
+      const [arrowX, arrowY] = this.caculateCenterPoint();
+      const degree = this.caculateRotation();
+      return `translate(${arrowX}, ${arrowY + 25})`;
+    },
     textTransform () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
-      let sideText = arrowX + 50;
+      let sideText = arrowX;
       const degree = this.caculateRotation();
       return `translate(${sideText}, ${arrowY}) rotate(${degree} )`;
+    },
+    textTransformHorizontal () {
+      const [arrowX, arrowY] = this.caculateCenterPoint();
+      let sideText = arrowX;
+      const degree = this.caculateRotation();
+      return `translate(${sideText}, ${arrowY})`;
     },
     changeTransform () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
       let change = arrowY + 35;
       const degree = this.caculateRotation();
       return `translate(${arrowX}, ${change}) rotate(${degree})`;
+    },
+    changeTransformHorizontal () {
+      const [arrowX, arrowY] = this.caculateCenterPoint();
+      let change = arrowY;
+      const degree = this.caculateRotation();
+      return `translate(${arrowX}, ${change})`;
     },
     compText () {
       let change = this.text;
@@ -151,8 +169,8 @@ export default {
       if (this.horizontal) {
         let cx = this.start[0] + 30,
           cy = this.start[1] - 50,
-          ex = this.end[0] - 30,
-          ey = this.end[1] + 30;
+          ex = this.linking ? this.end[0] : this.end[0] - 30,
+          ey = this.linking ? this.end[1] : this.end[1] + 30;
         let x1 = cx,
           y1 = cy,
           x2 = ex,
