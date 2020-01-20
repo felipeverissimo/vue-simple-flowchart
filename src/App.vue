@@ -24,7 +24,7 @@ export default {
   },
   data () {
     return {
-      horizontalStyle: true,
+      horizontalStyle: false,
       scene: {
         centerX: 1024,
         centerY: 140,

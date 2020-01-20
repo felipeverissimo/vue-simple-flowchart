@@ -176,11 +176,11 @@ export default {
           x2 = ex,
           y2 = ey;
         let calc = (x1 + x2) / 2;
-        return `M${cx} ${cy} H${Math.round(calc)}.${x1} V${y2}.${ey}H${ex}`;
+        return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
       }
       else {
         let cx = this.start[0],
-          cy = this.start[1],
+          cy = this.start[1] - 10,
           ex = this.end[0],
           ey = this.end[1];
         let x1 = cx,

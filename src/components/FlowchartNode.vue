@@ -109,7 +109,7 @@
       @mousedown="handleMousedown"
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      v-bind:class="{ selected: options.selected === id }"
+      v-bind:class="{ selected: options.selected === id, horizontal: options.horizontal }"
       v-if="type === 'End'"
     >
       <div
@@ -130,7 +130,7 @@
       @mousedown="handleMousedown"
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      v-bind:class="{ selected: options.selected === id }"
+      v-bind:class="{ selected: options.selected === id, horizontal: options.horizontal }"
       v-if="type === 'EndWorkflow'"
     >
       <div
@@ -317,7 +317,6 @@ $portSize: 12;
   opacity: 1;
   cursor: move;
   transform-origin: top left;
-  // margin-top: -30px;
 
   .node-main {
     text-align: center;
@@ -351,10 +350,16 @@ $portSize: 12;
   .node-output {
     bottom: #{-2 + $portSize/-2}px;
   }
+
+  &.horizontal {
+    .node-delete {
+      top: 45px;
+    }
+  }
   .node-delete {
     position: absolute;
     right: -6px;
-    // top: -6px;
+    top: 0;
     font-size: 12px;
     width: 12px;
     height: 12px;
@@ -393,6 +398,19 @@ $portSize: 12;
       }
     }
   }
+
+  .node-port {
+    left: 0;
+
+    &.node-input {
+      left: 0px;
+    }
+
+    &.node-output {
+      left: 52px;
+      top: 47px;
+    }
+  }
   .node-main {
     .node-label {
       font-size: 35px;
@@ -424,6 +442,19 @@ $portSize: 12;
       }
     }
   }
+
+  .node-port {
+    left: 0;
+
+    &.node-input {
+      left: 0px;
+    }
+
+    &.node-output {
+      left: 52px;
+      top: 47px;
+    }
+  }
   .node-main {
     .node-label {
       font-size: 35px;
@@ -437,18 +468,21 @@ $portSize: 12;
   height: 70px;
   border: 3px solid black;
   border-radius: 50%;
+  margin-left: -7px;
 
   &.horizontal {
     .node-port {
-      &.node-input {
-        top: 38%;
-        left: -5px;
-      }
-
       &.node-output {
         top: 38%;
         right: -20px;
+        left: 100%;
       }
+    }
+  }
+
+  .node-port {
+    &.node-output {
+      left: 30px;
     }
   }
 }
@@ -473,7 +507,26 @@ $portSize: 12;
     }
   }
 
-  .horizontal {
+  .node-port {
+    &.node-input {
+      left: 50%;
+    }
+  }
+  &.horizontal {
+    .node-port {
+      &.node-input {
+        top: 38%;
+        left: -5px;
+      }
+    }
+  }
+}
+.flowchart-end {
+  width: 50px;
+  height: 50px;
+  border: 5px solid black;
+  border-radius: 50%;
+  &.horizontal {
     .node-port {
       &.node-input {
         top: 38%;
@@ -486,23 +539,10 @@ $portSize: 12;
       }
     }
   }
-}
-.flowchart-end {
-  width: 50px;
-  height: 50px;
-  border: 5px solid black;
-  border-radius: 50%;
-  .horizontal {
-    .node-port {
-      &.node-input {
-        top: 38%;
-        left: -5px;
-      }
 
-      &.node-output {
-        top: 38%;
-        right: -20px;
-      }
+  .node-port {
+    &.node-input {
+      left: 50%;
     }
   }
 }
@@ -527,15 +567,28 @@ $portSize: 12;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  &.horizontal {
+    .node-port {
+      &.node-input {
+        top: 38%;
+        left: -5px;
+      }
+
+      &.node-output {
+        top: 38%;
+        right: 0px;
+        left: 100%;
+      }
+    }
+  }
+
   .node-port {
     &.node-input {
-      top: 38%;
-      left: -5px;
+      left: 50%;
     }
 
     &.node-output {
-      top: 38%;
-      right: -20px;
+      left: 50%;
     }
   }
 
