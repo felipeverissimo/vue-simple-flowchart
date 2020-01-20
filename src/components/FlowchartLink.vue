@@ -64,7 +64,8 @@ export default {
         return [0, 0];
       }
     },
-    id: Number
+    id: Number,
+    horizontal: Boolean,
   },
   data () {
     return {
@@ -146,17 +147,31 @@ export default {
       let change = this.text;
       return (this.$props.label = `${change}`);
     },
-    dAttr () {
-      let cx = this.start[0],
-        cy = this.start[1],
-        ex = this.end[0],
-        ey = this.end[1];
-      let x1 = cx,
-        y1 = cy + 50,
-        x2 = ex,
-        y2 = ey - 50;
-      return `M ${cx}, ${cy} C ${x1}, ${y1}, ${x2}, ${y2}, ${ex}, ${ey}`;
-    }
+    dAttr: function () {
+      if (this.horizontal) {
+        let cx = this.start[0] + 30,
+          cy = this.start[1] - 50,
+          ex = this.end[0] - 30,
+          ey = this.end[1] + 30;
+        let x1 = cx,
+          y1 = cy,
+          x2 = ex,
+          y2 = ey;
+        let calc = (x1 + x2) / 2;
+        return `M${cx} ${cy} H${Math.round(calc)}.${x1} V${y2}.${ey}H${ex}`;
+      }
+      else {
+        let cx = this.start[0],
+          cy = this.start[1],
+          ex = this.end[0],
+          ey = this.end[1];
+        let x1 = cx,
+          y1 = cy + 50,
+          x2 = ex,
+          y2 = ey - 50;
+        return `M ${cx}, ${cy} C ${x1}, ${y1}, ${x2}, ${y2}, ${ex}, ${ey}`;
+      }
+    },
   }
 };
 </script>

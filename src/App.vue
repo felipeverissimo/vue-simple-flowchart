@@ -2,6 +2,7 @@
   <div id="app">
     <h1>simple flowchart</h1>
     <simple-flowchart
+      :horizontalStyle.sync="horizontalStyle"
       :scene.sync="scene"
       @not-allowed="teste"
       @nodeDelete="nodeDelete"
@@ -23,6 +24,7 @@ export default {
   },
   data () {
     return {
+      horizontalStyle: true,
       scene: {
         centerX: 1024,
         centerY: 140,

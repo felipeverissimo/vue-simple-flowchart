@@ -7,7 +7,7 @@
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
       @dblclick="handleContent"
-      v-bind:class="{full: options.transition, selected: options.selected === id  }"
+      v-bind:class="{full: options.transition, selected: options.selected === id, horizontal: options.horizontal  }"
       v-if="type === 'Action'"
     >
       <div
@@ -37,7 +37,7 @@
       @mousedown="handleMousedown"
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      v-bind:class="{ selected: options.selected === id }"
+      v-bind:class="{ selected: options.selected === id,horizontal: options.horizontal }"
       v-if="type === 'Decision'"
     >
       <div
@@ -64,7 +64,7 @@
       @mousedown="handleMousedown"
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      v-bind:class="{ selected: options.selected === id }"
+      v-bind:class="{ selected: options.selected === id,horizontal: options.horizontal }"
       v-if="type === 'Join'"
     >
       <div
@@ -91,7 +91,7 @@
       @mousedown="handleMousedown"
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
-      v-bind:class="{ selected: options.selected === id }"
+      v-bind:class="{ selected: options.selected === id, horizontal: options.horizontal }"
       v-if="type === 'Start'"
     >
       <div class="node-main">
@@ -216,7 +216,7 @@ export default {
     nodeStyle: function () {
       if (this.show.fullContent) {
         return {
-          top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
+          top: this.options.centerY - 2 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
           left: this.options.centerX - 160 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
           transform: `scale(${this.options.scale})`,
           width: this.options.width + "px",
@@ -224,7 +224,7 @@ export default {
       }
       else {
         return {
-          top: this.options.centerY + this.y + 5 * this.options.scale + "px", // remove: this.options.offsetTop +
+          top: this.options.centerY - 2 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
           left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
           transform: `scale(${this.options.scale})`,
           width: 120 + "px",
@@ -241,7 +241,7 @@ export default {
     },
     startStyle () {
       return {
-        top: this.options.centerY + 40 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
+        top: this.options.centerY - 2 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
         left: this.options.centerX + 15 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
         transform: `scale(${this.options.scale})`
       };
@@ -258,22 +258,13 @@ export default {
     handleContent () {
       if (!this.show.fullContent) {
         this.$emit('nodeTransition')
-
         this.show.fullContent = true;
-
-
-
       }
       else {
-
         this.$emit('nodeTransition')
         // alert('to aqui ')
         this.show.fullContent = false;
         this.$emit('canvasClick')
-
-
-
-
       }
     },
     handleMousedown (e) {
@@ -323,9 +314,11 @@ $portSize: 12;
   border: none;
   background: white;
   z-index: 1;
-  opacity: 0.9;
+  opacity: 1;
   cursor: move;
   transform-origin: top left;
+  // margin-top: -30px;
+
   .node-main {
     text-align: center;
     .node-type {
@@ -342,7 +335,7 @@ $portSize: 12;
     position: absolute;
     width: #{$portSize}px;
     height: #{$portSize}px;
-    left: 50%;
+    // left: 50%;
     transform: translate(-50%);
     border: 1px solid #ccc;
     border-radius: 100px;
@@ -361,7 +354,7 @@ $portSize: 12;
   .node-delete {
     position: absolute;
     right: -6px;
-    top: -6px;
+    // top: -6px;
     font-size: 12px;
     width: 12px;
     height: 12px;
@@ -381,11 +374,23 @@ $portSize: 12;
   width: 60px;
   height: 60px;
   border: 5px solid black;
-  .node-port {
-    left: 0;
+  margin-top: -10px;
 
-    &.node-output {
-      left: 100%;
+  &.horizontal {
+    .node-port {
+      left: 0;
+      transform: rotate(90deg);
+
+      &.node-input {
+        top: 50px;
+        left: -14px;
+      }
+
+      &.node-output {
+        right: 0;
+        left: 48px;
+        top: -13px;
+      }
     }
   }
   .node-main {
@@ -400,11 +405,23 @@ $portSize: 12;
   width: 60px;
   height: 60px;
   border: 5px solid black;
-  .node-port {
-    left: 0;
+  margin-top: -10px;
 
-    &.node-output {
-      left: 100%;
+  &.horizontal {
+    .node-port {
+      left: 0;
+      transform: rotate(90deg);
+
+      &.node-input {
+        top: 50px;
+        left: -14px;
+      }
+
+      &.node-output {
+        right: 0;
+        left: 48px;
+        top: -13px;
+      }
     }
   }
   .node-main {
@@ -416,10 +433,24 @@ $portSize: 12;
 }
 
 .flowchart-start {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border: 3px solid black;
   border-radius: 50%;
+
+  &.horizontal {
+    .node-port {
+      &.node-input {
+        top: 38%;
+        left: -5px;
+      }
+
+      &.node-output {
+        top: 38%;
+        right: -20px;
+      }
+    }
+  }
 }
 
 .flowchart-end-workflow {
@@ -441,12 +472,39 @@ $portSize: 12;
       z-index: 20;
     }
   }
+
+  .horizontal {
+    .node-port {
+      &.node-input {
+        top: 38%;
+        left: -5px;
+      }
+
+      &.node-output {
+        top: 38%;
+        right: -20px;
+      }
+    }
+  }
 }
 .flowchart-end {
   width: 50px;
   height: 50px;
   border: 5px solid black;
   border-radius: 50%;
+  .horizontal {
+    .node-port {
+      &.node-input {
+        top: 38%;
+        left: -5px;
+      }
+
+      &.node-output {
+        top: 38%;
+        right: -20px;
+      }
+    }
+  }
 }
 
 .flowchart-actions {
@@ -468,6 +526,17 @@ $portSize: 12;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .node-port {
+    &.node-input {
+      top: 38%;
+      left: -5px;
+    }
+
+    &.node-output {
+      top: 38%;
+      right: -20px;
+    }
   }
 
   .node-main {

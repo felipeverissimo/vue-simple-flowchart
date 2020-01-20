@@ -97,6 +97,10 @@ export default {
     height: {
       type: Number,
       default: 400
+    },
+    horizontalStyle: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -124,7 +128,7 @@ export default {
       rootDivOffset: {
         top: 0,
         left: 0
-      }
+      },
     };
   },
   components: {
@@ -142,6 +146,7 @@ export default {
         selected: this.action.selected,
         width: 400,
         transition: this.action.transition,
+        horizontal: this.horizontalStyle,
       };
     },
     lines () {
@@ -162,7 +167,9 @@ export default {
           end: [ex, ey],
           id: link.id,
           label: link.label,
-          from: fromNode
+          from: fromNode,
+          horizontal: this.horizontalStyle,
+
         };
       });
       if (this.draggingLink) {
@@ -176,7 +183,8 @@ export default {
         lines.push({
           start: [cx, cy],
           end: [this.draggingLink.mx, this.draggingLink.my],
-          label: ""
+          label: "",
+          horizontal: this.horizontalStyle,
         });
       }
       return lines;
