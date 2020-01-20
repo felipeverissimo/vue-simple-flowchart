@@ -550,8 +550,9 @@ export default {
   transition: 0.5s ease-in-out;
 
   & > div {
-    font-size: 22px;
+    font-size: 17px;
     color: black;
+    background: #fff;
   }
 
   &:hover {
