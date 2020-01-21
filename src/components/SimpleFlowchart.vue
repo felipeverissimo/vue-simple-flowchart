@@ -211,7 +211,7 @@ export default {
     },
     addNode () {
 
-      const max = Math.max.apply(Math, this.scene.nodes.length.map(function (o) { return o.id; }))
+      const max = Math.max.apply(Math, this.scene.nodes.map(function (o) { return o.id; }))
       this.scene.nodes.push({
         id: max + 1,
         x: -400,
