@@ -210,13 +210,14 @@ export default {
       this.addNode();
     },
     addNode () {
-      let maxID = this.scene.nodes.length;
+
+      const max = Math.max.apply(Math, this.scene.nodes.length.map(function (o) { return o.id; }))
       this.scene.nodes.push({
-        id: maxID + 1,
+        id: max + 1,
         x: -400,
         y: 50,
         type: this.nodeCategory[this.newNodeType],
-        label: this.newNodeLabel ? this.newNodeLabel : `test${maxID + 1}`
+        label: this.newNodeLabel ? this.newNodeLabel : `test${max + 1}`
       });
     },
     findNodeWithID (id) {

@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
     <h1>simple flowchart</h1>
     <simple-flowchart
