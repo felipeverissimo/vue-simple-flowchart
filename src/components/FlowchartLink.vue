@@ -1,23 +1,13 @@
 <template>
   <g
-    @mouseover="handleMouseOver"
-    @mouseleave="handleMouseLeave"
+    @click="linkSelect"
+    @dblclick="changeLink"
   >
     <path
       :d="dAttr"
       :style="pathStyle"
     ></path>
-    <a
-      v-if="show.delete"
-      @click="deleteLink"
-    >
-      <text
-        text-anchor="middle"
-        :transform="horizontal? arrowTransformHorizontal :arrowTransform "
-        font-size="22"
-      >&times;</text>
-    </a>
-    <a v-else>
+    <a>
       <text
         text-anchor="middle"
         :transform="horizontal? textTransformHorizontal : textTransform"
@@ -25,17 +15,6 @@
       >{{
         text
       }}</text>
-    </a>
-    <a
-      v-if="show.delete"
-      @dblclick="changeLink"
-    >
-      <text
-        text-anchor="middle"
-        :transform="horizontal? changeTransformHorizontal : changeTransform"
-        font-size="22"
-      >Editar
-      </text>
     </a>
   </g>
 </template>
@@ -67,16 +46,23 @@ export default {
     id: Number,
     horizontal: Boolean,
     linking: Boolean,
+    selectedLine: Boolean
   },
   data () {
     return {
       text: this.label,
       show: {
-        delete: false
-      }
+        delete: true
+      },
     };
   },
   methods: {
+    linkSelect () {
+      if (this.id) {
+        this.selectedLine = !this.selectedLine
+        this.$emit('linkSelected')
+      }
+    },
     handleMouseOver () {
       if (this.id) {
         this.show.delete = true;
@@ -115,7 +101,7 @@ export default {
   computed: {
     pathStyle () {
       return {
-        stroke: "rgb(255, 136, 85)",
+        stroke: this.selectedLine ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
         strokeWidth: 2.73205,
         fill: "none"
       };
@@ -176,7 +162,8 @@ export default {
           x2 = ex,
           y2 = ey;
         let calc = (x1 + x2) / 2;
-        return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
+        // return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
+        return `M ${cx}, ${cy} H 467.5V204.5,  H ${ex}`;
       }
       else {
         let cx = this.start[0],

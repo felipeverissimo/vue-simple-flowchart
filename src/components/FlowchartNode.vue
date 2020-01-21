@@ -513,6 +513,10 @@ $portSize: 12;
     }
   }
   &.horizontal {
+    .node-delete {
+      top: 36%;
+      right: -13px;
+    }
     .node-port {
       &.node-input {
         top: 38%;
@@ -526,16 +530,16 @@ $portSize: 12;
   height: 50px;
   border: 5px solid black;
   border-radius: 50%;
+
   &.horizontal {
+    .node-delete {
+      top: 36%;
+      right: -13px;
+    }
     .node-port {
       &.node-input {
         top: 38%;
         left: -5px;
-      }
-
-      &.node-output {
-        top: 38%;
-        right: -20px;
       }
     }
   }

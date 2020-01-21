@@ -40,10 +40,11 @@
         </div>
       </div>
     </div>
-
     <svg
       width="100%"
       :height="`${height}px`"
+      @keyup.delete="linkDelete(selectedLine.id)"
+      tabindex="0"
     >
       <flowchart-link
         v-bind.sync="link"
@@ -51,8 +52,9 @@
         v-for="(link, index) in lines"
         :key="`link${index}`"
         :linking="action.linking"
-        @deleteLink="linkDelete(link.id)"
+        @deleteLink="linkDelete(selectedLine.id)"
         @changeLineLabel="linkLabel(link, $event)"
+        @linkSelected="linkSelected(link, $event)"
       ></flowchart-link>
     </svg>
     <flowchart-node
@@ -126,6 +128,7 @@ export default {
         lastY: 0
       },
       draggingLink: null,
+      selectedLine: {},
       rootDivOffset: {
         top: 0,
         left: 0
@@ -204,6 +207,12 @@ export default {
       if (deletedLink) {
         deletedLink.label = payload;
       }
+    },
+    linkSelected (link) {
+      this.selectedLine = link
+      const deletedLink = this.scene.links.find(item => {
+        return item.id === link.id;
+      });
     },
     chosedNodes (item, index) {
       this.newNodeType = index;
@@ -344,7 +353,7 @@ export default {
         this.scene.links = this.scene.links.filter(item => {
           return item.id !== id;
         });
-        if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision') {
+        if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision' || deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
           findNodeFromDelete['disabled'] = false
           this.$emit("linkBreak", deletedLink);
         }
