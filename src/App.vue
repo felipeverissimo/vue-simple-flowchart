@@ -32,7 +32,7 @@ export default {
         scale: 1,
         nodes: [
           {
-            id: 1,
+            id: 9999999,
             x: -700,
             y: -139,
             type: "Start",
@@ -102,7 +102,7 @@ export default {
       alert("Operação não permitida app");
     },
     canvasClick (e) {
-      // console.log("canvas Click, event:", e);
+      console.log("canvas Click, event:", e);
     },
     nodeClick (id) {
       // console.log("node click", id);

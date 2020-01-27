@@ -1,6 +1,11 @@
 <template>
   <div>
     <div
+      v-show="options.transition"
+      class="node-delete color"
+    >
+    </div>
+    <div
       class="flowchart-node flowchart-actions"
       :style="nodeStyle"
       @mousedown="handleMousedown"
@@ -11,24 +16,34 @@
       v-if="type === 'Action'"
     >
       <div
-        class="node-port node-input"
+        class="node-port node-input top"
         @mousedown="inputMouseDown"
         @mouseup="inputMouseUp"
       ></div>
-      <div class="node-main">
+      <div
+        class="node-port node-input left"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div class="node-main node-delete">
         <div
           v-text="label"
           class="node-label"
         ></div>
       </div>
       <div
-        class="node-port node-output"
+        class="node-port node-output right"
         @mousedown="outputMouseDown"
       ></div>
       <div
+        class="node-port node-output bottom"
+        @mousedown="outputMouseDown"
+      ></div>
+
+      <!-- <div
         v-show="show.delete"
         class="node-delete"
-      >&times;</div>
+      >&times;</div> -->
     </div>
 
     <div
@@ -41,7 +56,12 @@
       v-if="type === 'Decision'"
     >
       <div
-        class="node-port node-input"
+        class="node-port node-input top"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div
+        class="node-port node-input right"
         @mousedown="inputMouseDown"
         @mouseup="inputMouseUp"
       ></div>
@@ -49,13 +69,14 @@
         <div class="node-label">✖</div>
       </div>
       <div
-        class="node-port node-output"
+        class="node-port node-output left"
         @mousedown="outputMouseDown"
       ></div>
       <div
-        v-show="show.delete"
-        class="node-delete"
-      >&times;</div>
+        class="node-port node-output bottom"
+        @mousedown="outputMouseDown"
+      ></div>
+
     </div>
 
     <div
@@ -68,7 +89,12 @@
       v-if="type === 'Join'"
     >
       <div
-        class="node-port node-input"
+        class="node-port node-input top"
+        @mousedown="inputMouseDown"
+        @mouseup="inputMouseUp"
+      ></div>
+      <div
+        class="node-port node-input right"
         @mousedown="inputMouseDown"
         @mouseup="inputMouseUp"
       ></div>
@@ -76,31 +102,37 @@
         <div class="node-label">🞅</div>
       </div>
       <div
-        class="node-port node-output"
+        class="node-port node-output left"
         @mousedown="outputMouseDown"
       ></div>
+
       <div
+        class="node-port node-output bottom"
+        @mousedown="outputMouseDown"
+      ></div>
+      <!-- <div
         v-show="show.delete"
         class="node-delete"
-      >&times;</div>
+      >&times;</div> -->
     </div>
-
-    <div
-      class="flowchart-node flowchart-start"
-      :style="startStyle"
-      @mousedown="handleMousedown"
-      @mouseover="handleMouseOver"
-      @mouseleave="handleMouseLeave"
-      v-bind:class="{ selected: options.selected === id, horizontal: options.horizontal }"
-      v-if="type === 'Start'"
-    >
-      <div class="node-main">
-        <div class="node-label"></div>
-      </div>
+    <div>
       <div
-        class="node-port node-output"
-        @mousedown="outputMouseDown"
-      ></div>
+        class="flowchart-node flowchart-start"
+        :style="startStyle"
+        @mousedown="handleMousedown"
+        @mouseover="handleMouseOver"
+        @mouseleave="handleMouseLeave"
+        v-bind:class="{ selected: options.selected === id, horizontal: options.horizontal }"
+        v-if="type === 'Start'"
+      >
+        <div class="node-main">
+          <div class="node-label"></div>
+          <div
+            class="node-port node-output"
+            @mousedown="outputMouseDown"
+          > </div>
+        </div>
+      </div>
     </div>
 
     <div
@@ -356,69 +388,26 @@ $portSize: 12;
       top: 45px;
     }
   }
-  .node-delete {
-    position: absolute;
-    right: -6px;
-    top: 0;
-    font-size: 12px;
-    width: 12px;
-    height: 12px;
-    color: $themeColor;
-    cursor: pointer;
-    background: white;
-    border: 1px solid $themeColor;
-    border-radius: 100px;
-    text-align: center;
-    &:hover {
-      background: $themeColor;
-      color: white;
-    }
-  }
+  // .node-delete {
+  //   position: absolute;
+  //   right: -6px;
+  //   top: 0;
+  //   font-size: 12px;
+  //   width: 12px;
+  //   height: 12px;
+  //   color: $themeColor;
+  //   cursor: pointer;
+  //   background: white;
+  //   border: 1px solid $themeColor;
+  //   border-radius: 100px;
+  //   text-align: center;
+  //   &:hover {
+  //     background: $themeColor;
+  //     color: white;
+  //   }
+  // }
 }
-.flowchart-decision {
-  width: 60px;
-  height: 60px;
-  border: 5px solid black;
-  margin-top: -10px;
-
-  &.horizontal {
-    .node-port {
-      left: 0;
-      transform: rotate(90deg);
-
-      &.node-input {
-        top: 50px;
-        left: -14px;
-      }
-
-      &.node-output {
-        right: 0;
-        left: 48px;
-        top: -13px;
-      }
-    }
-  }
-
-  .node-port {
-    left: 0;
-
-    &.node-input {
-      left: 0px;
-    }
-
-    &.node-output {
-      left: 52px;
-      top: 47px;
-    }
-  }
-  .node-main {
-    .node-label {
-      font-size: 35px;
-      color: black;
-    }
-  }
-}
-
+.flowchart-decision,
 .flowchart-join {
   width: 60px;
   height: 60px;
@@ -431,14 +420,68 @@ $portSize: 12;
       transform: rotate(90deg);
 
       &.node-input {
-        top: 50px;
-        left: -14px;
+        &.top {
+          top: 20px;
+          left: -41px;
+          width: 130%;
+          border-radius: 0;
+          border: none;
+          opacity: 0;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+        &.right {
+          width: 130%;
+          left: -5px;
+          top: -15px;
+          border-radius: 0;
+          border: none;
+          transform: rotate(180deg);
+          opacity: 0;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
       }
 
       &.node-output {
         right: 0;
         left: 48px;
         top: -13px;
+
+        &.bottom {
+          width: 130%;
+          width: 130%;
+          left: 23px;
+          top: 17px;
+          border-radius: 0;
+          border: none;
+          -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+          opacity: 0;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+
+        &.left {
+          width: 130%;
+          left: -10px;
+          top: 51px;
+          border-radius: 0;
+          border: none;
+          -webkit-transform: rotate(-90deg);
+          transform: rotate(180deg);
+          opacity: 0;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
       }
     }
   }
@@ -571,17 +614,70 @@ $portSize: 12;
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
   &.horizontal {
     .node-port {
       &.node-input {
+        &.top {
+          width: 110%;
+          top: -8px;
+          transform: translate(0%);
+          opacity: 0;
+          left: -8px;
+          border-radius: 0;
+          border-color: transparent;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+
+        &.left {
+          height: 115%;
+          top: -7px;
+          border-color: transparent;
+          opacity: 0;
+          border-radius: 0;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
         top: 38%;
         left: -5px;
       }
 
       &.node-output {
-        top: 38%;
-        right: 0px;
-        left: 100%;
+        // top: 38%;
+        // right: 0px;
+        // left: 100%;
+        &.bottom {
+          width: 110%;
+          bottom: -8px;
+          transform: translate(0%);
+          opacity: 0;
+          left: -8px;
+          border-radius: 0;
+          border-color: transparent;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
+
+        &.right {
+          height: 115%;
+          top: -7px;
+          border-color: transparent;
+          opacity: 0;
+          border-radius: 0;
+          right: -8px;
+          left: 100%;
+
+          &:hover {
+            opacity: 0.4;
+          }
+        }
       }
     }
   }
@@ -608,5 +704,10 @@ $portSize: 12;
 }
 .full {
   transition: 0.5s ease-in-out;
+}
+.color {
+  background-color: red;
+  width: 100px;
+  height: 100px;
 }
 </style>

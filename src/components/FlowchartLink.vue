@@ -1,6 +1,6 @@
 <template>
   <g
-    @click="linkSelect"
+    @click="linkSelect($event)"
     @dblclick="changeLink"
   >
     <path
@@ -14,8 +14,16 @@
         font-size="22"
       >{{
         text
-      }}</text>
+      }}{{dragLine}}</text>
     </a>
+    <path
+      v-if="show.delete"
+      d="M -1 -1 L 0 1 L 1 -1 z"
+      :style="arrowStyle"
+      :transform="arrowTransform"
+    >
+    </path>
+
   </g>
 </template>
 
@@ -46,21 +54,37 @@ export default {
     id: Number,
     horizontal: Boolean,
     linking: Boolean,
-    selectedLine: Boolean
+    selectedLine: Boolean,
+    dragLine: Number,
   },
   data () {
     return {
       text: this.label,
+      line: this.dragLine,
+      select: this.selectedLine,
       show: {
-        delete: true
+        delete: false
       },
     };
   },
   methods: {
-    linkSelect () {
+    handleMousedown (e) {
+      const target = e.target || e.srcElement;
+      // console.log(target);
+      if (
+        target.className.indexOf("node-input") < 0 &&
+        target.className.indexOf("node-output") < 0
+      ) {
+        this.$emit("nodeSelected", e);
+      }
+      e.preventDefault();
+    },
+
+    linkSelect (e) {
+      this.show.delete = true
       if (this.id) {
-        this.selectedLine = !this.selectedLine
-        this.$emit('linkSelected')
+        this.select = !this.select
+        this.$emit('linkSelected', e)
       }
     },
     handleMouseOver () {
@@ -96,12 +120,15 @@ export default {
   watch: {
     text: function () {
       this.$emit("changeLineLabel", this.text);
+    },
+    select: function () {
+      this.$emit("changeLineSelected", this.select);
     }
   },
   computed: {
     pathStyle () {
       return {
-        stroke: this.selectedLine ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
+        stroke: this.select ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
         strokeWidth: 2.73205,
         fill: "none"
       };
@@ -151,19 +178,29 @@ export default {
       let change = this.text;
       return (this.$props.label = `${change}`);
     },
+    compselect () {
+      let change = this.select;
+      return (this.$props.selectedLine = `${change}`);
+    },
     dAttr: function () {
       if (this.horizontal) {
-        let cx = this.start[0] + 30,
-          cy = this.start[1] - 50,
-          ex = this.linking ? this.end[0] : this.end[0] - 30,
-          ey = this.linking ? this.end[1] : this.end[1] + 30;
+        let cx = this.start[0],
+          cy = this.start[1] - 70,
+          ex = this.linking ? this.end[0] : this.end[0],
+          ey = this.linking ? this.end[1] : this.end[1];
         let x1 = cx,
           y1 = cy,
           x2 = ex,
           y2 = ey;
+        let halfHeight = y1 / 2;
         let calc = (x1 + x2) / 2;
-        // return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
-        return `M ${cx}, ${cy} H 467.5V204.5,  H ${ex}`;
+        if (x1 < x2) {
+          return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
+        }
+        else {
+          return `M${x1} ${y1}  V${y1 - this.dragLine} H${x2} V${y2}`
+
+        }
       }
       else {
         let cx = this.start[0],

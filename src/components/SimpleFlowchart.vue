@@ -5,6 +5,13 @@
     @mouseup="handleUp"
     @mousedown="handleDown"
   >
+    <input
+      type="range"
+      name="points"
+      min="-800"
+      max="800"
+      v-model="offset"
+    >
     <div class="tool-wrapper">
       <div
         class="config-tool"
@@ -43,18 +50,18 @@
     <svg
       width="100%"
       :height="`${height}px`"
-      @keyup.delete="linkDelete(selectedLine.id)"
+      @keyup.delete="removeItems"
       tabindex="0"
     >
       <flowchart-link
         v-bind.sync="link"
         :label="link.label"
+        :dragLine="parseInt(offset)"
         v-for="(link, index) in lines"
         :key="`link${index}`"
         :linking="action.linking"
-        @deleteLink="linkDelete(selectedLine.id)"
-        @changeLineLabel="linkLabel(link, $event)"
-        @linkSelected="linkSelected(link, $event)"
+        @changeLineSelect="linkLabel(link, $event)"
+        @linkSelected="linkSelected(link)"
       ></flowchart-link>
     </svg>
     <flowchart-node
@@ -64,7 +71,7 @@
       :options="nodeOptions"
       @linkingStart="linkingStart(node.id, node.type)"
       @linkingStop="linkingStop(node.id, node.type)"
-      @nodeSelected="nodeSelected(node.id, $event)"
+      @nodeSelected="nodeSelected(node.id, $event, node)"
       @nodeTransition='nodeTransition()'
     >
     </flowchart-node>
@@ -127,8 +134,10 @@ export default {
         lastX: 0,
         lastY: 0
       },
+      offset: 150,
       draggingLink: null,
       selectedLine: {},
+      selectedNode: {},
       rootDivOffset: {
         top: 0,
         left: 0
@@ -147,7 +156,7 @@ export default {
         scale: this.scene.scale,
         offsetTop: this.rootDivOffset.top,
         offsetLeft: this.rootDivOffset.left,
-        selected: this.action.selected,
+        selected: this.selectedNode.id,
         width: 400,
         transition: this.action.transition,
         horizontal: this.horizontalStyle,
@@ -173,7 +182,8 @@ export default {
           label: link.label,
           from: fromNode,
           horizontal: this.horizontalStyle,
-
+          dragLine: this.offset,
+          selectedLine: false
         };
       });
       if (this.draggingLink) {
@@ -189,10 +199,11 @@ export default {
           end: [this.draggingLink.mx, this.draggingLink.my],
           label: "",
           horizontal: this.horizontalStyle,
+          dragLine: 200,
         });
       }
       return lines;
-    }
+    },
   },
   mounted () {
     this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
@@ -200,6 +211,28 @@ export default {
     // console.log(22222, this.rootDivOffset);
   },
   methods: {
+    removeItems () {
+      debugger
+      if (this.action.selected != null) {
+        this.deleteNodeButtom()
+      } else {
+        this.deleteButtom()
+      }
+    },
+    deleteButtom () {
+      this.linkDelete(this.selectedLine.id)
+    },
+    deleteNodeButtom () {
+      this.nodeDelete(this.selectedNode.id)
+      this.selectedNode = {}
+    },
+    nodeDelete (id) {
+      console.log(id)
+      this.scene.nodes = this.scene.nodes.filter(node => {
+        return node.id !== id;
+      });
+      this.$emit("nodeDelete", id);
+    },
     linkLabel (link, payload) {
       const deletedLink = this.scene.links.find(item => {
         return item.id === link.id;
@@ -210,16 +243,12 @@ export default {
     },
     linkSelected (link) {
       this.selectedLine = link
-      const deletedLink = this.scene.links.find(item => {
-        return item.id === link.id;
-      });
     },
     chosedNodes (item, index) {
       this.newNodeType = index;
       this.addNode();
     },
     addNode () {
-
       const max = Math.max.apply(Math, this.scene.nodes.map(function (o) { return o.id; }))
       this.scene.nodes.push({
         id: max + 1,
@@ -339,6 +368,7 @@ export default {
       this.draggingLink = null;
     },
     linkDelete (id) {
+      debugger
       const deletedLink = this.scene.links.find(item => {
         return item.id === id;
       });
@@ -353,6 +383,8 @@ export default {
         this.scene.links = this.scene.links.filter(item => {
           return item.id !== id;
         });
+        this.selectedLine = {};
+
         if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision' || deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
           findNodeFromDelete['disabled'] = false
           this.$emit("linkBreak", deletedLink);
@@ -372,10 +404,11 @@ export default {
         me.action.transition = false
       }, 500);
     },
-    nodeSelected (id, e) {
-      this.action.dragging = id;
-      this.action.selected = id;
-      this.$emit("nodeClick", id);
+    nodeSelected (id, e, node) {
+      this.selectedNode = node
+      this.action.selected = node.id
+      this.action.dragging = id
+      this.$emit("nodeClick", id)
       this.mouse.lastX =
         e.pageX || e.clientX + document.documentElement.scrollLeft;
       this.mouse.lastY =
@@ -414,6 +447,19 @@ export default {
 
         // this.hasDragged = true
       }
+      if (this.selectedLine.selectedLine) {
+        this.mouse.x =
+          e.pageX || e.clientX + document.documentElement.scrollLeft;
+        this.mouse.y =
+          e.pageY || e.clientY + document.documentElement.scrollTop;
+        let diffX = this.mouse.x - this.mouse.lastX;
+        let diffY = this.mouse.y - this.mouse.lastY;
+
+        this.mouse.lastX = this.mouse.x;
+        this.mouse.lastY = this.mouse.y;
+        this.moveSelectedLine(diffY);
+
+      }
     },
     handleUp (e) {
       const target = e.target || e.srcElement;
@@ -424,13 +470,13 @@ export default {
         ) {
           this.draggingLink = null;
         }
-        if (
-          typeof target.className === "string" &&
-          target.className.indexOf("node-delete") > -1
-        ) {
-          // console.log('delete2', this.action.dragging);
-          this.nodeDelete(this.action.dragging);
-        }
+        // if (
+        //   typeof target.className === "string" &&
+        //   target.className.indexOf("node-delete") > -1
+        // ) {
+        //   // console.log('delete2', this.action.dragging);
+        //   this.nodeDelete(this.action.dragging);
+        // }
       }
       this.action.linking = false;
       this.action.dragging = null;
@@ -449,6 +495,21 @@ export default {
       }
       this.$emit("canvasClick", e);
     },
+    moveSelectedLine (dy) {
+      let index = this.scene.links.findIndex(item => {
+        return item.id === this.selectedLine.id
+      });
+      // alert(index)
+      console.log(index)
+      let top = dy / this.scene.scale;
+      this.$set(
+        this.scene.links,
+        index,
+        Object.assign(this.scene.links[index], {
+          dragLine: top
+        })
+      );
+    },
     moveSelectedNode (dx, dy) {
       let index = this.scene.nodes.findIndex(item => {
         return item.id === this.action.dragging;
@@ -464,15 +525,6 @@ export default {
         })
       );
     },
-    nodeDelete (id) {
-      this.scene.nodes = this.scene.nodes.filter(node => {
-        return node.id !== id;
-      });
-      this.scene.links = this.scene.links.filter(link => {
-        return link.from !== id && link.to !== id;
-      });
-      this.$emit("nodeDelete", id);
-    }
   }
 };
 </script>
