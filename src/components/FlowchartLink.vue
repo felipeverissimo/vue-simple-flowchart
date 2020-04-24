@@ -3,10 +3,29 @@
     @click="linkSelect($event)"
     @dblclick="changeLink"
   >
+
+    <defs>
+      <!-- arrowhead marker definition -->
+      <marker
+        id="arrow"
+        viewBox="0 0 10 10"
+        refX="5"
+        refY="5"
+        markerWidth="6"
+        markerHeight="6"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" />
+      </marker>
+    </defs>
+
     <path
       :d="dAttr"
       :style="pathStyle"
-    ></path>
+      marker-end="url(#arrow)"
+    >
+    </path>
+
     <a>
       <text
         text-anchor="middle"
@@ -14,15 +33,8 @@
         font-size="22"
       >{{
         text
-      }}{{dragLine}}</text>
+      }}</text>
     </a>
-    <path
-      v-if="show.delete"
-      d="M -1 -1 L 0 1 L 1 -1 z"
-      :style="arrowStyle"
-      :transform="arrowTransform"
-    >
-    </path>
 
   </g>
 </template>
@@ -51,10 +63,21 @@ export default {
         return [0, 0];
       }
     },
+    type: {
+      type: String,
+      default () {
+        return "Default";
+      }
+    },
     id: Number,
     horizontal: Boolean,
     linking: Boolean,
-    selectedLine: Boolean,
+    selectedLine: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
     dragLine: Number,
   },
   data () {
@@ -68,22 +91,9 @@ export default {
     };
   },
   methods: {
-    handleMousedown (e) {
-      const target = e.target || e.srcElement;
-      // console.log(target);
-      if (
-        target.className.indexOf("node-input") < 0 &&
-        target.className.indexOf("node-output") < 0
-      ) {
-        this.$emit("nodeSelected", e);
-      }
-      e.preventDefault();
-    },
-
     linkSelect (e) {
       this.show.delete = true
       if (this.id) {
-        this.select = !this.select
         this.$emit('linkSelected', e)
       }
     },
@@ -94,12 +104,19 @@ export default {
     },
     handleMouseLeave () {
       this.show.delete = false;
+      this.select = false;
     },
     caculateCenterPoint () {
       // caculate arrow position: the center point between start and end
       const dx = (this.end[0] - this.start[0]) / 2;
       const dy = (this.end[1] - this.start[1]) / 2;
       return [this.start[0] + dx, this.start[1] + dy];
+    },
+    caculateBottomPoint () {
+      // caculate arrow position: the center point between start and end
+      const dx = (this.end[0] - this.start[0]) / 2;
+      const dy = (this.end[1] - this.start[1]) / 2;
+      return [this.start[0] + dx, dy];
     },
     caculateRotation () {
       // caculate arrow rotation
@@ -140,8 +157,9 @@ export default {
         fill: "none"
       };
     },
+
     arrowTransform () {
-      const [arrowX, arrowY] = this.caculateCenterPoint();
+      const [arrowX, arrowY] = this.caculateBottomPoint();
       const degree = this.caculateRotation();
       return `translate(${arrowX}, ${arrowY}) rotate(${degree})`;
     },
@@ -178,27 +196,35 @@ export default {
       let change = this.text;
       return (this.$props.label = `${change}`);
     },
-    compselect () {
-      let change = this.select;
-      return (this.$props.selectedLine = `${change}`);
-    },
+    // compselect () {
+    //   return this.$props.selectedLine = this.select;
+    // },
     dAttr: function () {
       if (this.horizontal) {
         let cx = this.start[0],
-          cy = this.start[1] - 70,
+          cy = this.start[1] - 45,
           ex = this.linking ? this.end[0] : this.end[0],
-          ey = this.linking ? this.end[1] : this.end[1];
+          ey = this.linking ? this.end[1] : this.end[1] + 33;
         let x1 = cx,
           y1 = cy,
           x2 = ex,
           y2 = ey;
-        let halfHeight = y1 / 2;
         let calc = (x1 + x2) / 2;
         if (x1 < x2) {
-          return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
+          if (this.type === "Action" || this.type === "Join" || this.type === "Decision") {
+            return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex - 70}`;
+          }
+          if (this.type === "End" || this.type === "endWorkflow") {
+            return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey - 5} H ${ex - 40}`;
+          }
+          else {
+            return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
+          }
         }
         else {
-          return `M${x1} ${y1}  V${y1 - this.dragLine} H${x2} V${y2}`
+          cy = this.start[1]
+
+          return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1} H${x2} V${y2 + 50}`
 
         }
       }

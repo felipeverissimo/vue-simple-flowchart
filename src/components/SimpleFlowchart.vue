@@ -5,13 +5,6 @@
     @mouseup="handleUp"
     @mousedown="handleDown"
   >
-    <input
-      type="range"
-      name="points"
-      min="-800"
-      max="800"
-      v-model="offset"
-    >
     <div class="tool-wrapper">
       <div
         class="config-tool"
@@ -20,28 +13,15 @@
         :value="index"
         @click="chosedNodes(item, index)"
       >
-        <div
-          class="button-decision"
-          v-if="index == 0"
-        >
-          <div>✖</div>
-        </div>
-
-        <div
-          class="button-decision"
-          v-if="index == 1"
-        >
-          <div>🞅</div>
-        </div>
 
         <div
           class="button-end"
-          v-if="index == 2"
+          v-if="index == 0"
         ></div>
 
         <div
           class="button-end-workflow"
-          v-if="index == 3"
+          v-if="index == 1"
         >
           <div></div>
         </div>
@@ -53,15 +33,16 @@
       @keyup.delete="removeItems"
       tabindex="0"
     >
+      <!-- :dragLine="parseInt(offset)"moveSelectedLine -->
       <flowchart-link
         v-bind.sync="link"
         :label="link.label"
-        :dragLine="parseInt(offset)"
         v-for="(link, index) in lines"
         :key="`link${index}`"
         :linking="action.linking"
+        :selectedLine="selectedLine.selectedLine"
         @changeLineSelect="linkLabel(link, $event)"
-        @linkSelected="linkSelected(link)"
+        @linkSelected="linkSelected(link, $event)"
       ></flowchart-link>
     </svg>
     <flowchart-node
@@ -69,6 +50,8 @@
       v-for="(node, index) in scene.nodes"
       :key="`node${index}`"
       :options="nodeOptions"
+      :consultMode="consultOn"
+      @update:type="(newType) => {node.type = newType;}"
       @linkingStart="linkingStart(node.id, node.type)"
       @linkingStop="linkingStop(node.id, node.type)"
       @nodeSelected="nodeSelected(node.id, $event, node)"
@@ -111,13 +94,22 @@ export default {
     horizontalStyle: {
       type: Boolean,
       default: false
+    },
+    consult: {
+      type: Boolean,
+      default: false,
+    },
+    nodeSelected: {
+      type: Object,
+      default: {},
     }
   },
   data () {
     return {
       newNodeType: 0,
       newNodeLabel: "",
-      nodeCategory: ["Decision", "Join", "End", "EndWorkflow"],
+      consultOn: this.consult,
+      nodeCategory: ["End", "EndWorkflow"],
       action: {
         linking: false,
         dragging: false,
@@ -137,7 +129,7 @@ export default {
       offset: 150,
       draggingLink: null,
       selectedLine: {},
-      selectedNode: {},
+      selectedNode: this.nodeSelected,
       rootDivOffset: {
         top: 0,
         left: 0
@@ -147,6 +139,11 @@ export default {
   components: {
     FlowchartLink,
     FlowchartNode
+  },
+  watch: {
+    selectedNode () {
+      this.$emit('update:nodeSelected', this.selectedNode)
+    },
   },
   computed: {
     nodeOptions () {
@@ -183,7 +180,8 @@ export default {
           from: fromNode,
           horizontal: this.horizontalStyle,
           dragLine: this.offset,
-          selectedLine: false
+          selectedLine: false,
+          type: link.type
         };
       });
       if (this.draggingLink) {
@@ -212,7 +210,7 @@ export default {
   },
   methods: {
     removeItems () {
-      debugger
+      // debugger
       if (this.action.selected != null) {
         this.deleteNodeButtom()
       } else {
@@ -227,11 +225,24 @@ export default {
       this.selectedNode = {}
     },
     nodeDelete (id) {
-      console.log(id)
-      this.scene.nodes = this.scene.nodes.filter(node => {
-        return node.id !== id;
-      });
-      this.$emit("nodeDelete", id);
+      // console.log(id)
+      if (!this.consultOn) {
+
+        let findNodeFrom = this.scene.nodes.find(node => { return node.id; });
+        findNodeFrom['disabled'] = false
+        this.scene.nodes = this.scene.nodes.filter(node => {
+          return node.id !== id;
+        });
+        this.scene.links = this.scene.links.filter(link => {
+          return link.to !== id;
+        });
+        this.scene.links = this.scene.links.filter(link => {
+          return link.from !== id;
+        });
+
+        this.$emit("nodeDelete", id);
+      }
+
     },
     linkLabel (link, payload) {
       const deletedLink = this.scene.links.find(item => {
@@ -241,8 +252,11 @@ export default {
         deletedLink.label = payload;
       }
     },
-    linkSelected (link) {
+    linkSelected (link, e) {
       this.selectedLine = link
+      this.selectedLine.selectedLine = true
+
+      this.$props.selectedLine = this.selectedLine.selectedLine
     },
     chosedNodes (item, index) {
       this.newNodeType = index;
@@ -278,6 +292,7 @@ export default {
         from: index,
         mx: 0,
         my: 0,
+        dragLine: 0,
       };
     },
     linkingStop (index, type) {
@@ -300,10 +315,12 @@ export default {
               return link.id;
             })
           );
+          console.log(type)
           const newLink = {
             id: maxID + 1,
             from: this.draggingLink.from,
             to: index,
+            type: type,
           };
           let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
           let parentNodes = this.scene.links.map(element => { return element.from });
@@ -368,32 +385,35 @@ export default {
       this.draggingLink = null;
     },
     linkDelete (id) {
-      debugger
-      const deletedLink = this.scene.links.find(item => {
-        return item.id === id;
-      });
-      let findNodeFromDelete = this.scene.nodes.find(node => {
-        return node.id === deletedLink.from
-      });
+      // debugger
+      if (!this.consultOn) {
 
-      let deletedLinkChild = this.scene.nodes.find(item => {
-        return item.id === deletedLink.to;
-      });
-      if (deletedLink) {
-        this.scene.links = this.scene.links.filter(item => {
-          return item.id !== id;
+        const deletedLink = this.scene.links.find(item => {
+          return item.id === id;
         });
-        this.selectedLine = {};
+        let findNodeFromDelete = this.scene.nodes.find(node => {
+          return node.id === deletedLink.from
+        });
 
-        if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision' || deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
-          findNodeFromDelete['disabled'] = false
-          this.$emit("linkBreak", deletedLink);
-        }
-        else if (findNodeFromDelete.type === "Start" || findNodeFromDelete.type === "Action") {
-          findNodeFromDelete['disabled'] = false
-        }
-        else {
-          this.$emit("linkBreak", deletedLink);
+        let deletedLinkChild = this.scene.nodes.find(item => {
+          return item.id === deletedLink.to;
+        });
+        if (deletedLink) {
+          this.scene.links = this.scene.links.filter(item => {
+            return item.id !== id;
+          });
+          this.selectedLine = {};
+
+          if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision' || deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
+            findNodeFromDelete['disabled'] = false
+            this.$emit("linkBreak", deletedLink);
+          }
+          else if (findNodeFromDelete.type === "Start" || findNodeFromDelete.type === "Action") {
+            findNodeFromDelete['disabled'] = false
+          }
+          else {
+            this.$emit("linkBreak", deletedLink);
+          }
         }
       }
     },
@@ -413,6 +433,10 @@ export default {
         e.pageX || e.clientX + document.documentElement.scrollLeft;
       this.mouse.lastY =
         e.pageY || e.clientY + document.documentElement.scrollTop;
+
+      // if (this.consultOn) {
+      //   this.selectedNode =
+      // }
     },
     handleMove (e) {
       if (this.action.linking) {
@@ -448,6 +472,8 @@ export default {
         // this.hasDragged = true
       }
       if (this.selectedLine.selectedLine) {
+        // debugger
+        this.action.scrolling = false
         this.mouse.x =
           e.pageX || e.clientX + document.documentElement.scrollLeft;
         this.mouse.y =
@@ -457,8 +483,7 @@ export default {
 
         this.mouse.lastX = this.mouse.x;
         this.mouse.lastY = this.mouse.y;
-        this.moveSelectedLine(diffY);
-
+        this.moveSelectedLine(this.mouse.y);
       }
     },
     handleUp (e) {
@@ -470,6 +495,7 @@ export default {
         ) {
           this.draggingLink = null;
         }
+
         // if (
         //   typeof target.className === "string" &&
         //   target.className.indexOf("node-delete") > -1
@@ -481,18 +507,26 @@ export default {
       this.action.linking = false;
       this.action.dragging = null;
       this.action.scrolling = false;
+      this.selectedLine.selectedLine = false;
     },
     handleDown (e) {
       const target = e.target || e.srcElement;
-      // console.log('for scroll', target, e.keyCode, e.which)
+      console.log('for scroll', target, e.keyCode, e.which)
       if (
         (target === this.$el || target.matches("svg, svg *")) &&
         e.which === 1
       ) {
+
         this.action.scrolling = true;
         [this.mouse.lastX, this.mouse.lastY] = getMousePosition(this.$el, e);
+        console.log(getMousePosition(this.$el, e))
+
         this.action.selected = null; // deselectAll
+
       }
+      //descelectLine
+      this.selectedLine.selectedLine = false
+      this.selectedLine = {}
       this.$emit("canvasClick", e);
     },
     moveSelectedLine (dy) {
@@ -500,15 +534,8 @@ export default {
         return item.id === this.selectedLine.id
       });
       // alert(index)
-      console.log(index)
       let top = dy / this.scene.scale;
-      this.$set(
-        this.scene.links,
-        index,
-        Object.assign(this.scene.links[index], {
-          dragLine: top
-        })
-      );
+      this.offset = top
     },
     moveSelectedNode (dx, dy) {
       let index = this.scene.nodes.findIndex(item => {
@@ -548,7 +575,7 @@ export default {
   overflow: auto;
   left: 15px;
   width: 122px;
-  height: 140px;
+  height: 60px;
   margin-top: 10px;
   padding-top: 20px;
   background-color: white;
