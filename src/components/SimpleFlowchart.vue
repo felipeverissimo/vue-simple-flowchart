@@ -99,9 +99,9 @@ export default {
       type: Boolean,
       default: false,
     },
-    nodeSelected: {
+    activeNode: {
       type: Object,
-      default: {},
+      required: false
     }
   },
   data () {
