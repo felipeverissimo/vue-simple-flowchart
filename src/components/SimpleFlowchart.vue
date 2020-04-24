@@ -142,7 +142,7 @@ export default {
   },
   watch: {
     selectedNode () {
-      this.$emit('update:nodeSelected', this.selectedNode)
+      this.$emit('update:activeNode', this.selectedNode)
     },
   },
   computed: {
