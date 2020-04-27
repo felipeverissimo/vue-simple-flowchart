@@ -179,7 +179,7 @@ export default {
         x = this.scene.centerX + toNode.x;
         y = this.scene.centerY + toNode.y;
         [ex, ey] = this.getPortPosition("top", x, y);
-        console.log(link.selectedLine)
+        // console.log(link.selectedLine)
         return {
           start: [cx, cy],
           end: [ex, ey],
@@ -222,10 +222,8 @@ export default {
       // alert('estrutura ta funcionando ')
 
       if (this.action.selected != null) {
-        debugger
         this.deleteNodeButtom()
       } else {
-        alert('estrutura ta funcionando ')
         this.deleteButtom()
       }
     },
@@ -257,7 +255,6 @@ export default {
 
     },
     linkLabel (link, payload) {
-      alert('linkLabel')
       if (!this.consultOn) {
 
         const deletedLink = this.scene.links.find(item => {

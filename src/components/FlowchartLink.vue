@@ -218,13 +218,13 @@ export default {
         let calc = (x1 + x2) / 2;
         if (x1 < x2) {
           if (this.type === "Action" || this.type === "Join" || this.type === "Decision") {
-            return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex - 70}`;
+            return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
           }
           if (this.type === "End" || this.type === "endWorkflow") {
-            return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey - 5} H ${ex - 40}`;
+            return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex - 40}`;
           }
           else {
-            return `M ${cx}, ${cy} H ${Math.round(calc)}.${x1}, V ${y2},${ey} H ${ex}`;
+            return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex}`;
           }
         }
         else {
