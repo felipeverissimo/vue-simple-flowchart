@@ -135,6 +135,7 @@ export default {
       offset: 150,
       draggingLink: null,
       selectedLine: null,
+      idSelectedLine: 0,
       selectedNode: this.nodeSelected,
       rootDivOffset: {
         top: 0,
@@ -218,10 +219,10 @@ export default {
   },
   methods: {
     removeItems () {
-      // debugger
       // alert('estrutura ta funcionando ')
 
       if (this.action.selected != null) {
+        debugger
         this.deleteNodeButtom()
       } else {
         alert('estrutura ta funcionando ')
@@ -229,7 +230,7 @@ export default {
       }
     },
     deleteButtom () {
-      this.linkDelete(this.selectedLine.id)
+      this.linkDelete(this.idSelectedLine)
     },
     deleteNodeButtom () {
       this.nodeDelete(this.selectedNode.id)
@@ -270,8 +271,10 @@ export default {
     linkSelected (id) {
       if (!this.consultOn) {
 
-        console.log(id)
         let me = this;
+        me.idSelectedLine = id;
+        me.selectedNode = {};
+        me.action.selected = null;
         me.$nextTick(() => {
           this.scene.links.forEach(element => {
 
@@ -437,7 +440,7 @@ export default {
           });
           this.selectedLine = {};
 
-          if (deletedLinkChild.type === 'Join' || deletedLinkChild.type === 'Decision' || deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
+          if (deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
             findNodeFromDelete['disabled'] = false
             this.$emit("linkBreak", deletedLink);
           }
