@@ -74,9 +74,11 @@ export default {
     linking: Boolean,
     selectedLine: {
       type: Boolean,
-      default () {
-        return false
-      }
+      default: false
+    },
+    consultMode: {
+      type: Boolean,
+      default: false
     },
     dragLine: Number,
   },
@@ -93,9 +95,15 @@ export default {
   methods: {
     linkSelect (e) {
       this.show.delete = true
-      if (this.id) {
-        this.$emit('linkSelected', e)
+      if (this.select === false) {
+        this.select = true
       }
+      this.$emit('linkSelected', this.id)
+      // else {
+      //   this.select = true
+      //   if (this.id) {
+      //   }
+      // }
     },
     handleMouseOver () {
       if (this.id) {
@@ -128,7 +136,9 @@ export default {
       return degree < 0 ? degree + 360 : degree;
     },
     changeLink () {
-      this.text = prompt();
+      if (this.consultMode) {
+        this.text = prompt();
+      }
     },
     deleteLink () {
       this.$emit("deleteLink");
@@ -145,7 +155,7 @@ export default {
   computed: {
     pathStyle () {
       return {
-        stroke: this.select ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
+        stroke: this.selectedLine ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
         strokeWidth: 2.73205,
         fill: "none"
       };
@@ -196,7 +206,7 @@ export default {
       let change = this.text;
       return (this.$props.label = `${change}`);
     },
-    // compselect () {
+    // select () {
     //   return this.$props.selectedLine = this.select;
     // },
     dAttr: function () {

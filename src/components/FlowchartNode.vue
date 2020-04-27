@@ -57,6 +57,48 @@
       ></div>
       <div class="node-main node-delete">
         <div
+          class="node-type-state"
+          v-if="state"
+          v-bind:class="{ waiting: state === 'WAITING', pending: state === 'PENDING', approved: state === 'APPROVED', unapproved: state === 'UNAPPROVED', discontinued: state === 'DISCONTINUED', closed: state === 'CLOSED' }"
+        >
+          <div class="tooltip">
+            <span
+              class="tooltiptext"
+              v-if="state ==='WAITING'"
+            >Status: Aguardando
+            </span>
+            <span
+              class="tooltiptext"
+              v-if="state ==='PENDING'"
+            >Status: Andamento
+            </span>
+            <span
+              class="tooltiptext"
+              v-if="state ==='APPROVED'"
+            >Status: Concluida
+            </span>
+
+            <span
+              class="tooltiptext"
+              v-if="state ==='UNAPPROVED'"
+            >Status: Cancelada
+            </span>
+
+            <span
+              class="tooltiptext"
+              v-if="state ==='CLOSED'"
+            >Status: Encerrada
+            </span>
+            <span
+              class="tooltiptext"
+              v-if="state ==='DISCONTINUED'"
+            >Status: Não Executada
+            </span>
+          </div>
+
+        </div>
+
+        <div
           v-if="type ==='Join'"
           class="node-type-icon"
         >🞅</div>
@@ -215,7 +257,7 @@ export default {
   data () {
     return {
       actionType: this.type,
-
+      state: 'DISCONTINUED',
       show: {
         delete: false,
         fullContent: false,
@@ -252,7 +294,6 @@ export default {
         }
       }
     },
-
     startStyle () {
       return {
         top: this.options.centerY - 2 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
@@ -270,12 +311,14 @@ export default {
   },
   methods: {
     menu ($event) {
-      $event.preventDefault();
-      this.show.menu = true;
+      if (!this.consultMode) {
+        $event.preventDefault();
+        this.show.menu = true;
 
-      window.addEventListener("click", () => {
-        this.show.menu = false;
-      });
+        window.addEventListener("click", () => {
+          this.show.menu = false;
+        });
+      }
     },
     handleContent () {
       if (!this.show.fullContent) {
@@ -376,6 +419,118 @@ $portSize: 12;
   &.horizontal {
     .node-delete {
       top: 45px;
+    }
+  }
+}
+
+.node-type-state {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  &.waiting {
+    &:before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 10px;
+      right: 10px;
+      color: transparent;
+      background-color: yellow;
+      border-radius: 50%;
+    }
+  }
+  &.pending {
+    &:before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 10px;
+      right: 10px;
+      color: transparent;
+      background-color: #0066ff;
+      border-radius: 50%;
+    }
+  }
+  &.approved {
+    &:before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 10px;
+      right: 10px;
+      color: transparent;
+      background-color: #00cc33;
+      border-radius: 50%;
+    }
+  }
+  &.unapproved {
+    &:before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 10px;
+      right: 10px;
+      color: transparent;
+      background-color: #cccccc;
+      border-radius: 50%;
+    }
+  }
+
+  &.discontinued {
+    &:before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 10px;
+      right: 10px;
+      color: transparent;
+      background-color: #00ffff;
+      border-radius: 50%;
+    }
+  }
+
+  &.closed {
+    &:before {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      top: 10px;
+      right: 10px;
+      color: transparent;
+      background-color: red;
+      border-radius: 50%;
+    }
+  }
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+
+    .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: rgba($color: #000, $alpha: 0.5);
+      color: #fff;
+      font-size: 11px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      z-index: 1;
+      top: -15px;
+    }
+  }
+  &:hover {
+    .tooltip {
+      .tooltiptext {
+        visibility: visible;
+      }
     }
   }
 }

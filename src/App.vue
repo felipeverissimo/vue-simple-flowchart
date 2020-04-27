@@ -102,7 +102,7 @@ export default {
       alert("Operação não permitida app");
     },
     canvasClick (e) {
-      console.log("canvas Click, event:", e);
+      // console.log("canvas Click, event:", e);
     },
     nodeClick (id) {
       // console.log("node click", id);

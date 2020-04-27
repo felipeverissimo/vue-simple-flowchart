@@ -4,8 +4,12 @@
     @mousemove="handleMove"
     @mouseup="handleUp"
     @mousedown="handleDown"
+    :key="keyFlowChart"
   >
-    <div class="tool-wrapper">
+    <div
+      class="tool-wrapper"
+      v-if="!consultOn"
+    >
       <div
         class="config-tool"
         v-for="(item, index) in nodeCategory"
@@ -37,12 +41,13 @@
       <flowchart-link
         v-bind.sync="link"
         :label="link.label"
+        :consultMode="consultOn"
         v-for="(link, index) in lines"
         :key="`link${index}`"
         :linking="action.linking"
-        :selectedLine="selectedLine.selectedLine"
+        :selectedLine="link.selectedLine"
         @changeLineSelect="linkLabel(link, $event)"
-        @linkSelected="linkSelected(link, $event)"
+        @linkSelected="linkSelected($event)"
       ></flowchart-link>
     </svg>
     <flowchart-node
@@ -109,6 +114,7 @@ export default {
       newNodeType: 0,
       newNodeLabel: "",
       consultOn: this.consult,
+      keyFlowChart: 0,
       nodeCategory: ["End", "EndWorkflow"],
       action: {
         linking: false,
@@ -128,7 +134,6 @@ export default {
       },
       offset: 150,
       draggingLink: null,
-      selectedLine: {},
       selectedNode: this.nodeSelected,
       rootDivOffset: {
         top: 0,
@@ -172,6 +177,7 @@ export default {
         x = this.scene.centerX + toNode.x;
         y = this.scene.centerY + toNode.y;
         [ex, ey] = this.getPortPosition("top", x, y);
+        console.log(link.selectedLine)
         return {
           start: [cx, cy],
           end: [ex, ey],
@@ -180,10 +186,11 @@ export default {
           from: fromNode,
           horizontal: this.horizontalStyle,
           dragLine: this.offset,
-          selectedLine: false,
+          selectedLine: link.selectedLine,
           type: link.type
         };
       });
+
       if (this.draggingLink) {
         let x, y, cy, cx;
         const fromNode = this.findNodeWithID(this.draggingLink.from);
@@ -245,18 +252,34 @@ export default {
 
     },
     linkLabel (link, payload) {
-      const deletedLink = this.scene.links.find(item => {
-        return item.id === link.id;
-      });
-      if (deletedLink) {
-        deletedLink.label = payload;
+      if (!this.consultOn) {
+
+        const deletedLink = this.scene.links.find(item => {
+          return item.id === link.id;
+        });
+        if (deletedLink) {
+          deletedLink.label = payload;
+        }
       }
     },
-    linkSelected (link, e) {
-      this.selectedLine = link
-      this.selectedLine.selectedLine = true
+    linkSelected (id) {
+      if (!this.consultOn) {
 
-      this.$props.selectedLine = this.selectedLine.selectedLine
+        console.log(id)
+        let me = this;
+        me.$nextTick(() => {
+          this.scene.links.forEach(element => {
+
+            if (element.id === id) {
+              element.selectedLine = !element.selectedLine
+            }
+            else {
+              element.selectedLine = false
+            }
+
+          });
+        });
+      }
     },
     chosedNodes (item, index) {
       this.newNodeType = index;
@@ -315,12 +338,13 @@ export default {
               return link.id;
             })
           );
-          console.log(type)
+          // console.log(type)
           const newLink = {
             id: maxID + 1,
             from: this.draggingLink.from,
             to: index,
             type: type,
+            selectedLine: false
           };
           let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
           let parentNodes = this.scene.links.map(element => { return element.from });
@@ -471,20 +495,20 @@ export default {
 
         // this.hasDragged = true
       }
-      if (this.selectedLine.selectedLine) {
-        // debugger
-        this.action.scrolling = false
-        this.mouse.x =
-          e.pageX || e.clientX + document.documentElement.scrollLeft;
-        this.mouse.y =
-          e.pageY || e.clientY + document.documentElement.scrollTop;
-        let diffX = this.mouse.x - this.mouse.lastX;
-        let diffY = this.mouse.y - this.mouse.lastY;
+      // if (this.selectedLine.selectedLine) {
+      //   debugger
+      //   this.action.scrolling = false
+      //   this.mouse.x =
+      //     e.pageX || e.clientX + document.documentElement.scrollLeft;
+      //   this.mouse.y =
+      //     e.pageY || e.clientY + document.documentElement.scrollTop;
+      //   let diffX = this.mouse.x - this.mouse.lastX;
+      //   let diffY = this.mouse.y - this.mouse.lastY;
 
-        this.mouse.lastX = this.mouse.x;
-        this.mouse.lastY = this.mouse.y;
-        this.moveSelectedLine(this.mouse.y);
-      }
+      //   this.mouse.lastX = this.mouse.x;
+      //   this.mouse.lastY = this.mouse.y;
+      //   this.moveSelectedLine(this.mouse.y);
+      // }
     },
     handleUp (e) {
       const target = e.target || e.srcElement;
@@ -507,11 +531,11 @@ export default {
       this.action.linking = false;
       this.action.dragging = null;
       this.action.scrolling = false;
-      this.selectedLine.selectedLine = false;
+      // this.selectedLine.selectedLine = false;
     },
     handleDown (e) {
       const target = e.target || e.srcElement;
-      console.log('for scroll', target, e.keyCode, e.which)
+      // console.log('for scroll', target, e.keyCode, e.which)
       if (
         (target === this.$el || target.matches("svg, svg *")) &&
         e.which === 1
@@ -519,13 +543,13 @@ export default {
 
         this.action.scrolling = true;
         [this.mouse.lastX, this.mouse.lastY] = getMousePosition(this.$el, e);
-        console.log(getMousePosition(this.$el, e))
+        // console.log(getMousePosition(this.$el, e))
 
-        this.action.selected = null; // deselectAll
+        // this.action.selected = null; // deselectAll
 
       }
       //descelectLine
-      this.selectedLine.selectedLine = false
+      // this.selectedLine.selectedLine = false
       this.selectedLine = {}
       this.$emit("canvasClick", e);
     },
@@ -575,7 +599,7 @@ export default {
   overflow: auto;
   left: 15px;
   width: 122px;
-  height: 60px;
+  height: 70px;
   margin-top: 10px;
   padding-top: 20px;
   background-color: white;
