@@ -115,6 +115,7 @@ export default {
       newNodeLabel: "",
       consultOn: this.consult,
       keyFlowChart: 0,
+      browser: '',
       nodeCategory: ["End", "EndWorkflow"],
       action: {
         linking: false,
@@ -216,6 +217,7 @@ export default {
     this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
     this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
     // console.log(22222, this.rootDivOffset);
+    this.identific_nav()
   },
   methods: {
     removeItems () {
@@ -226,6 +228,26 @@ export default {
       } else {
         this.deleteButtom()
       }
+    },
+    identific_nav () {
+      var nav = navigator.userAgent.toLowerCase();
+      let browser = "";
+      if (nav.indexOf("msie") != -1) {
+        browser = "msie";
+      } else if (nav.indexOf("opera") != -1) {
+        browser = "opera";
+      } else if (nav.indexOf("mozilla") != -1) {
+        if (nav.indexOf("firefox") != -1) {
+          browser = "firefox";
+        } else if (nav.indexOf("firefox") != -1) {
+          browser = "mozilla";
+        } else if (nav.indexOf("chrome") != -1) {
+          browser = "chrome";
+        }
+      } else {
+        alert("Navegador desconhecido!");
+      }
+      this.browser = browser
     },
     deleteButtom () {
       this.linkDelete(this.idSelectedLine)

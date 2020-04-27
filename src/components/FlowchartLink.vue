@@ -218,13 +218,29 @@ export default {
         let calc = (x1 + x2) / 2;
         if (x1 < x2) {
           if (this.type === "Action" || this.type === "Join" || this.type === "Decision") {
-            return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
+            if (this.$parent.browser === 'firefox') {
+              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
+            } else {
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
+            }
           }
           if (this.type === "End" || this.type === "endWorkflow") {
+            if (this.$parent.browser === 'firefox') {
+              return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey - 5} H ${ex - 40}`;
+            }
+            else {
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex - 40}`;
+
+            }
             return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex - 40}`;
           }
           else {
-            return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex}`;
+            if (this.$parent.browser === 'firefox') {
+              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+            }
+            else {
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex}`;
+            }
           }
         }
         else {

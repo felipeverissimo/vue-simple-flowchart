@@ -58,7 +58,7 @@
       <div class="node-main node-delete">
         <div
           class="node-type-state"
-          v-if="state"
+          v-if="consultMode"
           v-bind:class="{ waiting: state === 'WAITING', pending: state === 'PENDING', approved: state === 'APPROVED', unapproved: state === 'UNAPPROVED', discontinued: state === 'DISCONTINUED', closed: state === 'CLOSED' }"
         >
           <div class="tooltip">
