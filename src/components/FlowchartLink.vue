@@ -99,11 +99,7 @@ export default {
         this.select = true
       }
       this.$emit('linkSelected', this.id)
-      // else {
-      //   this.select = true
-      //   if (this.id) {
-      //   }
-      // }
+
     },
     handleMouseOver () {
       if (this.id) {
@@ -136,7 +132,7 @@ export default {
       return degree < 0 ? degree + 360 : degree;
     },
     changeLink () {
-      if (this.consultMode) {
+      if (!this.consultMode) {
         this.text = prompt();
       }
     },

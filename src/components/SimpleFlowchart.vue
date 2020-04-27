@@ -134,6 +134,7 @@ export default {
       },
       offset: 150,
       draggingLink: null,
+      selectedLine: null,
       selectedNode: this.nodeSelected,
       rootDivOffset: {
         top: 0,
@@ -218,9 +219,12 @@ export default {
   methods: {
     removeItems () {
       // debugger
+      // alert('estrutura ta funcionando ')
+
       if (this.action.selected != null) {
         this.deleteNodeButtom()
       } else {
+        alert('estrutura ta funcionando ')
         this.deleteButtom()
       }
     },
@@ -252,6 +256,7 @@ export default {
 
     },
     linkLabel (link, payload) {
+      alert('linkLabel')
       if (!this.consultOn) {
 
         const deletedLink = this.scene.links.find(item => {
@@ -271,10 +276,14 @@ export default {
           this.scene.links.forEach(element => {
 
             if (element.id === id) {
+
               element.selectedLine = !element.selectedLine
+
             }
             else {
+
               element.selectedLine = false
+
             }
 
           });
@@ -409,7 +418,7 @@ export default {
       this.draggingLink = null;
     },
     linkDelete (id) {
-      // debugger
+      debugger
       if (!this.consultOn) {
 
         const deletedLink = this.scene.links.find(item => {
