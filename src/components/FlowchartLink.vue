@@ -245,8 +245,28 @@ export default {
         }
         else {
           cy = this.start[1]
+          let nodeHeight = -100;
+          if (y1 < y2 && (y1 + nodeHeight) > y2) {
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+          }
+          // 60 - 67 
+          else if (y1 < y2 && (y1 - y2) > nodeHeight) {
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+          }
+          else if (y1 < y2 && (y1 - y2) < nodeHeight) {
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 - 45}`
+          }
+          else if (y1 < y2) {
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 - 45}`
 
-          return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1} H${x2} V${y2 + 50}`
+          }
+          else if (y1 > y2 && x2 > y2) {
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+          }
+          else {
+
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+          }
 
         }
       }

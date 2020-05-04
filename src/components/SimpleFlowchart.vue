@@ -41,6 +41,7 @@
       <flowchart-link
         v-bind.sync="link"
         :label="link.label"
+        :state="link.state"
         :consultMode="consultOn"
         v-for="(link, index) in lines"
         :key="`link${index}`"
@@ -186,6 +187,7 @@ export default {
           end: [ex, ey],
           id: link.id,
           label: link.label,
+          state: link.state,
           from: fromNode,
           horizontal: this.horizontalStyle,
           dragLine: this.offset,

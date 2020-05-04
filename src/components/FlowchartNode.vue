@@ -105,7 +105,7 @@
 
         <div
           v-if="type ==='Decision'"
-          class="node-type-icon"
+          class="node-type-icon desicion-node"
         >✖</div>
         <div
           v-text="label"
@@ -241,6 +241,10 @@ export default {
       type: Boolean,
       default: false
     },
+    state: {
+      type: String,
+      default: ""
+    },
     options: {
       type: Object,
       default () {
@@ -257,7 +261,6 @@ export default {
   data () {
     return {
       actionType: this.type,
-      state: 'DISCONTINUED',
       show: {
         delete: false,
         fullContent: false,
@@ -773,5 +776,9 @@ $portSize: 12;
   background-color: red;
   width: 100px;
   height: 100px;
+}
+
+.node-type-icon.desicion-node {
+  transform: rotate(45deg) !important;
 }
 </style>
