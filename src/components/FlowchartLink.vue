@@ -238,6 +238,8 @@ export default {
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 150}`
             }
             else {
+              console.log('chrome contruindo o cara salvo')
+
               return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex : ex - 150}`;
             }
           }
@@ -268,8 +270,10 @@ export default {
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           else {
-            // console.log('teste')
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
+            console.log('teste')
+            let yModificado = y2 + 75;
+
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${yModificado}`
           }
 
         }
