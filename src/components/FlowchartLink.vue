@@ -239,8 +239,11 @@ export default {
             }
             else {
               console.log('chrome contruindo o cara salvo')
+              console.log(this.dragLine)
+              let mountedLine = ex - 80;
+              console.log(mountedLine)
 
-              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex : ex - 150}`;
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex - 80 : ex - 150}`;
             }
           }
         }
