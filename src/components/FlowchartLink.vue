@@ -232,14 +232,13 @@ export default {
               return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex - 40}`;
 
             }
-            return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex - 40}`;
           }
           else {
             if (this.$parent.browser === 'firefox') {
-              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex + 70}`
             }
             else {
-              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex}`;
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex + 70}`;
             }
           }
         }
@@ -264,7 +263,7 @@ export default {
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
           }
           else {
-
+            console.log('teste')
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
           }
 
