@@ -442,7 +442,7 @@ export default {
       this.draggingLink = null;
     },
     linkDelete (id) {
-      debugger
+      // debugger
       if (!this.consultOn) {
 
         const deletedLink = this.scene.links.find(item => {

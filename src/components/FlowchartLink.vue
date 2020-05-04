@@ -235,36 +235,41 @@ export default {
           }
           else {
             if (this.$parent.browser === 'firefox') {
-              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex + 70}`
+              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 150}`
             }
             else {
-              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex + 70}`;
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex : ex - 150}`;
             }
           }
         }
         else {
           cy = this.start[1]
           let nodeHeight = -100;
+          let verticalLine = y1 - 150;
           if (y1 < y2 && (y1 + nodeHeight) > y2) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+            // console.log(verticalLine)
+            // console.log(y2)
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           // 60 - 67 
           else if (y1 < y2 && (y1 - y2) > nodeHeight) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+            // console.log(verticalLine, 'menor')
+            // console.log(y2, 'menor')
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           else if (y1 < y2 && (y1 - y2) < nodeHeight) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 - 45}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 - 45}`
           }
           else if (y1 < y2) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 - 45}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 - 45}`
 
           }
           else if (y1 > y2 && x2 > y2) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           else {
-            console.log('teste')
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : y1 - 150} H${x2} V${y2 + 75}`
+            // console.log('teste')
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
 
         }
