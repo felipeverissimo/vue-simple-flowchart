@@ -235,7 +235,7 @@ export default {
           }
           else {
             if (this.$parent.browser === 'firefox') {
-              if (me.consultMode) {
+              if (this.consultMode) {
                 return `M ${cx} ${cy} H ${Math.round(calc)} ${calc}, V ${y2} ${ey} H ${ex - 70}`;
               }
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 150}`
@@ -246,7 +246,7 @@ export default {
               let mountedLine = ex - 80;
               console.log(mountedLine)
 
-              if (me.consultMode) {
+              if (this.consultMode) {
                 return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
               else {
