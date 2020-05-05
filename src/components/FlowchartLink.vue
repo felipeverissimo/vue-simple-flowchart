@@ -235,6 +235,9 @@ export default {
           }
           else {
             if (this.$parent.browser === 'firefox') {
+              if (me.consultMode) {
+                return `M ${cx} ${cy} H ${Math.round(calc)} ${calc}, V ${y2} ${ey} H ${ex - 70}`;
+              }
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 150}`
             }
             else {
@@ -243,7 +246,13 @@ export default {
               let mountedLine = ex - 80;
               console.log(mountedLine)
 
-              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex - 80 : ex - 150}`;
+              if (me.consultMode) {
+                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
+              }
+              else {
+                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex : ex - 150}`;
+              }
+
             }
           }
         }
