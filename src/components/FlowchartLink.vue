@@ -236,7 +236,7 @@ export default {
           else {
             if (this.$parent.browser === 'firefox') {
               if (this.consultMode) {
-                return `M ${cx} ${cy} H ${Math.round(calc)} ${calc}, V ${y2} ${ey} H ${ex - 70}`;
+                return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey} H ${ex - 70}`;
               }
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 150}`
             }
