@@ -19,11 +19,10 @@
       >
 
         <div
-
           class="button-end"
           v-if="index == 0 && end"
         ></div>
-    
+
         <div
           class="button-end-workflow"
           v-if="index == 1 && endWorkflow"
@@ -37,7 +36,6 @@
       :height="`${height}px`"
       tabindex="0"
     >
-      <!-- :label.sync="link.label" -->
       <!-- :dragLine="parseInt(offset)"moveSelectedLine -->
       <flowchart-link
         v-bind.sync="link"
@@ -47,6 +45,7 @@
         :key="`link${index}`"
         :linking="action.linking"
         :selectedLine="link.selectedLine"
+        :label.sync="link.label"
         @update:label="labelUpdate(link,$event)"
         @changeLineSelect="linkLabel(link, $event)"
         @linkSelected="linkSelected($event)"
@@ -228,41 +227,41 @@ export default {
     this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
     this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
 
-    window.addEventListener('keydown', (e)=>{     
-        var key = e.which || e.keyCode;  
-        if (key === 46) {        
-           me.removeItems();     
-        }
+    window.addEventListener('keydown', (e) => {
+      var key = e.which || e.keyCode;
+      if (key === 46) {
+        me.removeItems();
+      }
     })
 
     // console.log(22222, this.rootDivOffset);
   },
   methods: {
-    labelUpdate(link, label){
+    labelUpdate (link, label) {
       console.log(link)
-        this.scene.links.forEach(item => {
-          if(item.id === link.id){
-            item.label = label 
-          } 
+      this.scene.links.forEach(item => {
+        if (item.id === link.id) {
+          item.label = label
+        }
       });
-      this.keyFlowChart = this.keyFlowChart +1
+      this.keyFlowChart = this.keyFlowChart + 1
     },
     removeItems () {
-      if(!this.consultOn){
-            if (this.action.selected !== 0) {
-              if(this.selectedNode.type !=='Start'){
-              return  this.deleteNodeButtom()
-              }
-              else{
-                return 
-              }
-            } 
-            else if(this.idSelectedLine !== 0) {
-              this.deleteLineButtom()
-            }
-            else{
-              return 
-            }
+      if (!this.consultOn) {
+        if (this.action.selected !== 0) {
+          if (this.selectedNode.type !== 'Start') {
+            return this.deleteNodeButtom()
+          }
+          else {
+            return
+          }
+        }
+        else if (this.idSelectedLine !== 0) {
+          this.deleteLineButtom()
+        }
+        else {
+          return
+        }
       }
     },
     identific_nav () {
@@ -347,7 +346,7 @@ export default {
 
           });
         });
-        
+
       }
     },
     chosedNodes (item, index) {
@@ -414,14 +413,14 @@ export default {
             to: index,
             type: type,
             selectedLine: false,
-            label:''
+            label: ''
           };
           let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
           let parentNodes = this.scene.links.map(element => { return element.from });
           let disabled = findNodeFrom.disabled;
 
           if (this.draggingType === "Start") {
-            if (type === 'Join' || type === 'End' ||  type === 'EndWorkflow' ) {
+            if (type === 'Join' || type === 'End' || type === 'EndWorkflow') {
               // if (!disabled) {
               // }
               // else {
@@ -431,9 +430,9 @@ export default {
               this.$emit('not-allowed')
             }
             else {
-                findNodeFrom['disabled'] = true
-                this.scene.links.push(newLink);
-                this.$emit("linkAdded", newLink);
+              findNodeFrom['disabled'] = true
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
             }
           }
           if (this.draggingType === "Action") {
