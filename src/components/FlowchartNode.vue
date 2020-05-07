@@ -315,30 +315,31 @@ export default {
   methods: {
     menu ($event) {
       let me = this;
-        if (!me.consultMode) {
-          if(me.$parent.scene.links.length === 0){
-            findElementLink()
-          }
-          else{
-              me.$parent.scene.links.forEach((element)=>{
-                let link = element.to;
-                  if(link ===  this.id){
-                  }
-                  else{
-                   findElementLink()
-                  }
-              })
-          }
-
-          function findElementLink(){
-                    $event.preventDefault();
-                    me.show.menu = true;
-
-                    window.addEventListener("click", () => {
-                      me.show.menu = false;
-                    });
-          }
+      if (!me.consultMode) {
+        if (me.$parent.scene.links.length === 0) {
+          findElementLink()
         }
+        else {
+          me.$parent.scene.links.forEach((element) => {
+            let link = element.to;
+            let linkFrom = element.from;
+            if (link === this.id || linkFrom === this.id) {
+            }
+            else {
+              findElementLink()
+            }
+          })
+        }
+
+        function findElementLink () {
+          $event.preventDefault();
+          me.show.menu = true;
+
+          window.addEventListener("click", () => {
+            me.show.menu = false;
+          });
+        }
+      }
     },
     handleContent () {
       if (!this.show.fullContent) {
