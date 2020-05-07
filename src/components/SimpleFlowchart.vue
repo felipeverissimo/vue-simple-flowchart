@@ -19,13 +19,14 @@
       >
 
         <div
-          class="button-end"
-          v-if="index == 0"
-        ></div>
 
+          class="button-end"
+          v-if="index == 0 && end"
+        ></div>
+    
         <div
           class="button-end-workflow"
-          v-if="index == 1"
+          v-if="index == 1 && endWorkflow"
         >
           <div></div>
         </div>
@@ -34,19 +35,19 @@
     <svg
       width="100%"
       :height="`${height}px`"
-      @keyup.delete="removeItems"
       tabindex="0"
     >
+      <!-- :label.sync="link.label" -->
       <!-- :dragLine="parseInt(offset)"moveSelectedLine -->
       <flowchart-link
         v-bind.sync="link"
-        :label="link.label"
         :state="link.state"
         :consultMode="consultOn"
         v-for="(link, index) in lines"
         :key="`link${index}`"
         :linking="action.linking"
         :selectedLine="link.selectedLine"
+        @update:label="labelUpdate(link,$event)"
         @changeLineSelect="linkLabel(link, $event)"
         @linkSelected="linkSelected($event)"
       ></flowchart-link>
@@ -108,6 +109,14 @@ export default {
     activeNode: {
       type: Object,
       required: false
+    },
+    end: {
+      type: Boolean,
+      default: false,
+    },
+    endWorkflow: {
+      type: Boolean,
+      default: true,
     }
   },
   data () {
@@ -207,7 +216,6 @@ export default {
         lines.push({
           start: [cx, cy],
           end: [this.draggingLink.mx, this.draggingLink.my],
-          label: "",
           horizontal: this.horizontalStyle,
           dragLine: 200,
         });
@@ -216,19 +224,45 @@ export default {
     },
   },
   mounted () {
+    let me = this;
     this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
     this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
+
+    window.addEventListener('keydown', (e)=>{     
+        var key = e.which || e.keyCode;  
+        if (key === 46) {        
+           me.removeItems();     
+        }
+    })
+
     // console.log(22222, this.rootDivOffset);
-    this.identific_nav()
   },
   methods: {
+    labelUpdate(link, label){
+      console.log(link)
+        this.scene.links.forEach(item => {
+          if(item.id === link.id){
+            item.label = label 
+          } 
+      });
+      this.keyFlowChart = this.keyFlowChart +1
+    },
     removeItems () {
-      // alert('estrutura ta funcionando ')
-
-      if (this.action.selected != null) {
-        this.deleteNodeButtom()
-      } else {
-        this.deleteButtom()
+      if(!this.consultOn){
+            if (this.action.selected !== 0) {
+              if(this.selectedNode.type !=='Start'){
+              return  this.deleteNodeButtom()
+              }
+              else{
+                return 
+              }
+            } 
+            else if(this.idSelectedLine !== 0) {
+              this.deleteLineButtom()
+            }
+            else{
+              return 
+            }
       }
     },
     identific_nav () {
@@ -251,12 +285,14 @@ export default {
       }
       this.browser = browser
     },
-    deleteButtom () {
+    deleteLineButtom () {
       this.linkDelete(this.idSelectedLine)
+      this.idSelectedLine = 0
     },
     deleteNodeButtom () {
       this.nodeDelete(this.selectedNode.id)
       this.selectedNode = {}
+      this.action.selected = 0
     },
     nodeDelete (id) {
       // console.log(id)
@@ -276,7 +312,6 @@ export default {
 
         this.$emit("nodeDelete", id);
       }
-
     },
     linkLabel (link, payload) {
       if (!this.consultOn) {
@@ -295,7 +330,7 @@ export default {
         let me = this;
         me.idSelectedLine = id;
         me.selectedNode = {};
-        me.action.selected = null;
+        me.action.selected = 0;
         me.$nextTick(() => {
           this.scene.links.forEach(element => {
 
@@ -312,6 +347,7 @@ export default {
 
           });
         });
+        
       }
     },
     chosedNodes (item, index) {
@@ -377,25 +413,27 @@ export default {
             from: this.draggingLink.from,
             to: index,
             type: type,
-            selectedLine: false
+            selectedLine: false,
+            label:''
           };
           let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
           let parentNodes = this.scene.links.map(element => { return element.from });
           let disabled = findNodeFrom.disabled;
 
           if (this.draggingType === "Start") {
-            if (type === 'Action') {
-              if (!disabled) {
+            if (type === 'Join' || type === 'End' ||  type === 'EndWorkflow' ) {
+              // if (!disabled) {
+              // }
+              // else {
+              //   alert('2 action')
+              //   this.$emit('not-allowed')
+              // }
+              this.$emit('not-allowed')
+            }
+            else {
                 findNodeFrom['disabled'] = true
                 this.scene.links.push(newLink);
                 this.$emit("linkAdded", newLink);
-              }
-              else {
-                this.$emit('not-allowed')
-              }
-            }
-            else {
-              this.$emit('not-allowed')
             }
           }
           if (this.draggingType === "Action") {

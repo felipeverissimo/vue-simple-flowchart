@@ -99,6 +99,8 @@ export default {
         this.select = true
       }
       this.$emit('linkSelected', this.id)
+        this.$emit("nodeSelected", null);
+      
 
     },
     handleMouseOver () {
@@ -141,8 +143,8 @@ export default {
     }
   },
   watch: {
-    text: function () {
-      this.$emit("changeLineLabel", this.text);
+    text: function (value) {
+      this.$emit("update:label", value);
     },
     select: function () {
       this.$emit("changeLineSelected", this.select);
