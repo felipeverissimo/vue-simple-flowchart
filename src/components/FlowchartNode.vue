@@ -12,7 +12,7 @@
       @mouseover="handleMouseOver"
       @mouseleave="handleMouseLeave"
       @dblclick="handleContent"
-      @contextmenu="menu($event)"
+      @contextmenu="menu($event, $data)"
       v-bind:class="{full: options.transition, selected: options.selected === id, horizontal: options.horizontal  }"
       v-if="type !== 'Start'&& type !== 'End' && type !== 'EndWorkflow'"
     >
@@ -313,20 +313,32 @@ export default {
     }
   },
   methods: {
-    menu ($event) {
+    menu ($event, node) {
       let me = this;
       if (!me.consultMode) {
         if (me.$parent.scene.links.length === 0) {
           findElementLink()
         }
         else {
+          console.log($event)
           me.$parent.scene.links.forEach((element) => {
-            let link = element.to;
-            let linkFrom = element.from;
-            if (link === this.id || linkFrom === this.id) {
+            let link = me.$parent.scene.links.filter(function (link) {
+              return link.to === me.id;
+            });
+            let linkFrom = me.$parent.scene.links.filter(function (link) {
+              return link.from === me.id;
+            });
+
+            if ((linkFrom !== undefined || linkFrom !== null) && linkFrom.length === 0 && link.length === 0) {
+              document.oncontextmenu = function () {
+                return true;
+              };
+              return findElementLink()
             }
             else {
-              findElementLink()
+              return document.oncontextmenu = function () {
+                return false;
+              };
             }
           })
         }

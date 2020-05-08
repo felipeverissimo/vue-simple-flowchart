@@ -11,7 +11,6 @@
       v-if="!consultOn"
     >
       <div
-        class="config-tool"
         v-for="(item, index) in nodeCategory"
         :key="index"
         :value="index"
@@ -19,15 +18,20 @@
       >
 
         <div
-          class="button-end"
+          class="config-tool "
           v-if="index == 0 && end"
-        ></div>
+        >
+          <div class="button-end"></div>
+        </div>
 
         <div
-          class="button-end-workflow"
+          class=" config-tool"
           v-if="index == 1 && endWorkflow"
         >
-          <div></div>
+          <div class="button-end-workflow">
+            <div></div>
+
+          </div>
         </div>
       </div>
     </div>
@@ -142,7 +146,7 @@ export default {
         lastX: 0,
         lastY: 0
       },
-      offset: 150,
+      offset: 0,
       draggingLink: null,
       selectedLine: null,
       idSelectedLine: 0,
@@ -216,7 +220,7 @@ export default {
           start: [cx, cy],
           end: [this.draggingLink.mx, this.draggingLink.my],
           horizontal: this.horizontalStyle,
-          dragLine: 200,
+          dragLine: 0,
         });
       }
       return lines;
@@ -234,11 +238,13 @@ export default {
       }
     })
 
+
+
     // console.log(22222, this.rootDivOffset);
   },
   methods: {
     labelUpdate (link, label) {
-      console.log(link)
+      // console.log(link)
       this.scene.links.forEach(item => {
         if (item.id === link.id) {
           item.label = label

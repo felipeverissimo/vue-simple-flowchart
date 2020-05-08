@@ -11,8 +11,8 @@
         viewBox="0 0 10 10"
         refX="5"
         refY="5"
-        markerWidth="6"
-        markerHeight="6"
+        markerWidth="4"
+        markerHeight="4"
         orient="auto-start-reverse"
       >
         <path d="M 0 0 L 10 5 L 0 10 z" />
@@ -99,8 +99,7 @@ export default {
         this.select = true
       }
       this.$emit('linkSelected', this.id)
-        this.$emit("nodeSelected", null);
-      
+      this.$emit("nodeSelected", null);
 
     },
     handleMouseOver () {
@@ -116,7 +115,14 @@ export default {
       // caculate arrow position: the center point between start and end
       const dx = (this.end[0] - this.start[0]) / 2;
       const dy = (this.end[1] - this.start[1]) / 2;
-      return [this.start[0] + dx, this.start[1] + dy];
+      console.log(this.start[0])
+      console.log(this.start[1])
+      if (this.end[0] < this.start[0]) {
+        return [this.start[0] + dx, this.start[1] + 90]
+      }
+      else {
+        return [this.start[0] + dx, this.start[1] + dy];
+      }
     },
     caculateBottomPoint () {
       // caculate arrow position: the center point between start and end
@@ -154,7 +160,7 @@ export default {
     pathStyle () {
       return {
         stroke: this.selectedLine ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
-        strokeWidth: 2.73205,
+        strokeWidth: 4.73205,
         fill: "none"
       };
     },
@@ -165,7 +171,6 @@ export default {
         fill: "none"
       };
     },
-
     arrowTransform () {
       const [arrowX, arrowY] = this.caculateBottomPoint();
       const degree = this.caculateRotation();
@@ -174,7 +179,7 @@ export default {
     arrowTransformHorizontal () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
       const degree = this.caculateRotation();
-      return `translate(${arrowX}, ${arrowY + 25})`;
+      return `translate(${arrowX}, ${arrowY})`;
     },
     textTransform () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
@@ -243,10 +248,10 @@ export default {
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 150}`
             }
             else {
-              console.log('chrome contruindo o cara salvo')
-              console.log(this.dragLine)
+              // console.log('chrome contruindo o cara salvo')
+              // console.log(this.dragLine)
               let mountedLine = ex - 80;
-              console.log(mountedLine)
+              // console.log(mountedLine)
 
               if (this.consultMode) {
                 return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
@@ -284,7 +289,6 @@ export default {
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           else {
-            console.log('teste')
             let yModificado = y2 + 75;
 
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${yModificado}`
