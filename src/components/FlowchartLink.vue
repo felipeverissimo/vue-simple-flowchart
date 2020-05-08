@@ -245,7 +245,7 @@ export default {
               if (this.consultMode) {
                 return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey} H ${ex - 70}`;
               }
-              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 150}`
+              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 70}`
             }
             else {
               // console.log('chrome contruindo o cara salvo')
@@ -257,7 +257,7 @@ export default {
                 return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
               else {
-                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex : ex - 150}`;
+                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex : ex - 70}`;
               }
 
             }
