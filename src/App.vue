@@ -78,7 +78,7 @@ export default {
             id: 3248,
             x: -357,
             y: 80,
-            type: "Decision",
+            type: "Action",
             label: "decisáo",
             disabled: false
           },
@@ -86,8 +86,24 @@ export default {
             id: 5796,
             x: -557,
             y: 80,
-            type: "Join",
+            type: "Action",
             label: "test1",
+            disabled: false
+          },
+          {
+            id: 55796,
+            x: -557,
+            y: 80,
+            type: "Action",
+            label: "test5",
+            disabled: false
+          },
+          {
+            id: 556796,
+            x: -557,
+            y: 80,
+            type: "Action",
+            label: "test6",
             disabled: false
           }
         ],

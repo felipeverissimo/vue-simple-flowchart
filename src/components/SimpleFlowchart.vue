@@ -69,6 +69,7 @@
     >
     </flowchart-node>
   </div>
+
 </template>
 
 <script>
@@ -238,7 +239,15 @@ export default {
       }
     })
 
+    document.oncontextmenu = function () {
+      return false;
+    };
 
+    // document.addEventListener("click", this.linkSelected($event));
+
+
+
+    this.identific_nav()
 
     // console.log(22222, this.rootDivOffset);
   },
@@ -422,17 +431,11 @@ export default {
             label: ''
           };
           let findNodeFrom = this.scene.nodes.find(node => { return node.id === this.draggingLink.from; });
-          let parentNodes = this.scene.links.map(element => { return element.from });
+          // let parentNodes = this.scene.links.map(element => { return element.from });
           let disabled = findNodeFrom.disabled;
 
           if (this.draggingType === "Start") {
-            if (type === 'Join' || type === 'End' || type === 'EndWorkflow') {
-              // if (!disabled) {
-              // }
-              // else {
-              //   alert('2 action')
-              //   this.$emit('not-allowed')
-              // }
+            if (type === 'End' || type === 'EndWorkflow') {
               this.$emit('not-allowed')
             }
             else {
@@ -442,40 +445,40 @@ export default {
             }
           }
           if (this.draggingType === "Action") {
-            if (!disabled) {
-              findNodeFrom['disabled'] = true
-              this.scene.links.push(newLink);
-              this.$emit("linkAdded", newLink);
-            }
-            else if (disabled && type === "Action") {
-              this.scene.links.push(newLink);
-              this.$emit("linkAdded", newLink);
-            }
-            else {
-              this.$emit('not-allowed')
-            }
+            // if (!disabled) {
+            //   findNodeFrom['disabled'] = true
+            //   this.scene.links.push(newLink);
+            //   this.$emit("linkAdded", newLink);
+            // }
+            // else if (disabled && type === "Action") {
+            //   this.scene.links.push(newLink);
+            //   this.$emit("linkAdded", newLink);
+            // }
+            // else {
+            this.$emit('not-allowed')
+            // }
           }
           if (this.draggingType === "Join") {
-            if (type !== "Action") {
-              this.$emit('not-allowed')
-            }
-            else if (disabled && type === "Action") {
-              this.$emit('not-allowed')
-            }
-            else {
-              findNodeFrom['disabled'] = true
-              this.scene.links.push(newLink);
-              this.$emit("linkAdded", newLink);
-            }
+            // if (type !== "Action") {
+            //   this.$emit('not-allowed')
+            // }
+            // else if (disabled && type === "Action") {
+            //   this.$emit('not-allowed')
+            // }
+            // else {
+            findNodeFrom['disabled'] = true
+            this.scene.links.push(newLink);
+            this.$emit("linkAdded", newLink);
+            // }
           }
           if (this.draggingType === "Decision") {
-            if (type === "Join" || type === "Decision") {
-              this.$emit('not-allowed')
-            }
-            else {
-              this.scene.links.push(newLink);
-              this.$emit("linkAdded", newLink);
-            }
+            // if (type === "Join" || type === "Decision") {
+            //   this.$emit('not-allowed')
+            // }
+            // else {
+            this.scene.links.push(newLink);
+            this.$emit("linkAdded", newLink);
+            // }
           }
         }
         else {
@@ -630,9 +633,9 @@ export default {
       this.$emit("canvasClick", e);
     },
     moveSelectedLine (dy) {
-      let index = this.scene.links.findIndex(item => {
-        return item.id === this.selectedLine.id
-      });
+      // let index = this.scene.links.findIndex(item => {
+      //   return item.id === this.selectedLine.id
+      // });
       // alert(index)
       let top = dy / this.scene.scale;
       this.offset = top

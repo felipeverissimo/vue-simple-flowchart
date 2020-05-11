@@ -313,14 +313,14 @@ export default {
     }
   },
   methods: {
-    menu ($event, node) {
+    menu ($event) {
       let me = this;
       if (!me.consultMode) {
         if (me.$parent.scene.links.length === 0) {
-          findElementLink()
+          me.findElementLink()
         }
         else {
-          console.log($event)
+          // console.log($event)
           me.$parent.scene.links.forEach((element) => {
             let link = me.$parent.scene.links.filter(function (link) {
               return link.to === me.id;
@@ -333,7 +333,7 @@ export default {
               document.oncontextmenu = function () {
                 return true;
               };
-              return findElementLink()
+              return me.findElementLink($event)
             }
             else {
               return document.oncontextmenu = function () {
@@ -342,16 +342,16 @@ export default {
             }
           })
         }
-
-        function findElementLink () {
-          $event.preventDefault();
-          me.show.menu = true;
-
-          window.addEventListener("click", () => {
-            me.show.menu = false;
-          });
-        }
       }
+    },
+    findElementLink ($event) {
+      let me = this;
+      $event.preventDefault();
+      me.show.menu = true;
+
+      window.addEventListener("click", () => {
+        me.show.menu = false;
+      });
     },
     handleContent () {
       if (!this.show.fullContent) {

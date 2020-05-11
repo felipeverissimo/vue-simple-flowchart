@@ -1,7 +1,7 @@
 <template>
   <g
-    @click="linkSelect($event)"
     @dblclick="changeLink"
+    @click="linkSelect($event)"
   >
 
     <defs>
@@ -115,8 +115,8 @@ export default {
       // caculate arrow position: the center point between start and end
       const dx = (this.end[0] - this.start[0]) / 2;
       const dy = (this.end[1] - this.start[1]) / 2;
-      console.log(this.start[0])
-      console.log(this.start[1])
+      // console.log(this.start[0])
+      // console.log(this.start[1])
       if (this.end[0] < this.start[0]) {
         return [this.start[0] + dx, this.start[1] + 90]
       }
@@ -160,7 +160,7 @@ export default {
     pathStyle () {
       return {
         stroke: this.selectedLine ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
-        strokeWidth: 4.73205,
+        strokeWidth: 5.73205,
         fill: "none"
       };
     },
@@ -202,16 +202,13 @@ export default {
     changeTransformHorizontal () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
       let change = arrowY;
-      const degree = this.caculateRotation();
+      // const degree = this.caculateRotation();
       return `translate(${arrowX}, ${change})`;
     },
     compText () {
       let change = this.text;
       return (this.$props.label = `${change}`);
     },
-    // select () {
-    //   return this.$props.selectedLine = this.select;
-    // },
     dAttr: function () {
       if (this.horizontal) {
         let cx = this.start[0],
@@ -228,6 +225,7 @@ export default {
             if (this.$parent.browser === 'firefox') {
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
             } else {
+              // console.log('chrome action join ou decision retorno')
               return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
             }
           }
@@ -236,8 +234,8 @@ export default {
               return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey - 5} H ${ex - 40}`;
             }
             else {
+              // console.log('chrome end  end workflow retorno')
               return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex - 40}`;
-
             }
           }
           else {
@@ -245,7 +243,9 @@ export default {
               if (this.consultMode) {
                 return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey} H ${ex - 70}`;
               }
-              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${this.dragLine ? ex : ex - 70}`
+              else {
+                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
+              }
             }
             else {
               // console.log('chrome contruindo o cara salvo')
@@ -257,7 +257,9 @@ export default {
                 return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
               else {
-                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${this.dragLine ? ex : ex - 70}`;
+                // console.log('chrome add')
+
+                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex}`;
               }
 
             }
@@ -265,8 +267,8 @@ export default {
         }
         else {
           cy = this.start[1]
+          let verticalLine = y1 + 150;
           let nodeHeight = -100;
-          let verticalLine = y1 - 150;
           if (y1 < y2 && (y1 + nodeHeight) > y2) {
             // console.log(verticalLine)
             // console.log(y2)
@@ -289,9 +291,8 @@ export default {
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           else {
-            let yModificado = y2 + 75;
 
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${yModificado}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2}`
           }
 
         }
@@ -308,7 +309,7 @@ export default {
         return `M ${cx}, ${cy} C ${x1}, ${y1}, ${x2}, ${y2}, ${ex}, ${ey}`;
       }
     },
-  }
+  },
 };
 </script>
 
