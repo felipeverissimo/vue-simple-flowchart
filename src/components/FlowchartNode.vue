@@ -317,7 +317,7 @@ export default {
       let me = this;
       if (!me.consultMode) {
         if (me.$parent.scene.links.length === 0) {
-          me.findElementLink()
+          me.findElementLink($event)
         }
         else {
           // console.log($event)
@@ -333,7 +333,7 @@ export default {
               document.oncontextmenu = function () {
                 return true;
               };
-              return me.findElementLink()
+              return me.findElementLink($event)
             }
             else {
               return document.oncontextmenu = function () {
@@ -346,7 +346,8 @@ export default {
 
       }
     },
-    findElementLink () {
+    findElementLink ($event) {
+      let me = this;
       $event.preventDefault();
       me.show.menu = true;
 

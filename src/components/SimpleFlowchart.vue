@@ -345,22 +345,37 @@ export default {
         me.idSelectedLine = id;
         me.selectedNode = {};
         me.action.selected = 0;
-        me.$nextTick(() => {
-          this.scene.links.forEach(element => {
 
-            if (element.id === id) {
+        this.scene.links.forEach(element => {
 
-              element.selectedLine = !element.selectedLine
+          if (element.id === id) {
 
-            }
-            else {
+            element.selectedLine = !element.selectedLine
 
-              element.selectedLine = false
+          }
+          else {
 
-            }
+            element.selectedLine = false
 
-          });
+          }
+
         });
+        // me.$nextTick(() => {
+        //   this.scene.links.forEach(element => {
+
+        //     if (element.id === id) {
+
+        //       element.selectedLine = !element.selectedLine
+
+        //     }
+        //     else {
+
+        //       element.selectedLine = false
+
+        //     }
+
+        //   });
+        // });
 
       }
     },
