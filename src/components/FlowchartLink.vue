@@ -224,7 +224,11 @@ export default {
           if (this.type === "Action" || this.type === "Join" || this.type === "Decision") {
             if (this.$parent.browser === 'firefox') {
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
-            } else {
+            }
+            else if (this.$parent.action.linking) {
+              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+            }
+            else {
               // console.log('chrome action join ou decision retorno')
               return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
             }
@@ -233,15 +237,21 @@ export default {
             if (this.$parent.browser === 'firefox') {
               return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey - 5} H ${ex - 40}`;
             }
+            else if (this.$parent.action.linking) {
+              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+            }
             else {
               // console.log('chrome end  end workflow retorno')
-              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex - 40}`;
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex}`;
             }
           }
           else {
             if (this.$parent.browser === 'firefox') {
               if (this.consultMode) {
                 return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey} H ${ex - 70}`;
+              }
+              else if (this.$parent.action.linking) {
+                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
               }
               else {
                 return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
@@ -256,10 +266,13 @@ export default {
               if (this.consultMode) {
                 return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
+              else if (this.$parent.action.linking) {
+                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+              }
               else {
-                // console.log('chrome add')
+                console.log('chrome add')
 
-                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex}`;
+                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
 
             }

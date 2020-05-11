@@ -445,18 +445,18 @@ export default {
             }
           }
           if (this.draggingType === "Action") {
-            // if (!disabled) {
-            //   findNodeFrom['disabled'] = true
-            //   this.scene.links.push(newLink);
-            //   this.$emit("linkAdded", newLink);
-            // }
-            // else if (disabled && type === "Action") {
-            //   this.scene.links.push(newLink);
-            //   this.$emit("linkAdded", newLink);
-            // }
-            // else {
-            this.$emit('not-allowed')
-            // }
+            if (!disabled) {
+              findNodeFrom['disabled'] = true
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            }
+            else if (disabled && type === "Action" || type === "endWorkflow") {
+              this.scene.links.push(newLink);
+              this.$emit("linkAdded", newLink);
+            }
+            else {
+              this.$emit('not-allowed')
+            }
           }
           if (this.draggingType === "Join") {
             // if (type !== "Action") {

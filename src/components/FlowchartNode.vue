@@ -333,7 +333,7 @@ export default {
               document.oncontextmenu = function () {
                 return true;
               };
-              return me.findElementLink($event)
+              return me.findElementLink()
             }
             else {
               return document.oncontextmenu = function () {
@@ -342,10 +342,11 @@ export default {
             }
           })
         }
+
+
       }
     },
-    findElementLink ($event) {
-      let me = this;
+    findElementLink () {
       $event.preventDefault();
       me.show.menu = true;
 
@@ -632,6 +633,7 @@ $portSize: 12;
   height: 50px;
   border: 5px solid black;
   border-radius: 50%;
+  transform: translate(-30px, 5px) !important;
 
   .node-input {
     z-index: 22;
