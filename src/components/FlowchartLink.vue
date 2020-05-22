@@ -30,7 +30,8 @@
       <text
         text-anchor="middle"
         :transform="horizontal? textTransformHorizontal : textTransform"
-        font-size="22"
+        font-size="15"
+        font-weight="600"
       >{{
         text
       }}</text>
