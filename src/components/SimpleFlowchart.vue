@@ -360,8 +360,8 @@ export default {
           }
 
         });
+        this.keyFlowChart = this.keyFlowChart + 1
 
-        this.$emit('canvasClick', obj.evento)
         // me.$nextTick(() => {
         //   this.scene.links.forEach(element => {
 

@@ -844,7 +844,7 @@ $portSize: 12;
   padding: 2px;
   margin: 0px 0 2px;
   border-radius: 5px;
-  bottom: 0px;
+  bottom: 10px;
   height: 10px;
   font-size: 10px;
 }

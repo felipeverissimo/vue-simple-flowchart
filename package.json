@@ -1,6 +1,6 @@
 {
   "name": "simple-bpm",
-  "version": "0.2.38",
+  "version": "0.2.39",
   "private": false,
   "main": "./dist/vue-flowchart.common.js",
   "files": [
