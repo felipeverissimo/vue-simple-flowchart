@@ -37,15 +37,16 @@ export default {
             y: -139,
             type: "Start",
             label: "Start",
-            disabled: false
+            disabled: false,
           },
           {
             id: 2,
             x: -700,
             y: 0,
-            type: "Action",
+            type: "Join",
             label: "test1",
-            disabled: false
+            disabled: false,
+            state: "PENDING"
           },
           {
             id: 5987569,

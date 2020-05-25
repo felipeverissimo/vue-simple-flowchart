@@ -112,6 +112,12 @@
           class="node-label"
         >
         </div>
+        <div class="begin-date">
+          <b> ini:</b> 10/02/2020 10:52:00
+        </div>
+        <div class="end-date">
+          <b> fim:</b> 10/03/2020 10:52:00
+        </div>
 
       </div>
       <div
@@ -186,7 +192,7 @@
         v-if="!consultMode"
       ></div>
       <div class="node-main">
-        <div class="node-label">⏺</div>
+        <div class="node-label">●</div>
       </div>
       <!-- <div
         v-show="show.delete"
@@ -245,6 +251,14 @@ export default {
       type: String,
       default: ""
     },
+    beginDate: {
+      type: String,
+      default: ""
+    },
+    endDate: {
+      type: String,
+      default: ""
+    },
     options: {
       type: Object,
       default () {
@@ -253,7 +267,7 @@ export default {
           scale: 1,
           centerY: 140,
           rotate: 90,
-          width: 400,
+          width: 500,
         };
       }
     }
@@ -292,7 +306,7 @@ export default {
           top: this.options.centerY - 2 + this.y * this.options.scale + "px", // remove: this.options.offsetTop +
           left: this.options.centerX - 20 + this.x * this.options.scale + "px", // remove: this.options.offsetLeft +
           transform: `scale(${this.options.scale})`,
-          width: 120 + "px",
+          width: 160 + "px",
 
         }
       }
@@ -460,8 +474,8 @@ $portSize: 12;
 
 .node-type-state {
   position: absolute;
-  top: 0px;
-  right: 5px;
+  top: -5px;
+  right: -9px;
   &.waiting {
     &:before {
       content: "";
@@ -599,8 +613,8 @@ $portSize: 12;
 
 .node-type-icon {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  top: 1px;
+  left: 0;
   color: #000;
   background-color: transparent;
 }
@@ -643,10 +657,11 @@ $portSize: 12;
   .node-main {
     .node-label {
       position: relative;
-      top: -10px;
-      font-size: 42px;
+      top: -26px;
+      font-size: 72px;
       color: black;
       z-index: 20;
+      left: -2px;
     }
   }
 
@@ -695,8 +710,8 @@ $portSize: 12;
 }
 
 .flowchart-actions {
-  width: 140px;
-  height: 100px;
+  width: 200px;
+  height: 130px;
   border: 3px solid black;
   border-radius: 5px;
   will-change: width;
@@ -813,5 +828,24 @@ $portSize: 12;
 
 .node-type-icon.desicion-node {
   transform: rotate(45deg) !important;
+}
+
+.begin-date {
+  position: absolute;
+  padding: 2px;
+  margin: 0px 0 2px;
+  border-radius: 5px;
+  top: 5px;
+  font-size: 10px;
+}
+
+.end-date {
+  position: absolute;
+  padding: 2px;
+  margin: 0px 0 2px;
+  border-radius: 5px;
+  bottom: 0px;
+  height: 10px;
+  font-size: 10px;
 }
 </style>

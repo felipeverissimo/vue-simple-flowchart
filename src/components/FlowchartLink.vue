@@ -99,7 +99,7 @@ export default {
       if (this.select === false) {
         this.select = true
       }
-      this.$emit('linkSelected', this.id)
+      this.$emit('linkSelected', { id: this.id, evento: e })
       this.$emit("nodeSelected", null);
 
     },
@@ -142,7 +142,11 @@ export default {
     },
     changeLink () {
       if (!this.consultMode) {
+        let lastLabel = this.text;
         this.text = prompt();
+        if (this.text == null) {
+          this.text = lastLabel;
+        }
       }
     },
     deleteLink () {

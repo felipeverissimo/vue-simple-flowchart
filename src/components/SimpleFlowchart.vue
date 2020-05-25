@@ -176,7 +176,7 @@ export default {
         offsetTop: this.rootDivOffset.top,
         offsetLeft: this.rootDivOffset.left,
         selected: this.selectedNode.id,
-        width: 400,
+        width: 500,
         transition: this.action.transition,
         horizontal: this.horizontalStyle,
       };
@@ -338,17 +338,17 @@ export default {
         }
       }
     },
-    linkSelected (id) {
+    linkSelected (obj) {
       if (!this.consultOn) {
 
         let me = this;
-        me.idSelectedLine = id;
+        me.idSelectedLine = obj.id;
         me.selectedNode = {};
         me.action.selected = 0;
 
         this.scene.links.forEach(element => {
 
-          if (element.id === id) {
+          if (element.id === obj.id) {
 
             element.selectedLine = !element.selectedLine
 
@@ -360,6 +360,8 @@ export default {
           }
 
         });
+
+        this.$emit('canvasClick', obj.evento)
         // me.$nextTick(() => {
         //   this.scene.links.forEach(element => {
 
@@ -785,6 +787,7 @@ export default {
 .button-end-workflow {
   width: 28px;
   height: 28px;
+  font-size: 32px;
   justify-content: center;
   align-items: center;
   background-color: white;
