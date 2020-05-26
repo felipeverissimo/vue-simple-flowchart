@@ -55,7 +55,8 @@ export default {
             type: "Action",
             label: "Mano",
             disabled: false,
-            width: 400
+            width: 400,
+            beginDate: '1590527331'
           },
           {
             id: 60,
@@ -113,6 +114,16 @@ export default {
             from: 9999999,
             to: 2,
             id: 1,
+          },
+          {
+            from: 2,
+            to: 5987569,
+            id: 2,
+          },
+          {
+            from: 5987569,
+            to: 60,
+            id: 3,
           }
 
         ]

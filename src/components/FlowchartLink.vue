@@ -21,17 +21,14 @@
 
     <path
       :d="dAttr"
-      class="path"
-      :class="{selected:select }"
+      @click='select = !select'
+      :class="classeComputada"
       stroke-width="5.73205"
       fill="none"
       marker-end="url(#arrow)"
     >
     </path>
-    <!-- :style="select ?pathStyle:pathStyleSelected" -->
-
     <a>
-
       <text
         :id="`${text+id}`"
         text-anchor="middle"
@@ -43,13 +40,13 @@
         text
       }}
       </text>
-
     </a>
-
   </g>
 </template>
 
 <script>
+import { EventBus } from '../eventBus'
+
 export default {
   name: "FlowchartLink",
   props: {
@@ -103,18 +100,11 @@ export default {
     };
   },
   methods: {
-    linkSelect (e) {
-      this.show.delete = true
-      this.$parent.scene.links.forEach(element => {
-        element.select = false;
-      });
-
-      if (this.select === false) {
-        this.select = true
-      }
-      this.$emit('linkSelected', { id: parseInt(this.id), evento: e })
-      this.$emit("nodeSelected", null);
-
+    linkSelect () {
+      let me = this;
+      EventBus.$emit('linkSelected', this.id)
+      me.$emit('idLink', this.id)
+      me.$emit("nodeSelected", null);
     },
     handleMouseOver () {
       if (this.id) {
@@ -129,8 +119,6 @@ export default {
       // caculate arrow position: the center point between start and end
       const dx = (this.end[0] - this.start[0]) / 2;
       const dy = (this.end[1] - this.start[1]) / 2;
-      // console.log(this.start[0])
-      // console.log(this.start[1])
       if (this.end[0] < this.start[0]) {
         return [this.start[0] + dx, this.start[1] + 90]
       }
@@ -170,28 +158,15 @@ export default {
     text: function (value) {
       this.$emit("update:label", value);
     },
-    select: function () {
-      this.$emit("changeLineSelected", this.select);
-    },
-    selectedLine: function (value) {
-      console.log('teste')
-      this.select = value;
-    }
   },
   computed: {
-    pathStyle () {
-      return {
-        stroke: "rgb(2, 136, 8)",
-        strokeWidth: 5.73205,
-        fill: "none",
-      };
-    },
-    pathStyleSelected () {
-      return {
-        stroke: "rgb(255, 136, 85)",
-        strokeWidth: 5.73205,
-        fill: "none",
-      };
+    classeComputada () {
+      if (this.select) {
+        return 'path selected'
+      }
+      else {
+        return 'path'
+      }
     },
     arrowStyle () {
       return {
@@ -231,7 +206,6 @@ export default {
     changeTransformHorizontal () {
       const [arrowX, arrowY] = this.caculateCenterPoint();
       let change = arrowY;
-      // const degree = this.caculateRotation();
       return `translate(${arrowX}, ${change})`;
     },
     compText () {
@@ -240,10 +214,11 @@ export default {
     },
     dAttr: function () {
       if (this.horizontal) {
+        let classes
         let cx = this.start[0],
           cy = this.start[1] - 45,
           ex = this.linking ? this.end[0] : this.end[0],
-          ey = this.linking ? this.end[1] : this.end[1] + 33;
+          ey = this.linking ? this.end[1] : this.end[1] + 45;
         let x1 = cx,
           y1 = cy,
           x2 = ex,
@@ -258,7 +233,7 @@ export default {
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
             }
             else {
-              // console.log('chrome action join ou decision retorno')
+              // ('chrome action join ou decision retorno')
               return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
             }
           }
@@ -270,8 +245,8 @@ export default {
               return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
             }
             else {
-              // console.log('chrome end  end workflow retorno')
-              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 5} H ${ex}`;
+              // ('chrome end  end workflow retorno')
+              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey - 50} H ${ex - 60}`;
             }
           }
           else {
@@ -280,18 +255,15 @@ export default {
                 return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey} H ${ex - 70}`;
               }
               else if (this.$parent.action.linking) {
-                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2 - 80} ${ey - 80} H ${ex}`
               }
               else {
                 return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
               }
             }
             else {
-              // console.log('chrome contruindo o cara salvo')
-              // console.log(this.dragLine)
-              let mountedLine = ex - 80;
-              // console.log(mountedLine)
 
+              let mountedLine = ex - 80;
               if (this.consultMode) {
                 return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
@@ -299,8 +271,6 @@ export default {
                 return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
               }
               else {
-                console.log('chrome add')
-
                 return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
 
@@ -312,14 +282,9 @@ export default {
           let verticalLine = y1 + 150;
           let nodeHeight = -100;
           if (y1 < y2 && (y1 + nodeHeight) > y2) {
-            // console.log(verticalLine)
-            // console.log(y2)
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
-          // 60 - 67 
           else if (y1 < y2 && (y1 - y2) > nodeHeight) {
-            // console.log(verticalLine, 'menor')
-            // console.log(y2, 'menor')
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           else if (y1 < y2 && (y1 - y2) < nodeHeight) {
@@ -327,16 +292,13 @@ export default {
           }
           else if (y1 < y2) {
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 - 45}`
-
           }
           else if (y1 > y2 && x2 > y2) {
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
           }
           else {
-
             return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2}`
           }
-
         }
       }
       else {
@@ -352,6 +314,15 @@ export default {
       }
     },
   },
+  created () {
+    let me = this;
+    EventBus.$on('linkSelected', (id) => {
+      me.select = me.id === id
+    })
+  },
+  destroy () {
+    EventBus.$off('linkSelected')
+  }
 };
 </script>
 

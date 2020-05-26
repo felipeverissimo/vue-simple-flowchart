@@ -16,7 +16,6 @@
         :value="index"
         @click="chosedNodes(item, index)"
       >
-
         <div
           class="config-tool "
           v-if="index == 0 && end"
@@ -29,8 +28,9 @@
           v-if="index == 1 && endWorkflow"
         >
           <div class="button-end-workflow">
-            <div></div>
+            <div>
 
+            </div>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
         :label.sync="link.label"
         @update:label="labelUpdate(link,$event)"
         @changeLineSelect="linkLabel(link, $event)"
-        @linkSelected="linkSelected($event)"
+        @idLink="linkSelected($event)"
       ></flowchart-link>
     </svg>
     <flowchart-node
@@ -69,7 +69,6 @@
     >
     </flowchart-node>
   </div>
-
 </template>
 
 <script>
@@ -182,6 +181,8 @@ export default {
       };
     },
     lines () {
+      ('push da linha')
+
       // this.scene.links.map(element => { });
       const lines = this.scene.links.map(link => {
         const fromNode = this.findNodeWithID(link.from);
@@ -194,7 +195,7 @@ export default {
         x = this.scene.centerX + toNode.x;
         y = this.scene.centerY + toNode.y;
         [ex, ey] = this.getPortPosition("top", x, y);
-        // console.log(link.selectedLine)
+        // (link.selectedLine)
         return {
           start: [cx, cy],
           end: [ex, ey],
@@ -248,11 +249,11 @@ export default {
 
     this.identific_nav()
 
-    // console.log(22222, this.rootDivOffset);
+    // (22222, this.rootDivOffset);
   },
   methods: {
     labelUpdate (link, label) {
-      // console.log(link)
+      // (link)
       this.scene.links.forEach(item => {
         if (item.id === link.id) {
           item.label = label
@@ -308,7 +309,7 @@ export default {
       this.action.selected = 0
     },
     nodeDelete (id) {
-      // console.log(id)
+      // (id)
       if (!this.consultOn) {
 
         let findNodeFrom = this.scene.nodes.find(node => { return node.id; });
@@ -337,31 +338,13 @@ export default {
         }
       }
     },
-    linkSelected (obj) {
+    linkSelected (id) {
       if (!this.consultOn) {
-
+        console.log(id)
         let me = this;
-        me.idSelectedLine = obj.id;
+        me.idSelectedLine = id;
         me.selectedNode = {};
         me.action.selected = 0;
-
-        this.scene.links.forEach(element => {
-
-          if (element.id === obj.id) {
-
-            element.selectedLine = !element.selectedLine
-            element.select = !element.select
-
-          }
-          else {
-
-            element.select = false
-            element.selectedLine = false
-
-          }
-
-        });
-
       }
     },
     chosedNodes (item, index) {
@@ -421,7 +404,7 @@ export default {
               return link.id;
             })
           );
-          // console.log(type)
+          // (type)
           const newLink = {
             id: maxID + 1,
             from: this.draggingLink.from,
@@ -603,7 +586,7 @@ export default {
         //   typeof target.className === "string" &&
         //   target.className.indexOf("node-delete") > -1
         // ) {
-        //   // console.log('delete2', this.action.dragging);
+        //   // ('delete2', this.action.dragging);
         //   this.nodeDelete(this.action.dragging);
         // }
       }
@@ -614,7 +597,7 @@ export default {
     },
     handleDown (e) {
       const target = e.target || e.srcElement;
-      // console.log('for scroll', target, e.keyCode, e.which)
+      // ('for scroll', target, e.keyCode, e.which)
       if (
         (target === this.$el || target.matches("svg, svg *")) &&
         e.which === 1
@@ -622,7 +605,7 @@ export default {
 
         this.action.scrolling = true;
         [this.mouse.lastX, this.mouse.lastY] = getMousePosition(this.$el, e);
-        // console.log(getMousePosition(this.$el, e))
+        // (getMousePosition(this.$el, e))
 
         this.action.selected = null; // deselectAll
 

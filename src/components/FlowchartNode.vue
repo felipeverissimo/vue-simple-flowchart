@@ -116,13 +116,13 @@
           v-if="consultMode"
           class="begin-date"
         >
-          <b> ini:</b> {{beginDate}}
+          <b> ini:</b> {{beginTime}}
         </div>
         <div
           v-if="consultMode"
           class="end-date"
         >
-          <b> fim:</b> {{endDate}}
+          <b> fim:</b> {{endTime}}
         </div>
 
       </div>
@@ -294,10 +294,19 @@ export default {
     },
     actionType (value) {
       this.type = value
-    }
+    },
+
   },
   mounted () { },
   computed: {
+    beginTime () {
+      let newDate = new Date(this.beginDate * 1000).toLocaleString();
+      return newDate
+    },
+    endTime () {
+      let newDate = new Date(this.endDate * 1000).toLocaleString();
+      return newDate
+    },
     nodeStyle: function () {
       if (this.show.fullContent) {
         return {
@@ -340,7 +349,6 @@ export default {
           me.findElementLink($event)
         }
         else {
-          // console.log($event)
           me.$parent.scene.links.forEach((element) => {
             let link = me.$parent.scene.links.filter(function (link) {
               return link.to === me.id;
@@ -362,8 +370,6 @@ export default {
             }
           })
         }
-
-
       }
     },
     findElementLink ($event) {
@@ -382,14 +388,12 @@ export default {
       }
       else {
         this.$emit('nodeTransition')
-        // alert('to aqui ')
         this.show.fullContent = false;
         this.$emit('canvasClick')
       }
     },
     handleMousedown (e) {
       const target = e.target || e.srcElement;
-      // console.log(target);
       if (
         target.className.indexOf("node-input") < 0 &&
         target.className.indexOf("node-output") < 0
@@ -654,7 +658,7 @@ $portSize: 12;
   height: 50px;
   border: 5px solid black;
   border-radius: 50%;
-  transform: translate(-30px, 5px) !important;
+  transform: translate(-30px, 37px) !important;
 
   .node-input {
     z-index: 22;
@@ -717,7 +721,7 @@ $portSize: 12;
 
 .flowchart-actions {
   width: 200px;
-  height: 130px;
+  height: 100px;
   border: 3px solid black;
   border-radius: 5px;
   will-change: width;
@@ -850,7 +854,7 @@ $portSize: 12;
   padding: 2px;
   margin: 0px 0 2px;
   border-radius: 5px;
-  bottom: 10px;
+  bottom: 5px;
   height: 10px;
   font-size: 10px;
 }
