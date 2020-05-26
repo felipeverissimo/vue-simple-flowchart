@@ -21,10 +21,14 @@
 
     <path
       :d="dAttr"
-      :style="select ?pathStyle:pathStyleSelected"
+      class="path"
+      :class="{selected:select }"
+      stroke-width="5.73205"
+      fill="none"
       marker-end="url(#arrow)"
     >
     </path>
+    <!-- :style="select ?pathStyle:pathStyleSelected" -->
 
     <a>
 
@@ -351,12 +355,10 @@ export default {
 g {
   cursor: pointer;
 }
-text.bg {
-  content: "";
-  width: 100%;
-  height: 100%;
-  display: block;
-  background-color: white;
-  margin: 10px;
+.path {
+  stroke: rgb(255, 136, 85);
+  &.selected {
+    stroke: rgb(2, 136, 8);
+  }
 }
 </style>
