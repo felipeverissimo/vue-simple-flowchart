@@ -113,10 +113,10 @@
         >
         </div>
         <div class="begin-date">
-          <b> ini:</b> 10/02/2020 10:52:00
+          <b> ini:</b> {{beginDate}}
         </div>
         <div class="end-date">
-          <b> fim:</b> 10/03/2020 10:52:00
+          <b> fim:</b> {{endDate}}
         </div>
 
       </div>

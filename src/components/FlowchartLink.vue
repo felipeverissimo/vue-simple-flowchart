@@ -21,7 +21,7 @@
 
     <path
       :d="dAttr"
-      :style="selectedLine ?pathStyle:pathStyleSelected"
+      :style="select ?pathStyle:pathStyleSelected"
       marker-end="url(#arrow)"
     >
     </path>
