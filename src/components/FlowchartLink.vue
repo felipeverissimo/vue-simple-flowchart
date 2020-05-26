@@ -21,20 +21,25 @@
 
     <path
       :d="dAttr"
-      :style="pathStyle"
+      :style="selectedLine ?pathStyle:pathStyleSelected"
       marker-end="url(#arrow)"
     >
     </path>
 
     <a>
+
       <text
+        :id="`${text+id}`"
         text-anchor="middle"
         :transform="horizontal? textTransformHorizontal : textTransform"
         font-size="15"
         font-weight="600"
-      >{{
+      >
+        {{
         text
-      }}</text>
+      }}
+      </text>
+
     </a>
 
   </g>
@@ -164,9 +169,16 @@ export default {
   computed: {
     pathStyle () {
       return {
-        stroke: this.selectedLine ? "rgb(2, 136, 8)" : "rgb(255, 136, 85)",
+        stroke: "rgb(2, 136, 8)",
         strokeWidth: 5.73205,
-        fill: "none"
+        fill: "none",
+      };
+    },
+    pathStyleSelected () {
+      return {
+        stroke: "rgb(255, 136, 85)",
+        strokeWidth: 5.73205,
+        fill: "none",
       };
     },
     arrowStyle () {
@@ -334,5 +346,13 @@ export default {
 <style scoped lang="scss">
 g {
   cursor: pointer;
+}
+text.bg {
+  content: "";
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: white;
+  margin: 10px;
 }
 </style>

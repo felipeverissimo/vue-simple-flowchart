@@ -128,7 +128,7 @@ export default {
       newNodeType: 0,
       newNodeLabel: "",
       consultOn: this.consult,
-      keyFlowChart: 0,
+      keyFlowChart: 1,
       browser: '',
       nodeCategory: ["End", "EndWorkflow"],
       action: {
@@ -243,7 +243,6 @@ export default {
       return false;
     };
 
-    // document.addEventListener("click", this.linkSelected($event));
 
 
 
@@ -360,24 +359,7 @@ export default {
           }
 
         });
-        this.keyFlowChart = this.keyFlowChart + 1
-
-        // me.$nextTick(() => {
-        //   this.scene.links.forEach(element => {
-
-        //     if (element.id === id) {
-
-        //       element.selectedLine = !element.selectedLine
-
-        //     }
-        //     else {
-
-        //       element.selectedLine = false
-
-        //     }
-
-        //   });
-        // });
+        this.$emit('update:activeNode', [])
 
       }
     },
@@ -641,12 +623,12 @@ export default {
         [this.mouse.lastX, this.mouse.lastY] = getMousePosition(this.$el, e);
         // console.log(getMousePosition(this.$el, e))
 
-        // this.action.selected = null; // deselectAll
+        this.action.selected = null; // deselectAll
 
       }
       //descelectLine
       // this.selectedLine.selectedLine = false
-      this.selectedLine = {}
+      // this.selectedLine = {}
       this.$emit("canvasClick", e);
     },
     moveSelectedLine (dy) {
