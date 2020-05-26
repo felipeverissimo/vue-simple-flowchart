@@ -350,16 +350,17 @@ export default {
           if (element.id === obj.id) {
 
             element.selectedLine = !element.selectedLine
+            element.select = !element.select
 
           }
           else {
 
+            element.select = false
             element.selectedLine = false
 
           }
 
         });
-        this.$emit('update:activeNode', [])
 
       }
     },

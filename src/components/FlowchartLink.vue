@@ -104,7 +104,7 @@ export default {
       if (this.select === false) {
         this.select = true
       }
-      this.$emit('linkSelected', { id: this.id, evento: e })
+      this.$emit('linkSelected', { id: parseInt(this.id), evento: e })
       this.$emit("nodeSelected", null);
 
     },
@@ -164,6 +164,10 @@ export default {
     },
     select: function () {
       this.$emit("changeLineSelected", this.select);
+    },
+    selectedLine: function (value) {
+      console.log('teste')
+      this.select = value;
     }
   },
   computed: {

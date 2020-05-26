@@ -112,10 +112,16 @@
           class="node-label"
         >
         </div>
-        <div class="begin-date">
+        <div
+          v-if="consultMode"
+          class="begin-date"
+        >
           <b> ini:</b> {{beginDate}}
         </div>
-        <div class="end-date">
+        <div
+          v-if="consultMode"
+          class="end-date"
+        >
           <b> fim:</b> {{endDate}}
         </div>
 
