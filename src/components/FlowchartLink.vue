@@ -105,6 +105,10 @@ export default {
   methods: {
     linkSelect (e) {
       this.show.delete = true
+      this.$parent.scene.links.forEach(element => {
+        element.select = false;
+      });
+
       if (this.select === false) {
         this.select = true
       }
