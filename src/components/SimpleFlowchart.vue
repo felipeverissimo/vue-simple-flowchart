@@ -107,7 +107,7 @@ export default {
     },
     consult: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     activeNode: {
       type: Object,

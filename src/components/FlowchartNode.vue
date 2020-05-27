@@ -257,13 +257,13 @@ export default {
       type: String,
       default: ""
     },
-    beginDate: {
-      type: String,
-      default: ""
+    begin: {
+      type: Number,
+      default: 0
     },
-    endDate: {
-      type: String,
-      default: ""
+    end: {
+      type: Number,
+      default: 0
     },
     options: {
       type: Object,
@@ -300,11 +300,11 @@ export default {
   mounted () { },
   computed: {
     beginTime () {
-      let newDate = new Date(this.beginDate * 1000).toLocaleString();
+      let newDate = new Date(this.begin * 1000).toLocaleString();
       return newDate
     },
     endTime () {
-      let newDate = new Date(this.endDate * 1000).toLocaleString();
+      let newDate = new Date(this.end * 1000).toLocaleString();
       return newDate
     },
     nodeStyle: function () {
@@ -667,7 +667,7 @@ $portSize: 12;
   .node-main {
     .node-label {
       position: relative;
-      top: -26px;
+      top: -39px;
       font-size: 72px;
       color: black;
       z-index: 20;
