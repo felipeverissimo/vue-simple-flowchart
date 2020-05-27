@@ -257,13 +257,9 @@ export default {
       type: String,
       default: ""
     },
-    begin: {
-      type: Number,
-      default: 0
-    },
-    end: {
-      type: Number,
-      default: 0
+    activity: {
+      type: Object,
+
     },
     options: {
       type: Object,
@@ -300,12 +296,16 @@ export default {
   mounted () { },
   computed: {
     beginTime () {
-      let newDate = new Date(this.activity.departments[0].beginDate * 1000).toLocaleString();
-      return newDate
+      if (this.activity) {
+        let newDate = new Date(this.activity.departments[0].beginDate * 1000).toLocaleString();
+        return newDate
+      }
     },
     endTime () {
-      let newDate = new Date(this.activity.departments[0].endDate * 1000).toLocaleString();
-      return newDate
+      if (this.activity) {
+        let newDate = new Date(this.activity.departments[0].endDate * 1000).toLocaleString();
+        return newDate
+      }
     },
     nodeStyle: function () {
       if (this.show.fullContent) {

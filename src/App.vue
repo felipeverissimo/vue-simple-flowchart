@@ -56,7 +56,13 @@ export default {
             label: "Mano",
             disabled: false,
             width: 400,
-            begin: 1590527331
+            activity: {
+              departments: [
+                {
+                  beginDate: 1590527331
+                }
+              ]
+            }
           },
           {
             id: 60,
