@@ -300,11 +300,11 @@ export default {
   mounted () { },
   computed: {
     beginTime () {
-      let newDate = new Date(this.begin * 1000).toLocaleString();
+      let newDate = new Date(this.activity.departments[0].beginDate * 1000).toLocaleString();
       return newDate
     },
     endTime () {
-      let newDate = new Date(this.end * 1000).toLocaleString();
+      let newDate = new Date(this.activity.departments[0].endDate * 1000).toLocaleString();
       return newDate
     },
     nodeStyle: function () {
