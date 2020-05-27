@@ -297,14 +297,30 @@ export default {
   computed: {
     beginTime () {
       if (this.activity) {
-        let newDate = new Date(this.activity.departments[0].beginDate * 1000).toLocaleString();
-        return newDate
+        if (this.activity.departments[0].beginDate) {
+          let newDate = new Date(this.activity.departments[0].beginDate).toLocaleString();
+          return newDate
+        }
+        else {
+          return ''
+        }
+      }
+      else {
+        return ''
       }
     },
     endTime () {
       if (this.activity) {
-        let newDate = new Date(this.activity.departments[0].endDate * 1000).toLocaleString();
-        return newDate
+        if (this.activity.departments[0].endDate) {
+          let newDate = new Date(this.activity.departments[0].endDate).toLocaleString();
+          return newDate
+        }
+        else {
+          return ''
+        }
+      }
+      else {
+        return ''
       }
     },
     nodeStyle: function () {

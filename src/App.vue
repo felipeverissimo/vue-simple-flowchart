@@ -59,7 +59,7 @@ export default {
             activity: {
               departments: [
                 {
-                  beginDate: 1590527331
+                  beginDate: 1590608528000
                 }
               ]
             }
