@@ -216,9 +216,9 @@ export default {
       if (this.horizontal) {
         let classes
         let cx = this.start[0],
-          cy = this.start[1] - 45,
-          ex = this.linking ? this.end[0] : this.end[0],
-          ey = this.linking ? this.end[1] : this.end[1] + 45;
+          cy = this.start[1] - 3,
+          ex = this.end[0],
+          ey = this.end[1] + 45;
         let x1 = cx,
           y1 = cy,
           x2 = ex,
@@ -227,14 +227,14 @@ export default {
         if (x1 < x2) {
           if (this.type === "Action" || this.type === "Join" || this.type === "Decision") {
             if (this.$parent.browser === 'firefox') {
-              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
+              return `M${cx} ${cy - 30}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
             }
             else if (this.$parent.action.linking) {
-              return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+              return `M${cx} ${cy - 30}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
             }
             else {
               // ('chrome action join ou decision retorno')
-              return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
+              return `M ${cx}, ${cy - 30} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
             }
           }
           if (this.type === "End" || this.type === "endWorkflow") {
@@ -255,23 +255,22 @@ export default {
                 return `M ${cx} ${cy} H ${Math.round(calc)} ${calc} V ${y2} ${ey} H ${ex - 70}`;
               }
               else if (this.$parent.action.linking) {
-                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2 - 80} ${ey - 80} H ${ex}`
+                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2 - 80} ${ey} H ${ex}`
               }
               else {
                 return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex - 70}`
               }
             }
             else {
-
               let mountedLine = ex - 80;
               if (this.consultMode) {
-                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
+                return `M ${cx}, ${cy - 30} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
               else if (this.$parent.action.linking) {
-                return `M${cx} ${cy}  H ${Math.round(calc)} ${calc}  V ${y2} ${ey} H ${ex}`
+                return `M${cx} ${cy - 30}  H ${Math.round(calc)} ${calc}  V ${y2 - 50} ${ey - 50} H ${ex}`
               }
               else {
-                return `M ${cx}, ${cy} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
+                return `M ${cx}, ${cy - 30} H ${Math.round(calc)},${calc}, V ${y2},${ey} H ${ex - 70}`;
               }
 
             }
@@ -282,22 +281,22 @@ export default {
           let verticalLine = y1 + 150;
           let nodeHeight = -100;
           if (y1 < y2 && (y1 + nodeHeight) > y2) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2 + 20} V${y2 + 50}`
           }
           else if (y1 < y2 && (y1 - y2) > nodeHeight) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2 + 20} V${y2 + 58}`
           }
           else if (y1 < y2 && (y1 - y2) < nodeHeight) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 - 45}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2 + 20} V${y2 - 60}`
           }
           else if (y1 < y2) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 - 45}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2 + 20} V${y2 - 45}`
           }
           else if (y1 > y2 && x2 > y2) {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2 + 75}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2 + 20} V${y2 + 55}`
           }
           else {
-            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2} V${y2}`
+            return `M${x1} ${y1}  V${this.dragLine ? y1 + this.dragLine : verticalLine} H${x2 + 20} V${y2 + 55}`
           }
         }
       }

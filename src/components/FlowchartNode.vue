@@ -646,11 +646,12 @@ $portSize: 12;
 }
 
 .flowchart-start {
-  width: 70px;
-  height: 70px;
+  width: 55px;
+  height: 55px;
   border: 3px solid black;
   border-radius: 50%;
   margin-left: -7px;
+  transform: translate(-5px, 20px) !important;
 
   &.horizontal {
     .node-port {
@@ -674,7 +675,7 @@ $portSize: 12;
   height: 50px;
   border: 5px solid black;
   border-radius: 50%;
-  transform: translate(-30px, 37px) !important;
+  transform: translate(-30px, 17px) !important;
 
   .node-input {
     z-index: 22;
@@ -736,8 +737,8 @@ $portSize: 12;
 }
 
 .flowchart-actions {
-  width: 200px;
-  height: 100px;
+  width: 110px;
+  height: 90px;
   border: 3px solid black;
   border-radius: 5px;
   will-change: width;

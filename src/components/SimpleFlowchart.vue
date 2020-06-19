@@ -6,68 +6,70 @@
     @mousedown="handleDown"
     :key="keyFlowChart"
   >
-    <div
-      class="tool-wrapper"
-      v-if="!consultOn"
-    >
+    <div class="zoom-container">
       <div
-        v-for="(item, index) in nodeCategory"
-        :key="index"
-        :value="index"
-        @click="chosedNodes(item, index)"
+        class="tool-wrapper"
+        v-if="!consultOn"
       >
         <div
-          class="config-tool "
-          v-if="index == 0 && end"
+          v-for="(item, index) in nodeCategory"
+          :key="index"
+          :value="index"
+          @click="chosedNodes(item, index)"
         >
-          <div class="button-end"></div>
-        </div>
+          <div
+            class="config-tool "
+            v-if="index == 0 && end"
+          >
+            <div class="button-end"></div>
+          </div>
 
-        <div
-          class=" config-tool"
-          v-if="index == 1 && endWorkflow"
-        >
-          <div class="button-end-workflow">
-            <div>
+          <div
+            class=" config-tool"
+            v-if="index == 1 && endWorkflow"
+          >
+            <div class="button-end-workflow">
+              <div>
 
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <svg
-      width="100%"
-      :height="`${height}px`"
-      tabindex="0"
-    >
-      <!-- :dragLine="parseInt(offset)"moveSelectedLine -->
-      <flowchart-link
-        v-bind.sync="link"
-        :state="link.state"
+      <svg
+        width="100%"
+        :height="`${height}px`"
+        tabindex="0"
+      >
+        <!-- :dragLine="parseInt(offset)"moveSelectedLine -->
+        <flowchart-link
+          v-bind.sync="link"
+          :state="link.state"
+          :consultMode="consultOn"
+          v-for="(link, index) in lines"
+          :key="`link${index}`"
+          :linking="action.linking"
+          :selectedLine="link.selectedLine"
+          :label.sync="link.label"
+          @update:label="labelUpdate(link,$event)"
+          @changeLineSelect="linkLabel(link, $event)"
+          @idLink="linkSelected($event)"
+        ></flowchart-link>
+      </svg>
+      <flowchart-node
+        v-bind.sync="node"
+        v-for="(node, index) in scene.nodes"
+        :key="`node${index}`"
+        :options="nodeOptions"
         :consultMode="consultOn"
-        v-for="(link, index) in lines"
-        :key="`link${index}`"
-        :linking="action.linking"
-        :selectedLine="link.selectedLine"
-        :label.sync="link.label"
-        @update:label="labelUpdate(link,$event)"
-        @changeLineSelect="linkLabel(link, $event)"
-        @idLink="linkSelected($event)"
-      ></flowchart-link>
-    </svg>
-    <flowchart-node
-      v-bind.sync="node"
-      v-for="(node, index) in scene.nodes"
-      :key="`node${index}`"
-      :options="nodeOptions"
-      :consultMode="consultOn"
-      @update:type="(newType) => {node.type = newType;}"
-      @linkingStart="linkingStart(node.id, node.type)"
-      @linkingStop="linkingStop(node.id, node.type)"
-      @nodeSelected="nodeSelected(node.id, $event, node)"
-      @nodeTransition='nodeTransition()'
-    >
-    </flowchart-node>
+        @update:type="(newType) => {node.type = newType;}"
+        @linkingStart="linkingStart(node.id, node.type)"
+        @linkingStop="linkingStop(node.id, node.type)"
+        @nodeSelected="nodeSelected(node.id, $event, node)"
+        @nodeTransition='nodeTransition()'
+      >
+      </flowchart-node>
+    </div>
   </div>
 </template>
 
@@ -107,7 +109,7 @@ export default {
     },
     consult: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     activeNode: {
       type: Object,
@@ -392,11 +394,12 @@ export default {
           return link.from === this.draggingLink.from && link.to === index;
         });
 
-        if (type === "Decision") {
-          existed = this.scene.links.find(link => {
-            return link.to === index;
-          });
-        }
+        // if (type === "Decision") {
+        //   existed = this.scene.links.filter(link => {
+        //     return link.to === index;
+        //   });
+        // }
+        // if (!existed || existed.length <= 1) {
         if (!existed) {
           let maxID = Math.max(
             0,
@@ -433,11 +436,13 @@ export default {
               this.scene.links.push(newLink);
               this.$emit("linkAdded", newLink);
             }
-            else if (disabled && type === "Action" || type === "endWorkflow") {
+            else if (disabled && type === "Action" || type === "endWorkflow" || type === "Decision") {
               this.scene.links.push(newLink);
               this.$emit("linkAdded", newLink);
             }
             else {
+              alert('nao permito Action')
+
               this.$emit('not-allowed')
             }
           }
@@ -464,9 +469,10 @@ export default {
             // }
           }
         }
-        else {
-          this.$emit('not-allowed')
-        }
+        // else {
+        //   alert('nao permito generico')
+        //   this.$emit('not-allowed')
+        // }
       }
       this.draggingLink = null;
     },
