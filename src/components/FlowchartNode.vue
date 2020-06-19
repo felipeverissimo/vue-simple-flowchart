@@ -116,13 +116,19 @@
           v-if="consultMode"
           class="begin-date"
         >
-          <b> ini:</b> {{beginTime}}
+          <b> Ini:</b> {{beginTime}}
+        </div>
+        <div
+          v-if="!consultMode"
+          class="begin-date"
+        >
+          <b> Prazo:</b> {{term}}
         </div>
         <div
           v-if="consultMode"
           class="end-date"
         >
-          <b> fim:</b> {{endTime}}
+          <b> Fim:</b> {{endTime}}
         </div>
 
       </div>
@@ -467,7 +473,7 @@ $portSize: 12;
       padding: 6px;
     }
     .node-label {
-      font-size: 13px;
+      font-size: 9px;
     }
   }
   .node-port {
@@ -651,7 +657,7 @@ $portSize: 12;
   border: 3px solid black;
   border-radius: 50%;
   margin-left: -7px;
-  transform: translate(-5px, 20px) !important;
+  transform: translate(-5px, 7px) !important;
 
   &.horizontal {
     .node-port {
@@ -675,7 +681,7 @@ $portSize: 12;
   height: 50px;
   border: 5px solid black;
   border-radius: 50%;
-  transform: translate(-30px, 17px) !important;
+  transform: translate(-30px, 7px) !important;
 
   .node-input {
     z-index: 22;
@@ -738,7 +744,7 @@ $portSize: 12;
 
 .flowchart-actions {
   width: 110px;
-  height: 90px;
+  height: 70px;
   border: 3px solid black;
   border-radius: 5px;
   will-change: width;
@@ -863,7 +869,7 @@ $portSize: 12;
   margin: 0px 0 2px;
   border-radius: 5px;
   top: 5px;
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .end-date {
@@ -871,8 +877,8 @@ $portSize: 12;
   padding: 2px;
   margin: 0px 0 2px;
   border-radius: 5px;
-  bottom: 5px;
+  bottom: 1px;
   height: 10px;
-  font-size: 10px;
+  font-size: 8px;
 }
 </style>
