@@ -38,6 +38,7 @@ export default {
             type: "Start",
             label: "Start",
             disabled: false,
+            term: ""
           },
           {
             id: 2,
@@ -46,7 +47,8 @@ export default {
             type: "Join",
             label: "test1",
             disabled: false,
-            state: "PENDING"
+            state: "PENDING",
+            term: ""
           },
           {
             id: 5987569,
@@ -55,6 +57,7 @@ export default {
             type: "Action",
             label: "Mano",
             disabled: false,
+            term: "",
             width: 400,
             activity: {
               departments: [
@@ -80,6 +83,7 @@ export default {
             type: "Action",
             label: "linhas ",
             disabled: false,
+            term: "",
             width: 400
           },
           {
@@ -87,6 +91,7 @@ export default {
             x: -357,
             y: 80,
             type: "Action",
+            term: "",
             label: "decisáo",
             disabled: false
           },
@@ -96,6 +101,7 @@ export default {
             y: 80,
             type: "Action",
             label: "test1",
+            term: "",
             disabled: false
           },
           {
@@ -103,6 +109,7 @@ export default {
             x: -557,
             y: 80,
             type: "Action",
+            term: "",
             label: "test5",
             disabled: false
           },
@@ -111,6 +118,7 @@ export default {
             x: -557,
             y: 80,
             type: "Action",
+            term: "",
             label: "test6",
             disabled: false
           }

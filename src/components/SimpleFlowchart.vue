@@ -46,8 +46,8 @@
           v-bind.sync="link"
           :state="link.state"
           :consultMode="consultOn"
-          v-for="(link, index) in lines"
-          :key="`link${index}`"
+          v-for="(link) in lines"
+          :key="`link${link.id}`"
           :linking="action.linking"
           :selectedLine="link.selectedLine"
           :label.sync="link.label"
@@ -360,7 +360,8 @@ export default {
         x: -400,
         y: 50,
         type: this.nodeCategory[this.newNodeType],
-        label: this.newNodeLabel ? this.newNodeLabel : `test${max + 1}`
+        label: this.newNodeLabel ? this.newNodeLabel : `test${max + 1}`,
+        term: ''
       });
     },
     findNodeWithID (id) {
@@ -436,7 +437,7 @@ export default {
               this.scene.links.push(newLink);
               this.$emit("linkAdded", newLink);
             }
-            else if (disabled && type === "Action" || type === "endWorkflow" || type === "Decision") {
+            else if (disabled && type === "Action" || type === "EndWorkflow" || type === "Decision") {
               this.scene.links.push(newLink);
               this.$emit("linkAdded", newLink);
             }
@@ -490,22 +491,23 @@ export default {
         let deletedLinkChild = this.scene.nodes.find(item => {
           return item.id === deletedLink.to;
         });
+
         if (deletedLink) {
           this.scene.links = this.scene.links.filter(item => {
             return item.id !== id;
           });
           this.selectedLine = {};
 
-          if (deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
-            findNodeFromDelete['disabled'] = false
-            this.$emit("linkBreak", deletedLink);
-          }
-          else if (findNodeFromDelete.type === "Start" || findNodeFromDelete.type === "Action") {
-            findNodeFromDelete['disabled'] = false
-          }
-          else {
-            this.$emit("linkBreak", deletedLink);
-          }
+          // if (deletedLinkChild.type === 'End' || deletedLinkChild.type === 'EndWorkflow') {
+          //   findNodeFromDelete['disabled'] = false
+          //   this.$emit("linkBreak", deletedLink);
+          // }
+          // else if (findNodeFromDelete.type === "Start" || findNodeFromDelete.type === "Action") {
+          //   findNodeFromDelete['disabled'] = false
+          // }
+          // else {
+          this.$emit("linkBreak", deletedLink);
+          // }
         }
       }
     },

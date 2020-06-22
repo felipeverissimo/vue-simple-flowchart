@@ -247,6 +247,10 @@ export default {
       type: String,
       default: "input name"
     },
+    term: {
+      type: String,
+      default: ''
+    },
     rotate: {
       type: Number,
       default: 0
@@ -265,7 +269,6 @@ export default {
     },
     activity: {
       type: Object,
-
     },
     options: {
       type: Object,
