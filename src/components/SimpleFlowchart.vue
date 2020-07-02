@@ -432,20 +432,8 @@ export default {
             }
           }
           if (this.draggingType === "Action") {
-            if (!disabled) {
-              findNodeFrom['disabled'] = true
-              this.scene.links.push(newLink);
-              this.$emit("linkAdded", newLink);
-            }
-            else if (disabled && type === "Action" || type === "EndWorkflow" || type === "Decision") {
-              this.scene.links.push(newLink);
-              this.$emit("linkAdded", newLink);
-            }
-            else {
-              alert('nao permito Action')
-
-              this.$emit('not-allowed')
-            }
+            this.scene.links.push(newLink);
+            this.$emit("linkAdded", newLink);
           }
           if (this.draggingType === "Join") {
             // if (type !== "Action") {
