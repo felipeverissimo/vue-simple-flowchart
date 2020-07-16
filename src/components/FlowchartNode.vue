@@ -113,19 +113,19 @@
         >
         </div>
         <div
-          v-if="consultMode"
+          v-if="consultMode && activity"
           class="begin-date"
         >
           <b> Ini:</b> {{beginTime}}
         </div>
         <div
-          v-if="!consultMode"
+          v-if="!consultMode && activityType"
           class="begin-date"
         >
           <b> Prazo:</b> {{term}}
         </div>
         <div
-          v-if="consultMode"
+          v-if="consultMode && activity"
           class="end-date"
         >
           <b> Fim:</b> {{endTime}}
@@ -247,10 +247,10 @@ export default {
       type: String,
       default: "input name"
     },
-    term: {
-      type: String,
-      default: ''
-    },
+    // term: {
+    //   type: String,
+    //   default: ''
+    // },
     rotate: {
       type: Number,
       default: 0
@@ -304,6 +304,16 @@ export default {
   },
   mounted () { },
   computed: {
+    term () {
+      if (this.activityType) {
+        if (this.activityType.term) {
+          return this.activityType.term
+        }
+        else {
+          return ''
+        }
+      }
+    },
     beginTime () {
       if (this.activity) {
         if (this.activity.departments[0].beginDate) {
