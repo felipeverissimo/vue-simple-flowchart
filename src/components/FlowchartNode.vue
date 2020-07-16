@@ -122,7 +122,7 @@
           v-if="consultMode && activityType"
           class="begin-date"
         >
-          <b> Prazo:</b> {{term}}
+          <b> Prazo:</b> {{term}} <b>hrs</b>
         </div>
         <div
           v-if="consultMode && activity"
