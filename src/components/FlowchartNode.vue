@@ -119,7 +119,7 @@
           <b> Ini:</b> {{beginTime}}
         </div>
         <div
-          v-if="!consultMode && activityType"
+          v-if="consultMode && activityType"
           class="begin-date"
         >
           <b> Prazo:</b> {{term}}
