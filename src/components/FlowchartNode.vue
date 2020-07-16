@@ -247,6 +247,9 @@ export default {
       type: String,
       default: "input name"
     },
+    activityType: {
+      type: Object,
+    },
     // term: {
     //   type: String,
     //   default: ''
