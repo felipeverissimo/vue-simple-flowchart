@@ -117,7 +117,7 @@ export default {
     },
     end: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     endWorkflow: {
       type: Boolean,
